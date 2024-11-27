@@ -1,26 +1,12 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Numts } from './ml-ts/numts';
+const App: React.FC = () => {
+  const a = new Numts([[1, 2, 3, 'asa']]);
+  const [row, col] = a.shape;
+  console.log(a, a.T);
+  return <div>{`Shape: (${row}, ${col})`}</div>;
+};
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+App.displayName = 'App';
 
 export default App;
