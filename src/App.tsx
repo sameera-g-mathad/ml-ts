@@ -1,9 +1,13 @@
 import React from 'react';
-import { Numts } from './ml-ts/numts';
+import { nt } from './ml-ts/numts';
 const App: React.FC = () => {
-  const a = new Numts([[1, 2, 3, 'asa']]);
+  const a = nt.array([
+    [1, 2, 3],
+    [2, 4, 2],
+    [2, 4, 2],
+  ]);
+  console.log(a);
   const [row, col] = a.shape;
-  console.log(a, a.T);
   return <div>{`Shape: (${row}, ${col})`}</div>;
 };
 
