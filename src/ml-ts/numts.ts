@@ -1,4 +1,4 @@
-type arrayType = (number | string)[][];
+type arrayType = number[][];
 type size = [number, number];
 
 class NDArray {
@@ -6,7 +6,7 @@ class NDArray {
   array: arrayType;
   /**
    * @constructor  Pass an array of n-dimensions.
-   * @param {arrayType} arr Array needs to be either number or strings for now.
+   * @param {arrayType} arr Array needs to be either Number or strings for now.
    */
   constructor(arr: arrayType) {
     /**
@@ -20,7 +20,7 @@ class NDArray {
   /**
    *
    * @description - This method is u
-   * @param size Array of numbers
+   * @param size Array of Numbers
    * @returns instance of Numts with an array filled with specified values
    */
   createAndFill(size: size = [1, 1], fillValue: number = 0): NDArray {
@@ -61,12 +61,42 @@ class NDArray {
   }
 }
 
+class Operations {
+  dotArrayWithArray(ndarray: NDArray, ndarray2: NDArray): number {
+    let [row, col] = ndarray.shape;
+    let [row2, col2] = ndarray2.shape;
+    if (row !== col2 || col !== row2)
+      throw new Error('Dimensions do not match');
+
+    let result = 0;
+    for (let i = 0; i < ndarray.array.length; i++) {
+      for (let j = 0; j < ndarray.array[i].length; j++) {
+        result += ndarray.array[i][j] * ndarray2.array[j][i];
+      }
+    }
+    return result;
+  }
+  dotArrayWithNumber(ndarray: NDArray, num: number): NDArray {
+    let newObj: NDArray = ndarray.createAndFill();
+    for (let i = 0; i < ndarray.array.length; i++) {
+      for (let j = 0; j < ndarray.array[i].length; j++) {
+        newObj.array[i][j] = ndarray.array[i][j] * num;
+      }
+    }
+    return newObj;
+  }
+}
+
 class Numts {
   private ndarray: NDArray;
+  private operations: Operations;
+
   constructor() {
     this.ndarray = new NDArray([[]]);
+    this.operations = new Operations();
   }
 
+  // Array Creation
   array(arr: arrayType): NDArray {
     let columns = arr[0].length;
     for (let i = 1; i < arr.length; i++) {
@@ -79,14 +109,34 @@ class Numts {
     this.ndarray = new NDArray(arr);
     return this.ndarray;
   }
+
+  // Array Creation
   /**
    *
    * @description - This method is u
-   * @param size Array of numbers
+   * @param size Array of Numbers
    * @returns instance of Numts with an array filled with specified values
    */
   zeros(size: size = [1, 1]): NDArray {
     return this.ndarray.createAndFill(size);
+  }
+
+  // Array Manipulation
+
+  // Method Overloading Declarations
+  dot(a: NDArray, b: NDArray): number;
+  dot(a: NDArray, b: number): NDArray;
+  dot(a: number, b: NDArray): NDArray;
+
+  dot(a: NDArray | number, b: NDArray | number): NDArray | number {
+    if (a instanceof NDArray && b instanceof NDArray) {
+      return this.operations.dotArrayWithArray(a, b);
+    } else if (a instanceof NDArray && typeof b === 'number') {
+      this.ndarray = this.operations.dotArrayWithNumber(a, b);
+    } else if (typeof a === 'number' && b instanceof NDArray) {
+      this.ndarray = this.operations.dotArrayWithNumber(b, a);
+    }
+    return this.ndarray;
   }
 }
 

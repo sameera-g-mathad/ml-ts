@@ -1,14 +1,9 @@
 import React from 'react';
 import { nt } from './ml-ts/numts';
 const App: React.FC = () => {
-  const a = nt.array([
-    [1, 2, 3],
-    [2, 4, 2],
-    [2, 4, 2],
-  ]);
-  console.log(a);
-  const [row, col] = a.shape;
-  return <div>{`Shape: (${row}, ${col})`}</div>;
+  const a = nt.array([[1, 2, 3]]);
+  const b = nt.array([[4, 5, 6]]);
+  return <div>{`dot product = ${nt.dot(a.T, b)}`}</div>;
 };
 
 App.displayName = 'App';
