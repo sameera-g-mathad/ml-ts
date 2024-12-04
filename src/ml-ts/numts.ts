@@ -66,6 +66,55 @@ class NDArray {
 }
 
 class Operations {
+  operate(a: number, b: number, operation: string): number {
+    switch (operation) {
+      case 'add':
+        return a + b;
+      case 'subtract':
+        return a - b;
+      case 'multiply':
+        return a * b;
+      case 'divide':
+        return a / b;
+      default:
+        return a * b;
+    }
+  }
+  /**
+   *
+   * @description If the dimensions are matched, i.e (row_of_first_vector = row_of_second_vector && col_of_first_vector === col_of_second_vector), then
+   * element wise math operations (add, subtract, multipy, divide) takes place.
+   * @param {NDArray} vectorA
+   * @param {NDArray} vectorB
+   * @param {string} operation Is a crucial parameter. Based on this parameter, element wise math operations (add, subtract, multipy, divide) takes place.
+   * @returns
+   * - Throws error if the dimensions of both **NDArray** are not equal.
+   * - Returns new NDArray, of size (col_of_first_vector, row_of_second_vector).
+   *
+   */
+  operateArrayWithArray(
+    vectorA: NDArray,
+    vectorB: NDArray,
+    operation: string
+  ): NDArray {
+    let [rowDimA, colDimA] = vectorA.shape;
+    let [rowDimB, colDimB] = vectorB.shape;
+    if (rowDimA !== rowDimB || colDimA !== colDimB)
+      throw new Error(
+        `Dimensions (${rowDimA}, ${colDimA}), (${rowDimB}, ${colDimB})  do not match`
+      );
+    let operatedArray = nt.zeros([rowDimA, colDimB]);
+    for (let i = 0; i < rowDimA; i++) {
+      for (let j = 0; j < colDimA; j++) {
+        operatedArray.array[i][j] = this.operate(
+          vectorA.array[i][j],
+          vectorB.array[i][j],
+          operation
+        );
+      }
+    }
+    return operatedArray;
+  }
   /**
    *
    * @description If the inner dimensions are matched, i.e (col_of_first_vector === row_of_second_vector), then start three pointers,
@@ -102,11 +151,15 @@ class Operations {
    * @param num
    * @returns  New array which is broadcasted by the num parameter on the ndarray parameter.
    */
-  dotArrayWithNumber(ndarray: NDArray, num: number): NDArray {
-    let newObj: NDArray = ndarray.createAndFill();
+  operateArrayWithNumber(
+    ndarray: NDArray,
+    num: number,
+    operation: string = 'dot'
+  ): NDArray {
+    let newObj: NDArray = nt.zeros(ndarray.shape);
     for (let i = 0; i < ndarray.array.length; i++) {
       for (let j = 0; j < ndarray.array[i].length; j++) {
-        newObj.array[i][j] = ndarray.array[i][j] * num;
+        newObj.array[i][j] = this.operate(ndarray.array[i][j], num, operation);
       }
     }
     return newObj;
@@ -154,8 +207,93 @@ class Numts {
   }
 
   // Array Manipulation
+  // Method Overloading Declarations ----> Addition
+  /**
+   * @description This method is for performing addition between two vectors or matrices.
+   * @param a - Can be a number or a instance of NDArray.
+   * @param b - Can be a number or a instance of NDArray.
+   * @returns
+   * - Returns new array by adding both parameters **a** and **b** are of ***NDArray***.
+   * - If any one of the parameters is a number, then broadcasting (elementwise addition) is performed on the vector.
+   */
+  add(a: NDArray, b: NDArray): NDArray;
+  add(a: NDArray, b: number): NDArray;
+  add(a: number, b: NDArray): NDArray;
 
-  // Method Overloading Declarations
+  add(a: NDArray | number, b: NDArray | number): NDArray | number {
+    // Handles if both the vectors are of type NDArray
+    if (a instanceof NDArray && b instanceof NDArray) {
+      return this.operations.operateArrayWithArray(a, b, 'add');
+    }
+    // If one of the parameters (@param b here)is a number, element wise addition is performed.
+    else if (a instanceof NDArray && typeof b === 'number') {
+      this.ndarray = this.operations.operateArrayWithNumber(a, b, 'add');
+    }
+    // If one of the parameters (@param a here)is a number, element wise addition is performed.
+    else if (typeof a === 'number' && b instanceof NDArray) {
+      this.ndarray = this.operations.operateArrayWithNumber(b, a, 'add');
+    }
+    return this.ndarray;
+  }
+
+  // Method Overloading Declarations ----> Subtraction
+  /**
+   * @description This method is for performing subtraction between two vectors or matrices.
+   * @param a - Can be a number or a instance of NDArray.
+   * @param b - Can be a number or a instance of NDArray.
+   * @returns
+   * - Returns new array by subtracting both parameters **a** and **b** are of ***NDArray***.
+   * - If any one of the parameters is a number, then broadcasting (elementwise subtraction) is performed on the vector.
+   */
+  sub(a: NDArray, b: NDArray): NDArray;
+  sub(a: NDArray, b: number): NDArray;
+  sub(a: number, b: NDArray): NDArray;
+
+  sub(a: NDArray | number, b: NDArray | number): NDArray | number {
+    // Handles if both the vectors are of type NDArray
+    if (a instanceof NDArray && b instanceof NDArray) {
+      return this.operations.operateArrayWithArray(a, b, 'subtract');
+    }
+    // If one of the parameters (@param b here)is a number, element wise subtraction is performed.
+    else if (a instanceof NDArray && typeof b === 'number') {
+      this.ndarray = this.operations.operateArrayWithNumber(a, b, 'subtract');
+    }
+    // If one of the parameters (@param a here)is a number, element wise subtraction is performed.
+    else if (typeof a === 'number' && b instanceof NDArray) {
+      this.ndarray = this.operations.operateArrayWithNumber(b, a, 'subtract');
+    }
+    return this.ndarray;
+  }
+  // Method Overloading Declarations ----> Multiplication
+  /**
+   * @description This method is for performing subtraction between two vectors or matrices.
+   * @param a - Can be a number or a instance of NDArray.
+   * @param b - Can be a number or a instance of NDArray.
+   * @returns
+   * - Returns new array by subtracting both parameters **a** and **b** are of ***NDArray***.
+   * - If any one of the parameters is a number, then broadcasting (elementwise multiplication) is performed on the vector.
+   */
+  mul(a: NDArray, b: NDArray): NDArray;
+  mul(a: NDArray, b: number): NDArray;
+  mul(a: number, b: NDArray): NDArray;
+
+  mul(a: NDArray | number, b: NDArray | number): NDArray | number {
+    // Handles if both the vectors are of type NDArray
+    if (a instanceof NDArray && b instanceof NDArray) {
+      return this.operations.operateArrayWithArray(a, b, 'multiply');
+    }
+    // If one of the parameters (@param b here)is a number, element wise multiplication is performed.
+    else if (a instanceof NDArray && typeof b === 'number') {
+      this.ndarray = this.operations.operateArrayWithNumber(a, b, 'multiply');
+    }
+    // If one of the parameters (@param a here)is a number, element wise multiplication is performed.
+    else if (typeof a === 'number' && b instanceof NDArray) {
+      this.ndarray = this.operations.operateArrayWithNumber(b, a, 'multiply');
+    }
+    return this.ndarray;
+  }
+
+  // Method Overloading Declarations ----> Dot product
   /**
    * @description This method is for performing dot product between two vectors or matrices.
    * @param a - Can be a number or a instance of NDArray.
@@ -173,13 +311,42 @@ class Numts {
     if (a instanceof NDArray && b instanceof NDArray) {
       return this.operations.dotArrayWithArray(a, b);
     }
-    // If one of the parameters (@param b here)is a number, then all that a dot product will perform is forecasting
+    // If one of the parameters (@param b here)is a number, element wise multiplication is performed.
     else if (a instanceof NDArray && typeof b === 'number') {
-      this.ndarray = this.operations.dotArrayWithNumber(a, b);
+      this.ndarray = this.operations.operateArrayWithNumber(a, b, 'dot');
     }
-    // If one of the parameters (@param a here)is a number, then all that a dot product will perform is forecasting
+    // If one of the parameters (@param a here)is a number, element wise multiplication is performed.
     else if (typeof a === 'number' && b instanceof NDArray) {
-      this.ndarray = this.operations.dotArrayWithNumber(b, a);
+      this.ndarray = this.operations.operateArrayWithNumber(b, a, 'dot');
+    }
+    return this.ndarray;
+  }
+
+  // Method Overloading Declarations ----> Division
+  /**
+   * @description This method is for performing subtraction between two vectors or matrices.
+   * @param a - Can be a number or a instance of NDArray.
+   * @param b - Can be a number or a instance of NDArray.
+   * @returns
+   * - Returns new array by subtracting both parameters **a** and **b** are of ***NDArray***.
+   * - If any one of the parameters is a number, then broadcasting (elementwise division) is performed on the vector.
+   */
+  by(a: NDArray, b: NDArray): NDArray;
+  by(a: NDArray, b: number): NDArray;
+  by(a: number, b: NDArray): NDArray;
+
+  by(a: NDArray | number, b: NDArray | number): NDArray | number {
+    // Handles if both the vectors are of type NDArray
+    if (a instanceof NDArray && b instanceof NDArray) {
+      return this.operations.operateArrayWithArray(a, b, 'divide');
+    }
+    // If one of the parameters (@param b here)is a number, element wise division is performed.
+    else if (a instanceof NDArray && typeof b === 'number') {
+      this.ndarray = this.operations.operateArrayWithNumber(a, b, 'divide');
+    }
+    // If one of the parameters (@param a here)is a number, element wise division is performed.
+    else if (typeof a === 'number' && b instanceof NDArray) {
+      this.ndarray = this.operations.operateArrayWithNumber(b, a, 'divide');
     }
     return this.ndarray;
   }
