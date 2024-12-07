@@ -2,18 +2,17 @@ import React from 'react';
 import { nt } from './ml-ts/numts';
 const Test: React.FC = () => {
   const a = nt.array([
-    [1, 2, 3],
-    [2, 3, 4],
-    [9, 6, 7],
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
   ]);
   const b = nt.array([
-    [1, 2, 3],
-    [2, 3, 4],
-    [3, 6, 7],
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
   ]);
 
-  console.log(nt.dot(a, b));
-  return <div>{`dot: ${a.shape}`}</div>;
+  return <div>{`${nt.log(10)}`}</div>;
 };
 
 Test.displayName = 'Test';

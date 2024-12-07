@@ -23,7 +23,7 @@ export const Switch: React.FC<switchProps> = ({ switchName, callback }) => {
   };
 
   return (
-    <div>
+    <div className="shadow-lg rounded-xl">
       <input
         className="switch-input hidden"
         type="checkbox"

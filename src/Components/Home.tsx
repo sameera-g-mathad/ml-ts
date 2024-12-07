@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Navbar } from './Navbar';
+import { Navbar, Content } from './index';
 import ThemeContext from '../Context/ThemeContext';
 
 export const Home: React.FC = () => {
@@ -7,11 +7,11 @@ export const Home: React.FC = () => {
   return (
     <div
       className={`web-container transition duration-500 ease-in-out ${
-        theme === 'light' ? 'bg-white' : 'bg-gray-800'
+        theme === 'light' ? 'bg-white' : 'bg-gray-700'
       }`}
     >
       <Navbar />
-      <div className="web-content"></div>
+      <Content />
     </div>
   );
 };
