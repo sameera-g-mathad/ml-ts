@@ -147,32 +147,113 @@ class Operations {
   }
   /**
    * @description This is an overload for dot product method. This method is call if any one of the parameters is a number.
-   * @param ndarray
+   * @param ndArray
    * @param num
-   * @returns  New array which is broadcasted by the num parameter on the ndarray parameter.
+   * @returns  New array which is broadcasted by the num parameter on the ndArray parameter.
    */
   operateArrayWithNumber(
-    ndarray: NDArray,
+    ndArray: NDArray,
     num: number,
     operation: string = 'dot'
   ): NDArray {
-    let newObj: NDArray = nt.zeros(ndarray.shape);
-    for (let i = 0; i < ndarray.array.length; i++) {
-      for (let j = 0; j < ndarray.array[i].length; j++) {
-        newObj.array[i][j] = this.operate(ndarray.array[i][j], num, operation);
+    let newObj: NDArray = nt.zeros(ndArray.shape);
+    for (let i = 0; i < ndArray.array.length; i++) {
+      for (let j = 0; j < ndArray.array[i].length; j++) {
+        newObj.array[i][j] = this.operate(ndArray.array[i][j], num, operation);
       }
     }
     return newObj;
+  }
+
+  absOfNumber(num: number): number {
+    if (num < 0) return num * -1;
+    return num;
+  }
+  absOfArray(ndArray: NDArray): NDArray {
+    let [m, n] = ndArray.shape;
+    let newArray = nt.zeros([m, n]);
+    for (let i = 0; i < m; i++) {
+      for (let j = 0; j < n; j++) {
+        newArray.array[i][j] = this.absOfNumber(ndArray.array[i][j]);
+      }
+    }
+    return newArray;
+  }
+}
+
+class Exponent {
+  powerOfNumber(m: number, n: number): number {
+    if (n === 0) return 1;
+    if (n % 2 === 0) return this.powerOfNumber(m * m, n / 2);
+    else return this.powerOfNumber(m * m, (n - 1) / 2) * m;
+  }
+
+  expOfNumber(x: number, n: number = 1, iterations: number = 50): number {
+    if (iterations === 0) return 1;
+    return 1 + (x / n) * this.expOfNumber(x, n + 1, iterations - 1);
+  }
+
+  naturalLogOfNumber(
+    x: number,
+    n: number = 0,
+    iterations: number = 50
+  ): number {
+    if (x <= 0) throw Error('Invalid!! value encountered in log function');
+    if (x === 0)
+      throw Error(
+        'Sorry!! log(0) results in an infinity value and cannot expressed numerically at the moment'
+      );
+    if (x === 1) return x;
+
+    if (iterations === 0) {
+      if (n % 2 !== 0) return 1 / n - x / (n + 1);
+      else return 1 / n + x / (n + 1);
+    }
+    if (n === 0) return x * this.naturalLogOfNumber(x, n + 1, iterations - 1);
+    if (n % 2 !== 0)
+      return 1 / n - x * this.naturalLogOfNumber(x, n + 1, iterations - 1);
+    else return 1 / n + x * this.naturalLogOfNumber(x, n + 1, iterations - 1);
+  }
+  sqrtOfNumber(n: number): number {
+    let l = 0,
+      h = n;
+    let sqrtGuess = 0;
+    while (l <= h) {
+      let mid = Math.floor(l + h) / 2;
+      let guess = mid * mid;
+      if (guess === n) {
+        sqrtGuess = guess;
+        break;
+      } else if (guess > n) h = mid - 1;
+      else l = mid + 1;
+    }
+    sqrtGuess = h;
+    while (nt.abs(sqrtGuess * sqrtGuess - n) > 0.0000001) {
+      sqrtGuess = (sqrtGuess + n / sqrtGuess) / 2;
+    }
+    return sqrtGuess;
+  }
+  sqrtOfArray(ndArray: NDArray): NDArray {
+    let [m, n] = ndArray.shape;
+    let newArray = nt.zeros([m, n]);
+    for (let i = 0; i < m; i++) {
+      for (let j = 0; j < n; j++) {
+        newArray.array[i][j] = this.sqrtOfNumber(ndArray.array[i][j]);
+      }
+    }
+    return newArray;
   }
 }
 
 class Numts {
   private ndarray: NDArray;
   private operations: Operations;
+  private exponent: Exponent;
 
   constructor() {
     this.ndarray = new NDArray([[]]);
     this.operations = new Operations();
+    this.exponent = new Exponent();
   }
 
   // Array Creation
@@ -350,6 +431,53 @@ class Numts {
     }
     return this.ndarray;
   }
+
+  /**
+   * @description This method is to return the absolute value.
+   * @param a - Can be a number or a instance of NDArray.
+   * @returns
+   * - Returns new array with absolute values s if **a** is an instance of ***NDArray***.
+   * - By default, returns absolute value of a number
+   */
+  abs(a: NDArray): NDArray;
+  abs(a: number): number;
+  abs(a: NDArray | number): NDArray | number {
+    if (a instanceof NDArray) return this.operations.absOfArray(a);
+    return this.operations.absOfNumber(a);
+  }
+
+  /**
+   * @description This method is to find square root of a number or matrix.
+   * @param a - Can be a number or a instance of NDArray.
+   * @returns
+   * - Returns new array by square rooting the elements if **a** is an instance of ***NDArray***.
+   * - By default, returns square root of a number
+   */
+  sqrt(a: NDArray): NDArray;
+  sqrt(a: number): number;
+  sqrt(a: NDArray | number): NDArray | number {
+    if (a instanceof NDArray) return this.exponent.sqrtOfArray(a);
+    return this.exponent.sqrtOfNumber(a);
+  }
+
+  pow(a: number, b: number): number {
+    let answer = this.exponent.powerOfNumber(a, b);
+    if (b < 0) return 1 / answer;
+    else return answer;
+  }
+
+  exp(a: number): number {
+    return this.exponent.expOfNumber(a);
+  }
+  log(a: number): number {
+    return this.exponent.naturalLogOfNumber(a);
+  }
 }
 
 export const nt = new Numts();
+
+// Experimental feature
+// export const evaluate = (s: string): string => {
+//   // eslint-disable-next-line
+//   return eval(s).toString();
+// };
