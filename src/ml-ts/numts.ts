@@ -182,39 +182,142 @@ class Operations {
 }
 
 class Exponent {
-  powerOfNumber(m: number, n: number): number {
-    if (n === 0) return 1;
-    if (n % 2 === 0) return this.powerOfNumber(m * m, n / 2);
-    else return this.powerOfNumber(m * m, (n - 1) / 2) * m;
+  /**
+   * @description - This method is used to calculate the value of a base given a power value.
+   * @param base - Must be a number whose value will be raised to the power value provided
+   * @param exponent - Must be a number.
+   * @returns - base ^ exponent
+   */
+  powerOfNumber(base: number, exponent: number): number {
+    const powFunc = (base: number, exponent: number): number => {
+      if (exponent === 0) return 1;
+      if (exponent % 2 === 0) return powFunc(base * base, exponent / 2);
+      else return powFunc(base * base, (exponent - 1) / 2) * base;
+    };
+    if (exponent < 0) return 1 / powFunc(base, exponent);
+    return powFunc(base, exponent);
   }
-
-  expOfNumber(x: number, n: number = 1, iterations: number = 50): number {
-    if (iterations === 0) return 1;
-    return 1 + (x / n) * this.expOfNumber(x, n + 1, iterations - 1);
-  }
-
-  naturalLogOfNumber(
-    x: number,
-    n: number = 0,
-    iterations: number = 50
-  ): number {
-    if (x <= 0) throw Error('Invalid!! value encountered in log function');
-    if (x === 0)
-      throw Error(
-        'Sorry!! log(0) results in an infinity value and cannot expressed numerically at the moment'
-      );
-    if (x === 1) return x;
-
-    if (iterations === 0) {
-      if (n % 2 !== 0) return 1 / n - x / (n + 1);
-      else return 1 / n + x / (n + 1);
+  /**
+   * @description - This method is used to calculate the ndarray of a base given a power value.
+   * @param ndArray
+   * @param exponent - Must be a number.
+   * @returns - [ndarray] ^ exponent
+   */
+  powerOArray(ndArray: NDArray, exponent: number): NDArray {
+    let [m, n] = ndArray.shape;
+    let newArray = nt.zeros([m, n]);
+    for (let i = 0; i < m; i++) {
+      for (let j = 0; j < n; j++) {
+        newArray.array[i][j] = this.powerOfNumber(
+          ndArray.array[i][j],
+          exponent
+        );
+      }
     }
-    if (n === 0) return x * this.naturalLogOfNumber(x, n + 1, iterations - 1);
-    if (n % 2 !== 0)
-      return 1 / n - x * this.naturalLogOfNumber(x, n + 1, iterations - 1);
-    else return 1 / n + x * this.naturalLogOfNumber(x, n + 1, iterations - 1);
+    return newArray;
   }
+
+  /**
+   * @description - This method is used to calculate the exponent of the value x provided. This method uses Tayler series for computing exponents.
+   * exp(x) = 1 + x + (x^2/ 2!) + (x^3/ 3!) + (x^4/ 4!) + ..... iterations provided
+   * @param x
+   * @param iterations - Must be a number. Default set to 50
+   * @returns - e ^ x
+   */
+  expOfNumber(x: number, iterations: number = 50): number {
+    const expFunc = (
+      x: number,
+      n: number = 1,
+      iterations: number = 50
+    ): number => {
+      if (iterations === 0) return 1;
+      return 1 + (x / n) * expFunc(x, n + 1, iterations - 1);
+    };
+    return expFunc(x, iterations);
+  }
+
+  /**
+   * @description - This method is used to calculate the exponent of the value x provided. This method uses Tayler series for computing exponents.
+   * exp(x) = 1 + x + (x^2/ 2!) + (x^3/ 3!) + (x^4/ 4!) + ..... iterations provided
+   * @param ndArray
+   * @param iterations - Must be a number. Default set to 50
+   * @returns - e ^ [ndarray]
+   */
+  expOfArray(ndArray: NDArray, iterations: number = 50): NDArray {
+    let [m, n] = ndArray.shape;
+    let newArray = nt.zeros([m, n]);
+    for (let i = 0; i < m; i++) {
+      for (let j = 0; j < n; j++) {
+        newArray.array[i][j] = this.expOfNumber(
+          ndArray.array[i][j],
+          iterations
+        );
+      }
+    }
+    return newArray;
+  }
+
+  /**
+   * @description - This method is used to calculate the log of a x given base
+   * @param x
+   * @param base - Provide a value greater than 0
+   * @returns - log(x, base)
+   */
+  logOfNumber(x: number, base: number = 2.718281828459045): number {
+    if (x == 1) return 0;
+    if (x <= 0) throw Error('Values for logarithms should be greater than 0');
+    switch (base) {
+      case 2:
+        return Math.log2(x);
+      case 10:
+        return Math.log10(x);
+      case nt.E:
+        return Math.log(x);
+      default:
+        return Math.log(x) / Math.log(base);
+    }
+  }
+  /**
+   * @description - This method is used to calculate the log of a x given base for ndarray
+   * @param ndArray
+   * @param base
+   * @returns - log(ndarry, base)
+   */
+  logOfArray(ndArray: NDArray, base: number): NDArray {
+    let [m, n] = ndArray.shape;
+    let newArray = nt.zeros([m, n]);
+    for (let i = 0; i < m; i++) {
+      for (let j = 0; j < n; j++) {
+        newArray.array[i][j] = this.logOfNumber(ndArray.array[i][j], base);
+      }
+    }
+    return newArray;
+  }
+
+  // Logarithms using Newton's method (Expensive) as it internally uses exp method
+  // naturalLogOfNumber(
+  //   x: number,
+  //   iterations: number = 25,
+  //   tolerance: number = 0.0001
+  // ): number {
+  //   let initialGuess = 1;
+  //   for (let i = 0; i < iterations; i++) {
+  //     let initialGuessExp = this.expOfNumber(initialGuess);
+  //     let newGuess = initialGuess - (initialGuessExp - x) / initialGuessExp;
+  //     if (nt.abs(newGuess - initialGuess) < tolerance) return newGuess;
+  //     initialGuess = newGuess;
+  //   }
+  //   return initialGuess;
+  // }
+
+  /**
+   * @description - Returns sqaure root of a number
+   * @param n - Must be greater than zero
+   * @returns - √(n)
+   */
   sqrtOfNumber(n: number): number {
+    if (n == 0) return 0;
+    if (n < 0) throw Error('Invalid value encountered ');
     let l = 0,
       h = n;
     let sqrtGuess = 0;
@@ -233,6 +336,11 @@ class Exponent {
     }
     return sqrtGuess;
   }
+  /**
+   * @description - Returns sqaure root of ndarray
+   * @param ndArray - Must be greater than zero
+   * @returns - √(ndarry)
+   */
   sqrtOfArray(ndArray: NDArray): NDArray {
     let [m, n] = ndArray.shape;
     let newArray = nt.zeros([m, n]);
@@ -249,7 +357,7 @@ class Numts {
   private ndarray: NDArray;
   private operations: Operations;
   private exponent: Exponent;
-
+  E: number = 2.718281828459045;
   constructor() {
     this.ndarray = new NDArray([[]]);
     this.operations = new Operations();
@@ -436,7 +544,7 @@ class Numts {
    * @description This method is to return the absolute value.
    * @param a - Can be a number or a instance of NDArray.
    * @returns
-   * - Returns new array with absolute values s if **a** is an instance of ***NDArray***.
+   * - Returns new array with absolute values if **a** is an instance of ***NDArray***.
    * - By default, returns absolute value of a number
    */
   abs(a: NDArray): NDArray;
@@ -460,17 +568,88 @@ class Numts {
     return this.exponent.sqrtOfNumber(a);
   }
 
-  pow(a: number, b: number): number {
-    let answer = this.exponent.powerOfNumber(a, b);
-    if (b < 0) return 1 / answer;
-    else return answer;
+  /**
+   *@description This method is used to calculate power of a number.
+   * @param a - Can be a number or a instance of NDArray.
+   * @param b - power to raise the value of a number or values of ndarray
+   * @returns
+   * - Returns new array of elements raised to the power if **a** is an instance of ***NDArray***.
+   * - By default, returns power of a number raised to power
+   * @example
+   * nt.pow(2, 3) ==== 2^3 = 8
+   */
+  pow(a: NDArray, b: number): NDArray;
+  pow(a: number, b: number): number;
+  pow(a: NDArray | number, b: number): NDArray | number {
+    if (a instanceof NDArray) return this.exponent.powerOArray(a, b);
+    return this.exponent.powerOfNumber(a, b);
   }
-
-  exp(a: number): number {
+  /**
+   * @description This method is used to calculate exponent of a number.
+   * @param a - Can be a number or a instance of NDArray.
+   * @returns
+   * - Returns new array of elements that are exponent raised to param a if **a** is an instance of ***NDArray***.
+   * - By default, returns exponent raised to param a
+   * @example
+   * nt.exp(4) =
+   */
+  exp(a: NDArray): NDArray;
+  exp(a: number): number;
+  exp(a: NDArray | number): NDArray | number {
+    if (a instanceof NDArray) return this.exponent.expOfArray(a);
     return this.exponent.expOfNumber(a);
   }
-  log(a: number): number {
-    return this.exponent.naturalLogOfNumber(a);
+  /**
+   * @description - This method is used to find the natural log of a number. This method uses Math.log() internally.
+   * @param a - Can be a number or a instance of NDArray. Values has to be greater than 0.
+   * @returns -
+   * - Returns new array with natural log of elements if **a** is an instance of ***NDArray***.
+   * - By default, returns natural log of a number
+   */
+  ln(a: NDArray): NDArray;
+  ln(a: number): number;
+  ln(a: NDArray | number): NDArray | number {
+    if (a instanceof NDArray) return this.exponent.logOfArray(a, nt.E);
+    return this.exponent.logOfNumber(a, nt.E);
+  }
+  /**
+   * @description - This method is used to find the log base 2 of a number. This method uses Math.log2() internally.
+   * @param a - Can be a number or a instance of NDArray. Values has to be greater than 0.
+   * @returns -
+   * - Returns new array with log base 2 of elements if **a** is an instance of ***NDArray***.
+   * - By default, returns log base 2 of a number
+   */
+  log2(a: NDArray): NDArray;
+  log2(a: number): number;
+  log2(a: NDArray | number): NDArray | number {
+    if (a instanceof NDArray) return this.exponent.logOfArray(a, 2);
+    return this.exponent.logOfNumber(a, 2);
+  }
+  /**
+   * @description - This method is used to find the log base 10 of a number. This method uses Math.log10() internally.
+   * @param a - Can be a number or a instance of NDArray. Values has to be greater than 0.
+   * @returns -
+   * - Returns new array with log base 10 of elements if **a** is an instance of ***NDArray***.
+   * - By default, returns log base 10 of a number
+   */
+  log10(a: NDArray): NDArray;
+  log10(a: number): number;
+  log10(a: NDArray | number): NDArray | number {
+    if (a instanceof NDArray) return this.exponent.logOfArray(a, 10);
+    return this.exponent.logOfNumber(a, 10);
+  }
+  /**
+   * @description - This method is used to find the log base provided of a number. This method calculates values as Math.log(a) / Math.log(base)  internally.
+   * @param a - Can be a number or a instance of NDArray. Values has to be greater than 0.
+   * @returns -
+   * - Returns new array with log base specified of elements if **a** is an instance of ***NDArray***.
+   * - By default, returns log base specified of a number
+   */
+  log(a: NDArray, base: number): NDArray;
+  log(a: number, base: number): number;
+  log(a: NDArray | number, base: number): NDArray | number {
+    if (a instanceof NDArray) return this.exponent.logOfArray(a, base);
+    return this.exponent.logOfNumber(a, base);
   }
 }
 
