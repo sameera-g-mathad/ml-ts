@@ -1,10 +1,5 @@
 import React, { useState, useEffect } from 'react';
-
-interface switchProps {
-  switchName: string;
-  callback?: (change: boolean) => any;
-}
-
+import { switchProps } from '../../interface';
 /**
  *
  * @param {string} switchName - This has to be a unique name for the component, else there would be unexpected behaviour if multiple switch components are rendered

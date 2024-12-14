@@ -1,7 +1,9 @@
 import React, { createContext, useState } from 'react';
-import { childrenProp, themeInterface } from '../interface';
+import { childrenProp, themeInterfaceByContext } from '../../interface';
 
-const ThemeContext = createContext<themeInterface>({ theme: 'light' });
+export const ThemeContext = createContext<themeInterfaceByContext>({
+  theme: 'light',
+});
 
 export const ThemeContextProvider: React.FC<childrenProp> = ({ children }) => {
   const [theme, setTheme] = useState<string>('light');
@@ -14,5 +16,3 @@ export const ThemeContextProvider: React.FC<childrenProp> = ({ children }) => {
     </ThemeContext.Provider>
   );
 };
-
-export default ThemeContext;

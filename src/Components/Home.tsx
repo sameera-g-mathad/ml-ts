@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { Navbar, Content } from './index';
-import ThemeContext from '../Context/ThemeContext';
+import { ThemeContext, ChatContextProvider } from './Context';
 
 export const Home: React.FC = () => {
   const { theme } = useContext(ThemeContext);
@@ -11,7 +11,9 @@ export const Home: React.FC = () => {
       }`}
     >
       <Navbar />
-      <Content />
+      <ChatContextProvider>
+        <Content />
+      </ChatContextProvider>
     </div>
   );
 };

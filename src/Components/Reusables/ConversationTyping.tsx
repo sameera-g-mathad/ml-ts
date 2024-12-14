@@ -9,16 +9,25 @@ export const ConversationTyping: React.FC<conversationalTypingInterface> = ({
   speed,
 }) => {
   text = text.trim();
-  const [index, setIndex] = useState<number>(0);
+  const [index, setIndex] = useState<number>(-1);
+  const [words, setWords] = useState('');
+
+  useEffect(() => {
+    setIndex(-1);
+    setWords('');
+  }, [text]);
+
   useEffect(() => {
     if (index < text.length) {
-      setTimeout(() => {
+      const timer = setTimeout(() => {
+        if (index >= 0) setWords((prevWord) => prevWord + text[index]);
         setIndex((prevIndex) => prevIndex + 1);
       }, speed);
+      return () => clearTimeout(timer);
     }
   }, [index, speed, text]);
 
-  return <div>{text.slice(0, index)}</div>;
+  return <div dangerouslySetInnerHTML={{ __html: words }} />;
 };
 
 ConversationTyping.displayName = 'ConversationTyping';

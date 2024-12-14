@@ -224,16 +224,10 @@ class Exponent {
    * @param iterations - Must be a number. Default set to 50
    * @returns - e ^ x
    */
-  expOfNumber(x: number, iterations: number = 50): number {
-    const expFunc = (
-      x: number,
-      n: number = 1,
-      iterations: number = 50
-    ): number => {
-      if (iterations === 0) return 1;
-      return 1 + (x / n) * expFunc(x, n + 1, iterations - 1);
-    };
-    return expFunc(x, iterations);
+
+  expOfNumber(x: number, n: number = 1, iterations: number = 50): number {
+    if (iterations === 0) return 1;
+    return 1 + (x / n) * this.expOfNumber(x, n + 1, iterations - 1);
   }
 
   /**
@@ -248,10 +242,7 @@ class Exponent {
     let newArray = nt.zeros([m, n]);
     for (let i = 0; i < m; i++) {
       for (let j = 0; j < n; j++) {
-        newArray.array[i][j] = this.expOfNumber(
-          ndArray.array[i][j],
-          iterations
-        );
+        newArray.array[i][j] = this.expOfNumber(ndArray.array[i][j]);
       }
     }
     return newArray;
@@ -264,7 +255,7 @@ class Exponent {
    * @returns - log(x, base)
    */
   logOfNumber(x: number, base: number = 2.718281828459045): number {
-    if (x == 1) return 0;
+    if (x === 1) return 0;
     if (x <= 0) throw Error('Values for logarithms should be greater than 0');
     switch (base) {
       case 2:
@@ -316,7 +307,7 @@ class Exponent {
    * @returns - √(n)
    */
   sqrtOfNumber(n: number): number {
-    if (n == 0) return 0;
+    if (n === 0) return 0;
     if (n < 0) throw Error('Invalid value encountered ');
     let l = 0,
       h = n;
