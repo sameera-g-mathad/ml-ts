@@ -3,22 +3,34 @@ import { ConversationTyping } from '../Reusables';
 export const WelcomeText: React.FC = React.memo(() => {
   return (
     <ConversationTyping
-      text={`<b>Lorem ipsum</b> dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-<ol class="list-disc list-inside"> Sameer
-<li> <i>Integer nec odio. Praesent libero. Sed cursus ante dapibus diam.</i></li>
-<li> Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum.</li>
-<li> Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa.</li>
-<li> Vestibulum lacinia arcu eget nulla.</li>
-</ol>
-<h2> Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. <u>Maecenas tempus</u>  , tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum.</h2> 
+      text={`
+        <div class='leading-7'>
+            <span class='font-bold'>Welcome to chatML! 🤖💬</span>
+            <br>
+            <p>
+              We're thrilled to have you here! At chatML, you can dive into machine learning directly in your browser, 
+              no backend required. Our platform uses <b>Numts</b>, a 2D NumPy variant for TypeScript, 
+              to bring powerful machine learning tools to the frontend. This means all computations and models run client-side,
+              allowing you to experiment, learn, and build without needing a separate server.
+            </p>
+            <p>
+            Whether you're just starting with machine learning or you're a seasoned pro, ML-Chat makes it easy to 
+            interact with models, run experiments, and explore the fascinating world of AI—all in a conversational format.
+            </p>
 
-<ul>
-<li> Vivamus cursus risus non dui convallis, vel tincidunt arcu blandit.</li>
-<li> Nulla facilisi. Etiam vel felis sit amet erat lacinia auctor.</li>
-<li> Fusce aliquet nec purus non venenatis. This is good </li>
-</ul>
+            <ul class='list-inside list-disc'><b>What can you do here?</b>
+              <li>Build and train machine learning models directly in TypeScript.</li>
+              <li>Use interactive conversations to query and experiment with your models.</li>
+              <li>Explore built-in tools and algorithms to get hands-on experience.</li>
+            </ul>
+            <p>
+            Let’s get started! Type your question or request, and we'll help you navigate through the world of machine learning. 
+            Feel free to ask about anything—from basic concepts to complex models. ✨
+            </p>
+            <hr/>
+            <span> What are you here for today? </span>
+        </div>
 
-Donec sonme when or lectus augue, dapibus a vehicula non, porttitor  this is good eu ante. Sed tempor massa vitae enim consequat, ac sodales metus ultricies.
 `}
       speed={2}
     />

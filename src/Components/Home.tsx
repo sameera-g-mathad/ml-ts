@@ -1,13 +1,13 @@
-import React, { useContext } from 'react';
+import React, { memo, useContext } from 'react';
 import { Navbar, Content } from './index';
 import { ThemeContext, ChatContextProvider } from './Context';
 
-export const Home: React.FC = () => {
+export const Home: React.FC = memo(() => {
   const { theme } = useContext(ThemeContext);
   return (
     <div
-      className={`web-container transition duration-500 ease-in-out ${
-        theme === 'light' ? 'bg-white' : 'bg-gray-700'
+      className={`web-container transition duration-300 ease-in-out ${
+        theme === 'light' ? 'bg-white' : 'bg-gray-900'
       }`}
     >
       <Navbar />
@@ -16,6 +16,6 @@ export const Home: React.FC = () => {
       </ChatContextProvider>
     </div>
   );
-};
+});
 
 Home.displayName = 'Home';

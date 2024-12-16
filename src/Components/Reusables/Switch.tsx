@@ -6,7 +6,11 @@ import { switchProps } from '../../interface';
  * @param {()=>|undefined} callback This is to support renderProps, which is optional
  * @returns
  */
-export const Switch: React.FC<switchProps> = ({ switchName, callback }) => {
+export const Switch: React.FC<switchProps> = ({
+  switchName,
+  callback,
+  color,
+}) => {
   const [checked, isChecked] = useState<boolean>(false);
 
   useEffect(() => {
@@ -20,14 +24,21 @@ export const Switch: React.FC<switchProps> = ({ switchName, callback }) => {
   return (
     <div className="shadow-lg rounded-xl">
       <input
-        className="switch-input hidden"
+        className="switch-input  hidden"
         type="checkbox"
         name={switchName}
         checked={checked}
         id={switchName}
         onChange={switchClick}
       />
-      <label htmlFor={switchName} className="switch"></label>
+      <label
+        style={{
+          borderColor: color,
+          ...({ '--color': color } as React.CSSProperties),
+        }}
+        htmlFor={switchName}
+        className="switch"
+      ></label>
     </div>
   );
 };

@@ -20,7 +20,6 @@ export const ChatContextProvider: React.FC<childrenProp> = ({ children }) => {
   ]);
 
   const appendChatComponent = (Component: JSX.Element) => {
-    console.log('called');
     setChatComponents((prevChatComponents) => [
       ...prevChatComponents,
       React.cloneElement(Component, { key: chatComponents.length + 1 }),

@@ -1,17 +1,37 @@
-import React, { useContext } from 'react';
+import React, { memo, useContext } from 'react';
 import { Switch } from './Reusables';
 import { ThemeContext } from './Context';
+import { DarkTheme, LightTheme } from './Svgs';
 
-export const Navbar: React.FC = () => {
-  const { changeTheme } = useContext(ThemeContext);
+export const Navbar: React.FC = memo(() => {
+  const { theme, useColor, changeTheme } = useContext(ThemeContext);
+  const displayIcon = {
+    light: <LightTheme />,
+    dark: <DarkTheme />,
+  };
+  console.log(useColor);
   return (
-    <div className="navbar border border-blue-300  shadow-md sm:p-6 p-2">
+    <div
+      style={{ backgroundColor: useColor }}
+      className={`navbar shadow-md sm:p-6 p-2 text-white`}
+    >
       <div className=" h-full flex justify-between items-center">
-        <span>chatML</span>
-        <Switch switchName="theme-switch" callback={changeTheme} />
+        <span className="font-bold text-3xl tracking-wider">
+          <span className="font-medium italic">chat</span>ML
+        </span>
+        <div>
+          <span className="flex justify-evenly items-center  w-20">
+            <Switch
+              switchName="theme-switch"
+              callback={changeTheme}
+              color={useColor}
+            />
+            {displayIcon[theme]}
+          </span>
+        </div>
       </div>
     </div>
   );
-};
+});
 
 Navbar.displayName = 'Navbar';

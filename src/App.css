@@ -23,7 +23,7 @@
 .switch {
   width: 45px;
   height: 25px;
-  border: 1px solid black;
+  background-color: white;
   border-radius: 25px;
   display: flex;
   align-items: center;
@@ -33,10 +33,10 @@
 
 .switch::before {
   content: '';
-  width: 20px;
-  height: 20px;
+  width: 15px;
+  height: 15px;
   margin: 2px;
-  border: 1px solid black;
+  background-color: var(--color);
   border-radius: 25px;
   /* Below code for box-shadow is taken from tailwind shadow-lg class */
   --tw-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1),
@@ -46,9 +46,24 @@
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
     var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
   display: block;
-  transition-duration: 0.2s;
+  transition-duration: 0.1s;
+  margin-left: 5px;
 }
 
 .switch-input:checked + .switch::before {
   transform: translateX(calc(39px - 100%));
+  width: 18px;
+  height: 18px;
+  margin-left: 0;
+}
+
+.button {
+  border-color: var(--button-color);
+  color: var(--button-color);
+  transition: background 0.2s;
+}
+
+.button:hover {
+  color: white;
+  background-color: var(--button-color);
 }

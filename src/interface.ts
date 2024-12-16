@@ -12,7 +12,8 @@ export interface childrenProp {
  * This interface is used by themeContext.
  */
 export interface themeInterfaceByContext {
-  theme: string;
+  theme: 'light' | 'dark';
+  useColor: string;
   changeTheme?: (change: boolean) => void;
 }
 
@@ -42,6 +43,7 @@ export interface chatInterface {
 export interface switchProps {
   switchName: string;
   callback?: (change: boolean) => any;
+  color?: string;
 }
 
 /**
@@ -51,3 +53,10 @@ export interface buttonInterface {
   name: string;
   callback?: () => any;
 }
+
+// export interface webProperties {
+//   borderColor: string;
+//   fillColor: string;
+//   background: string,
+//   textColor: string,
+// }
