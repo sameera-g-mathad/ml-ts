@@ -1,11 +1,22 @@
-import React from 'react';
-import { ConversationTyping } from '../Reusables';
+import React, { useContext, useState } from 'react';
+import {
+  Alert,
+  Button,
+  ConversationTyping,
+  HorizontalRule,
+} from '../Reusables';
+import { ChatContext } from '../Context';
+import { TaskEntry } from './TaskEntry';
+import { Chat } from '../Chat';
+import { RegressionSvg, ClassificationSvg } from '../Svgs';
 export const WelcomeText: React.FC = React.memo(() => {
+  const [complete, setComplete] = useState(false);
+  const { appendChatComponent } = useContext(ChatContext);
   return (
-    <ConversationTyping
-      text={`
-        <div class='leading-7'>
-            <span class='font-bold'>Welcome to chatML! 🤖💬</span>
+    <div className="flex-col leading-7 text-sm sm:text-md">
+      <ConversationTyping
+        text={`
+            <span class='font-bold text-md sm:text-lg'>Welcome to chat(ML)! 🤖💬</span>
             <br>
             <p>
               We're thrilled to have you here! At chatML, you can dive into machine learning directly in your browser, 
@@ -26,14 +37,47 @@ export const WelcomeText: React.FC = React.memo(() => {
             <p>
             Let’s get started! Type your question or request, and we'll help you navigate through the world of machine learning. 
             Feel free to ask about anything—from basic concepts to complex models. ✨
-            </p>
-            <hr/>
-            <span> What are you here for today? </span>
-        </div>
-
+            </p>          
 `}
-      speed={2}
-    />
+        callback={() => setComplete(true)}
+      />
+      {complete && (
+        <div>
+          <Alert type="note">Everything here is manually generated.</Alert>
+          <HorizontalRule />
+          <span className="font-medium my-1">
+            {' '}
+            What are you here for today?{' '}
+          </span>
+          <span className="flex">
+            <Button
+              name="Classification"
+              icon={true}
+              iconComponent={() => <ClassificationSvg />}
+              callback={() =>
+                appendChatComponent(
+                  <Chat gerneratedBy="user">
+                    <TaskEntry task="Classification" />
+                  </Chat>
+                )
+              }
+            />
+            <Button
+              name="Regression"
+              icon={true}
+              iconComponent={() => <RegressionSvg />}
+              callback={() =>
+                appendChatComponent(
+                  <Chat gerneratedBy="user">
+                    <TaskEntry task="Regression" />
+                  </Chat>
+                )
+              }
+            />
+          </span>
+        </div>
+      )}
+    </div>
   );
 });
 

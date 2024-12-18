@@ -1,16 +1,24 @@
 import React, { useContext } from 'react';
 import { buttonInterface } from '../../interface';
 import { ThemeContext } from '../Context';
-export const Button: React.FC<buttonInterface> = ({ name, callback }) => {
+export const Button: React.FC<buttonInterface> = ({
+  name,
+
+  iconComponent,
+  callback,
+}) => {
   const { useColor } = useContext(ThemeContext);
   // useEffect(() => console.log(useColor), [useColor]);
   return (
     <button
-      style={{ ...({ '--button-color': useColor } as React.CSSProperties) }}
-      className="border-2 py-2 px-5 m-1 rounded-lg button"
+      style={{ ...({ '--use-color': useColor } as React.CSSProperties) }}
+      className="button border-2 py-2 sm:px-4 px-3 mr-1 rounded-lg tracking-wide"
       onClick={callback}
     >
-      {name}
+      <span className="flex justify-evenly items-center">
+        {iconComponent && iconComponent()}
+        {name}
+      </span>
     </button>
   );
 };

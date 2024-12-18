@@ -34,7 +34,7 @@ export const ThemeContextProvider: React.FC<childrenProp> = ({ children }) => {
   let color = webColors[choice];
 
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
-
+  // const useColor = useState(color);
   const changeTheme = (change: boolean) => {
     setTheme(change ? 'dark' : 'light');
   };
@@ -43,6 +43,7 @@ export const ThemeContextProvider: React.FC<childrenProp> = ({ children }) => {
       value={{
         theme,
         useColor: color,
+        // useColor: useColor[0],
         changeTheme,
       }}
     >

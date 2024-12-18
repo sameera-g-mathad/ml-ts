@@ -22,19 +22,26 @@ export interface themeInterfaceByContext {
  */
 export interface chatInterfaceByContext {
   chatComponents: JSX.Element[];
+  task: 'Regression' | 'Classification';
   appendChatComponent: (Component: JSX.Element) => void;
+  updateTask: (task: string) => void;
+  updateTaskAndAppendChat: (task: string, Component: JSX.Element) => void;
+}
+
+export interface taskInterface {
+  task: 'Regression' | 'Classification';
 }
 
 /**
  * Used by Chat.tsx to decide the displaying of elements on either side of the display.
  * It uses enum which specifies that the generatedBy can have only two values.
  */
-export enum GeneratedBy {
-  user = 'user',
-  system = 'system',
-}
+// export enum GeneratedBy {
+//   user = 'user',
+//   system = 'system',
+// }
 export interface chatInterface {
-  gerneratedBy: GeneratedBy;
+  gerneratedBy: 'user' | 'system';
 }
 
 /**
@@ -51,12 +58,23 @@ export interface switchProps {
  */
 export interface buttonInterface {
   name: string;
+  icon: boolean;
+  iconComponent?: () => JSX.Element;
   callback?: () => any;
 }
 
-// export interface webProperties {
-//   borderColor: string;
-//   fillColor: string;
-//   background: string,
-//   textColor: string,
-// }
+/**
+ * Used by ConversationalTyping in Reusables
+ */
+export interface conversationalTypingInterface {
+  text: string;
+  speed?: number;
+  callback?: () => void;
+}
+
+/**
+ * Used by Alert in Reusables
+ */
+export interface alertInterface {
+  type: 'danger' | 'note';
+}

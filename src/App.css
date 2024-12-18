@@ -57,13 +57,25 @@
   margin-left: 0;
 }
 
-.button {
-  border-color: var(--button-color);
-  color: var(--button-color);
+.button,
+.file-input {
+  border-color: var(--use-color);
+  color: var(--use-color);
   transition: background 0.2s;
+  cursor: pointer;
 }
 
-.button:hover {
+.button:hover,
+.file-input:hover {
   color: white;
-  background-color: var(--button-color);
+  background-color: var(--use-color);
+  .svg {
+    fill: white;
+    stroke: white;
+  }
+}
+
+.svg {
+  fill: var(--use-color);
+  stroke: var(--use-color);
 }
