@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { switchProps } from '../../interface';
+import { switchProps, themeInterface } from '../../interface';
+import withTheme from '../HOC/withTheme';
 /**
  *
  * @param {string} switchName - This has to be a unique name for the component, else there would be unexpected behaviour if multiple switch components are rendered
  * @param {()=>|undefined} callback This is to support renderProps, which is optional
  * @returns
  */
-export const Switch: React.FC<switchProps> = ({
+export const SwitchComponent: React.FC<switchProps & themeInterface> = ({
   switchName,
   callback,
   color,
@@ -22,9 +23,9 @@ export const Switch: React.FC<switchProps> = ({
   };
 
   return (
-    <div className="shadow-lg rounded-xl">
+    <div className="rounded-xl">
       <input
-        className="switch-input  hidden"
+        className="switch-input hidden"
         type="checkbox"
         name={switchName}
         checked={checked}
@@ -37,10 +38,12 @@ export const Switch: React.FC<switchProps> = ({
           ...({ '--color': color } as React.CSSProperties),
         }}
         htmlFor={switchName}
-        className="switch"
+        className="switch border"
       ></label>
     </div>
   );
 };
 
-Switch.displayName = 'Switch';
+SwitchComponent.displayName = 'SwitchComponent';
+
+export const Switch = withTheme(SwitchComponent);

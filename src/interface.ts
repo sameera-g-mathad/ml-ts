@@ -1,9 +1,10 @@
+import { DataFrame } from './ml-ts/frame';
+
 /**
  * This interface is for container components that are used throughout the website.
  * Components extending this mean they are expecting children as prop, i.e
  * they need to be defined as html tags
  */
-
 export interface childrenProp {
   children: React.ReactNode;
 }
@@ -23,13 +24,23 @@ export interface themeInterfaceByContext {
 export interface chatInterfaceByContext {
   chatComponents: JSX.Element[];
   task: 'Regression' | 'Classification';
+  df: DataFrame;
   appendChatComponent: (Component: JSX.Element) => void;
   updateTask: (task: string) => void;
   updateTaskAndAppendChat: (task: string, Component: JSX.Element) => void;
+  addDataframe: (df: DataFrame) => void;
 }
 
 export interface taskInterface {
   task: 'Regression' | 'Classification';
+}
+
+export interface fileInterface {
+  callback: (file: File) => void;
+}
+
+export interface themeInterface {
+  color: string;
 }
 
 /**
@@ -42,6 +53,11 @@ export interface taskInterface {
 // }
 export interface chatInterface {
   gerneratedBy: 'user' | 'system';
+  widthFull?: boolean;
+}
+
+export interface tableInterface {
+  data: DataFrame;
 }
 
 /**
@@ -50,7 +66,6 @@ export interface chatInterface {
 export interface switchProps {
   switchName: string;
   callback?: (change: boolean) => any;
-  color?: string;
 }
 
 /**
@@ -59,6 +74,7 @@ export interface switchProps {
 export interface buttonInterface {
   name: string;
   icon: boolean;
+  disabled?: boolean;
   iconComponent?: () => JSX.Element;
   callback?: () => any;
 }
@@ -77,4 +93,12 @@ export interface conversationalTypingInterface {
  */
 export interface alertInterface {
   type: 'danger' | 'note';
+}
+
+/**
+ * Used by Input in Reusables
+ */
+export interface inputInterface {
+  size: 'small' | 'large' | 'medium' | 'full';
+  defaultValue: string;
 }

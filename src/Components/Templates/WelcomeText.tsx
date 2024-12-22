@@ -39,6 +39,7 @@ export const WelcomeText: React.FC = React.memo(() => {
             Feel free to ask about anything—from basic concepts to complex models. ✨
             </p>          
 `}
+        speed={1.5}
         callback={() => setComplete(true)}
       />
       {complete && (

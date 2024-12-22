@@ -1,9 +1,12 @@
-import React, { useContext } from 'react';
-import { ThemeContext } from '../Context';
-
-export const HorizontalRule: React.FC = () => {
-  const { useColor } = useContext(ThemeContext);
-  return <hr style={{ borderColor: useColor }} className="mt-3 border" />;
+import React from 'react';
+import { themeInterface } from '../../interface';
+import withTheme from '../HOC/withTheme';
+export const HorizontalRuleComponent: React.FC<themeInterface> = ({
+  color,
+}) => {
+  return <hr style={{ borderColor: color }} className="mt-3 border" />;
 };
 
-HorizontalRule.displayName = 'HorizontalRule';
+HorizontalRuleComponent.displayName = 'HorizontalRuleComponent';
+
+export const HorizontalRule = withTheme(HorizontalRuleComponent);

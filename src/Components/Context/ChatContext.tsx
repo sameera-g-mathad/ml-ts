@@ -2,17 +2,26 @@ import React, { createContext, useReducer } from 'react';
 import { childrenProp, chatInterfaceByContext } from '../../interface';
 import { WelcomeText } from '../Templates';
 import { Chat } from '../Chat';
+import { DataFrame } from '../../ml-ts/frame';
 
 export const ChatContext = createContext<chatInterfaceByContext>({
   chatComponents: [],
   task: 'Regression',
+  df: new DataFrame([], [], [0, 0], []),
   appendChatComponent: () => {},
+  addDataframe: () => {},
   updateTask: () => {},
   updateTaskAndAppendChat: () => {},
 });
 
 const chatContextReducer = (
-  state: any,
+  state: {
+    chatComponents: JSX.Element[];
+    task: 'Regression' | 'Classification';
+    df: DataFrame;
+    // header: boolean;
+    // delimeter: string;
+  },
   payload: { action: string; value: any }
 ) => {
   switch (payload.action) {
@@ -29,6 +38,8 @@ const chatContextReducer = (
         task: payload.value[0],
         chatComponents: [...state.chatComponents, payload.value[1]],
       };
+    case 'addDataFrame':
+      return { ...state, df: payload.value };
     default:
       return state;
   }
@@ -42,6 +53,9 @@ export const ChatContextProvider: React.FC<childrenProp> = ({ children }) => {
       </Chat>,
     ],
     task: '',
+    df: new DataFrame([], [], [0, 0], []),
+    // header: false,
+    // delimeter: '',
   });
 
   const updateTaskAndAppendChat = (task: string, Component: JSX.Element) => {
@@ -54,6 +68,10 @@ export const ChatContextProvider: React.FC<childrenProp> = ({ children }) => {
         }),
       ],
     });
+  };
+
+  const addDataframe = (df: DataFrame) => {
+    dispatch({ action: 'addDataFrame', value: df });
   };
   const updateTask = (task: string) => {
     dispatch({ action: 'updateTask', value: task });
@@ -75,6 +93,7 @@ export const ChatContextProvider: React.FC<childrenProp> = ({ children }) => {
       value={{
         ...state,
         appendChatComponent,
+        addDataframe,
         updateTaskAndAppendChat,
         updateTask,
       }}

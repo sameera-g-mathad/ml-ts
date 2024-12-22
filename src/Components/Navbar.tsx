@@ -22,11 +22,7 @@ export const Navbar: React.FC = memo(() => {
         </span>
         <div>
           <span className="flex justify-evenly items-center w-20">
-            <Switch
-              switchName="theme-switch"
-              callback={changeTheme}
-              color={useColor}
-            />
+            <Switch switchName="theme-switch" callback={changeTheme} />
             {displayIcon[theme]}
           </span>
         </div>

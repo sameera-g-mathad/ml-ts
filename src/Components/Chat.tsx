@@ -5,6 +5,7 @@ import { ThemeContext } from './Context';
 export const Chat: React.FC<childrenProp & chatInterface> = ({
   children,
   gerneratedBy,
+  widthFull,
 }) => {
   const displayPosition = {
     user: 'items-end flex-row-reverse',
@@ -30,7 +31,9 @@ export const Chat: React.FC<childrenProp & chatInterface> = ({
       </div>
       <div
         style={{ borderColor: useColor }}
-        className={`sm:w-1/2 w-5/6 border-2 shadow-lg p-4 rounded-3xl ${background} ${textColor}`}
+        className={`${
+          widthFull ? 'sm:w-full' : 'sm:w-1/2'
+        } w-5/6 border-2 shadow-lg p-4 rounded-3xl ${background} ${textColor}`}
       >
         {children}
       </div>
