@@ -23,11 +23,11 @@ export const FileUploadAck: React.FC<fileUploadAckInterface> = memo(
           file.name
         }'</b> with the delimiter of <b>'${delimeter}'</b> and the file <b>${
           header ? 'does have a header' : "doesn't have a header"
-        }</b>`}
+        } </b>`}
         callback={() =>
           appendChatComponent(
             <Chat gerneratedBy="system" widthFull={true}>
-              <DisplayDf />
+              <DisplayDf key={new Date().getTime()} />
             </Chat>
           )
         }

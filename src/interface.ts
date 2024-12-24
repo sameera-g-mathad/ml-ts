@@ -25,6 +25,7 @@ export interface chatInterfaceByContext {
   chatComponents: JSX.Element[];
   task: 'Regression' | 'Classification';
   df: DataFrame;
+  length?: number;
   appendChatComponent: (Component: JSX.Element) => void;
   updateTask: (task: string) => void;
   updateTaskAndAppendChat: (task: string, Component: JSX.Element) => void;

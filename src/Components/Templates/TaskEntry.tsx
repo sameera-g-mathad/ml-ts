@@ -15,7 +15,7 @@ export const TaskEntry: React.FC<taskInterface> = memo(({ task }) => {
         updateTaskAndAppendChat(
           task,
           <Chat gerneratedBy="system">
-            <TaskSelection task={task} />
+            <TaskSelection task={task} key={new Date().getTime()} />
           </Chat>
         )
       }

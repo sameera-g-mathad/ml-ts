@@ -49,7 +49,7 @@ export const ChatContextProvider: React.FC<childrenProp> = ({ children }) => {
   const [state, dispatch] = useReducer(chatContextReducer, {
     chatComponents: [
       <Chat key={1} gerneratedBy="system">
-        <WelcomeText />
+        <WelcomeText key={new Date().getTime()} />
       </Chat>,
     ],
     task: '',
@@ -57,7 +57,6 @@ export const ChatContextProvider: React.FC<childrenProp> = ({ children }) => {
     // header: false,
     // delimeter: '',
   });
-
   const updateTaskAndAppendChat = (task: string, Component: JSX.Element) => {
     dispatch({
       action: 'updateTaskAndAppendChat',

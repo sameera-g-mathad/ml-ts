@@ -120,11 +120,15 @@ class Process {
       let dtype_number = true;
       for (let row = 0; row < shape[0]; row++) {
         let value = data[row][column].toString();
+        if (value.length === 0) {
+          dtype_number = false;
+          data[row][column] = 'undefined';
+          // break;
+        }
         let new_value = parseInt(value) || parseFloat(value);
         if (isNaN(new_value)) {
           dtype_number = false;
-          console.log(row, column, parseInt(value), parseFloat(value));
-          break;
+          // break;
         }
       }
       if (dtype_number) {

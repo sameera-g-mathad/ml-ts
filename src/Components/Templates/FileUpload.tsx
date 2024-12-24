@@ -87,6 +87,7 @@ export const FileUpload: React.FC = React.memo(() => {
                       file={state.file}
                       header={state.header}
                       delimeter={state.delimiter}
+                      key={new Date().getTime()}
                     />
                   </Chat>
                 )

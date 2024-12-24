@@ -20,7 +20,7 @@ export const TaskSelection: React.FC<taskInterface> = memo(({ task }) => {
       callback={() =>
         appendChatComponent(
           <Chat gerneratedBy="system">
-            <FileUpload />
+            <FileUpload key={new Date().getTime()} />
           </Chat>
         )
       }

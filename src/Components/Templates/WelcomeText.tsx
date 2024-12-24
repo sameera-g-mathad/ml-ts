@@ -58,7 +58,10 @@ export const WelcomeText: React.FC = React.memo(() => {
               callback={() =>
                 appendChatComponent(
                   <Chat gerneratedBy="user">
-                    <TaskEntry task="Classification" />
+                    <TaskEntry
+                      task="Classification"
+                      key={new Date().getTime()}
+                    />
                   </Chat>
                 )
               }
