@@ -34,7 +34,7 @@ export const Chat: React.FC<childrenProp & chatInterface> = ({
         className={`${
           widthFull
             ? 'sm:w-full max-h-screen overflow-y-scroll sm:max-w-full overflow-x-scroll'
-            : 'sm:w-1/2'
+            : 'w-1/2'
         } w-5/6 border-2 shadow-lg p-4 rounded-3xl ${background} ${textColor}`}
       >
         {children}
