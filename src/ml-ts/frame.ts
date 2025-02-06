@@ -1,3 +1,5 @@
+// import { nt, NDArray } from './numts';
+
 type dataframe = (string | number)[][];
 type column = (number | string)[];
 
@@ -123,12 +125,10 @@ class Process {
         if (value.length === 0) {
           dtype_number = false;
           data[row][column] = 'undefined';
-          // break;
         }
         let new_value = parseInt(value) || parseFloat(value);
         if (isNaN(new_value)) {
           dtype_number = false;
-          // break;
         }
       }
       if (dtype_number) {

@@ -3,11 +3,16 @@ import { childrenProp, chatInterfaceByContext } from '../../interface';
 import { WelcomeText } from '../Templates';
 import { Chat } from '../Chat';
 import { DataFrame } from '../../ml-ts/frame';
+import { NDArray } from '../../ml-ts/numts';
 
 export const ChatContext = createContext<chatInterfaceByContext>({
   chatComponents: [],
   task: 'Regression',
   df: new DataFrame([], [], [0, 0], []),
+  trainX: null,
+  trainY: null,
+  testX: null,
+  testY: null,
   appendChatComponent: () => {},
   addDataframe: () => {},
   updateTask: () => {},
@@ -19,6 +24,10 @@ const chatContextReducer = (
     chatComponents: JSX.Element[];
     task: 'Regression' | 'Classification';
     df: DataFrame;
+    trainX: NDArray | null;
+    trainY: NDArray | null;
+    testX: NDArray | null;
+    testY: NDArray | null;
     // header: boolean;
     // delimeter: string;
   },
@@ -54,6 +63,10 @@ export const ChatContextProvider: React.FC<childrenProp> = ({ children }) => {
     ],
     task: '',
     df: new DataFrame([], [], [0, 0], []),
+    trainX: null,
+    trainY: null,
+    testX: null,
+    testY: null,
     // header: false,
     // delimeter: '',
   });

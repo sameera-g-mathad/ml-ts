@@ -1,4 +1,5 @@
 import { DataFrame } from './ml-ts/frame';
+import { NDArray } from './ml-ts/numts';
 
 /**
  * This interface is for container components that are used throughout the website.
@@ -25,6 +26,10 @@ export interface chatInterfaceByContext {
   chatComponents: JSX.Element[];
   task: 'Regression' | 'Classification';
   df: DataFrame;
+  trainX: NDArray | null;
+  trainY: NDArray | null;
+  testX: NDArray | null;
+  testY: NDArray | null;
   length?: number;
   appendChatComponent: (Component: JSX.Element) => void;
   updateTask: (task: string) => void;

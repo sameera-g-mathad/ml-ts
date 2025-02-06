@@ -1,7 +1,7 @@
 type arrayType = number[][];
 type size = [number, number];
 
-class NDArray {
+export class NDArray {
   shape: size = [0, 0];
   array: arrayType;
   /**

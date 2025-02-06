@@ -55,11 +55,15 @@ export const FileUpload: React.FC = React.memo(() => {
     <div className="flex-col leading-7 text-sm sm:text-md">
       <ConversationTyping
         text={`
-            <span class='font-bold text-md sm:text-lg'>Before we can proceed can you upload your csv file</span>
-            <br>
-            Let’s get started! Type your question or request, and we'll help you navigate through the world of machine learning. 
-            Feel free to ask about anything—from basic concepts to complex models. ✨
-            </p>          
+          <div>
+            <p>Please ensure the following before uploading your CSV file:</p>
+          <ul class="list-inside list-disc ml-4">
+            <li>The target variable should be placed in the last column.</li>
+            <li>The last column (target variable) must be label encoded.</li>
+            <li>Standardization, normalization, and categorical encoding are not handled by the website, so make sure your data is preprocessed accordingly.</li>
+          </ul>
+          <p>These requirements are expected to remain, though additional features may be added in the future.</p>
+          </div>
 `}
         callback={() => dispatch({ action: 'setComplete', value: true })}
       />
