@@ -37,14 +37,26 @@ export interface chatInterfaceByContext {
   addDataframe: (df: DataFrame) => void;
 }
 
+/**
+ * Used by Task.tsx to decide the task type.
+ * It uses enum which specifies that the task can have only two values.
+ */
 export interface taskInterface {
   task: 'Regression' | 'Classification';
 }
 
+/**
+ * Used by FileUpload.tsx to decide the file type.
+ * It uses enum which specifies that the file can have only two values.
+ */
 export interface fileInterface {
   callback: (file: File) => void;
 }
 
+/**
+ * Used by Theme.tsx to decide the theme type.
+ * It uses enum which specifies that the theme can have only two values.
+ */
 export interface themeInterface {
   color: string;
 }

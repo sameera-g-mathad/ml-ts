@@ -1,33 +1,17 @@
 import React, { memo, useContext } from 'react';
 import { ChatContext } from './Context';
-// import { Button } from './Reusables';
-// import { Chat } from './Chat';
-// import { WelcomeText } from './Templates';
-// import { GeneratedBy } from '../interface';
+
+/**
+ * This is the Content component of the application.
+ * It contains the main functionality of the application.
+ * It uses the ChatContext to manage the chat components.
+ * The chat components are displayed in a scrollable container.
+ */
 export const Content: React.FC = memo(() => {
+  // Use chatcontext to extract the chat components
   const { chatComponents } = useContext(ChatContext);
   return (
     <div className="web-content w-full overflow-y-scroll">
-      {/* <Button
-        name="System"
-        callback={() =>
-          appendChatComponent(
-            <Chat gerneratedBy={GeneratedBy.system}>
-              <WelcomeText />
-            </Chat>
-          )
-        }
-      />
-      <Button
-        name="User"
-        callback={() =>
-          appendChatComponent(
-            <Chat gerneratedBy={GeneratedBy.user}>
-              <WelcomeText />
-            </Chat>
-          )
-        }
-      /> */}
       <div>{chatComponents}</div>
     </div>
   );
