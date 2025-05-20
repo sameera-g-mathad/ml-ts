@@ -18,6 +18,7 @@ const fileUploadReducer = (
     delimiter: string;
     header: boolean;
     file: File | null;
+    submitStatus: boolean;
   },
   payload: { action: string; value: any }
 ) => {
@@ -30,6 +31,8 @@ const fileUploadReducer = (
       return { ...state, header: payload.value };
     case 'setFile':
       return { ...state, file: payload.value };
+
+    case 'setSubmitStatus': return { ...state, submitStatus: payload.value }
     default:
       return state;
   }
@@ -42,6 +45,7 @@ export const FileUpload: React.FC = React.memo(() => {
     delimiter: ',',
     header: false,
     file: null,
+    submitStatus: true
   });
   const setFile = useCallback((file: File) => {
     dispatch({ action: 'setFile', value: file });
@@ -49,6 +53,10 @@ export const FileUpload: React.FC = React.memo(() => {
 
   const setSwitch = useCallback((header: boolean) => {
     dispatch({ action: 'setHeader', value: header });
+  }, []);
+
+  const setSubmitStatus = useCallback((status: boolean) => {
+    dispatch({ action: 'setSubmitStatus', value: status });
   }, []);
 
   return (
@@ -82,19 +90,20 @@ export const FileUpload: React.FC = React.memo(() => {
             </span>
             <Button
               icon={false}
-              name="submit"
-              disabled={state.file == null ? true : false}
-              callback={() =>
+              name="Submit"
+              disabled={!state.file || !state.submitStatus ? true : false}
+              callback={() => {
+                setSubmitStatus(false);
                 appendChatComponent(
                   <Chat gerneratedBy="user">
                     <FileUploadAck
                       file={state.file}
                       header={state.header}
                       delimeter={state.delimiter}
-                      key={new Date().getTime()}
                     />
                   </Chat>
                 )
+              }
               }
             />
           </div>

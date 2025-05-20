@@ -23,6 +23,7 @@ export const ConversationTyping: React.FC<conversationalTypingInterface> = memo(
       } else {
         if (callback && index === text.length) callback();
       }
+      // eslint-disable-next-line 
     }, [index, speed, text]);
 
     return <div dangerouslySetInnerHTML={{ __html: words }} />;

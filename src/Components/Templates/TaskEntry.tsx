@@ -5,6 +5,13 @@ import { Chat } from '../Chat';
 import { TaskSelection } from './index';
 import { taskInterface } from '../../interface';
 
+/**
+ * TaskEntry component is responsible for displaying a typing animation
+ * and then rendering the TaskSelection component based on the task provided.
+ * 
+ * @param {taskInterface} task - The task to be executed.
+ * @returns {JSX.Element} - The rendered component.
+ */
 export const TaskEntry: React.FC<taskInterface> = memo(({ task }) => {
   const { updateTaskAndAppendChat } = useContext(ChatContext);
   const replies = [
@@ -17,6 +24,7 @@ export const TaskEntry: React.FC<taskInterface> = memo(({ task }) => {
     'Please run the [classification/regression] model and tell me what the outcome is.',
     'Can you perform a [classification/regression] analysis and display the results?',
   ];
+  // Randomly select a reply from the list of replies.
   const reply = useRef(
     replies[Math.floor(Math.random() * replies.length)].replace(
       '[classification/regression]',

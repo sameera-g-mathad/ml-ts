@@ -17,13 +17,12 @@ export const FileUploadAck: React.FC<fileUploadAckInterface> = memo(
       fr.read(file, header, delimeter).then((data) => addDataframe(data));
       // eslint-disable-next-line
     }, []);
+
     return (
       <ConversationTyping
-        text={`Please read the <b>'${
-          file.name
-        }'</b> with the delimiter of <b>'${delimeter}'</b> and the file <b>${
-          header ? 'does have a header' : "doesn't have a header"
-        } </b>`}
+        text={`Please read the <b>'${file.name
+          }'</b> with the delimiter of <b>'${delimeter}'</b> and the file <b>${header ? 'does have a header' : "doesn't have a header"
+          } </b>`}
         callback={() =>
           appendChatComponent(
             <Chat gerneratedBy="system" widthFull={true}>

@@ -4,8 +4,18 @@ import { ConversationTyping } from '../Reusables';
 import { Chat } from '../Chat';
 import { FileUpload } from './FileUpload';
 import { taskInterface } from '../../interface';
+
+/**
+ * TaskSelection component is responsible for displaying a typing animation
+ * and then rendering the FileUpload component based on the task provided.
+ *
+ * @param {taskInterface} task - The task to be executed.
+ * @returns {JSX.Element} - The rendered component.
+ */
+
 export const TaskSelection: React.FC<taskInterface> = memo(({ task }) => {
   const { appendChatComponent } = useContext(ChatContext);
+  // List of messages for each task type.
   const taskSelected = {
     Regression: [
       'Regression is a statistical technique used to model the relationship between one or more independent variables (also called predictors or features) and a dependent variable (also called the target or response). The goal of regression is to predict the dependent variable based on the values of the independent variables.',
@@ -24,6 +34,9 @@ export const TaskSelection: React.FC<taskInterface> = memo(({ task }) => {
       "You're exploring Classification. This technique is key when you want to distinguish between different types like types of plants from their features or credit card transactions as fraudulent or legitimate. Let's execute your classification analysis!",
     ],
   };
+  // Randomly select a message from the list of messages for the selected task.
+  // Here useRef is used to persist the selected message across renders.
+  // This is important to ensure that the same message is displayed when the component re-renders.
   const msgSelected = useRef(
     Math.floor(Math.random() * taskSelected[task].length)
   );

@@ -1,7 +1,7 @@
 import React from 'react';
 import { ConversationTyping } from '../Reusables';
 
-export const TerminateAbruptly: React.FC = () => {
+export const TerminateAbruptly: React.FC = React.memo(() => {
   return (
     <div>
       <ConversationTyping
@@ -11,6 +11,6 @@ export const TerminateAbruptly: React.FC = () => {
       />
     </div>
   );
-};
+});
 
 TerminateAbruptly.displayName = 'TerminateAbruptly';
