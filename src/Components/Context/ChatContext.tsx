@@ -20,10 +20,10 @@ export const ChatContext = createContext<chatInterfaceByContext>({
   trainY: null,
   testX: null,
   testY: null,
-  appendChatComponent: () => {},
-  addDataframe: () => {},
-  updateTask: () => {},
-  updateTaskAndAppendChat: () => {},
+  appendChatComponent: () => { },
+  addDataframe: () => { },
+  updateTask: () => { },
+  updateTaskAndAppendChat: () => { },
 });
 
 /**
@@ -77,7 +77,7 @@ const chatContextReducer = (
  * @param param0 - children
  * @returns 
  */
-export const ChatContextProvider: React.FC<childrenProp> = ({ children }) => {
+export const ChatContextProvider: React.FC<childrenProp> = React.memo(({ children }) => {
   const [state, dispatch] = useReducer(chatContextReducer, {
     chatComponents: [
       <Chat key={1} gerneratedBy="system">
@@ -154,6 +154,6 @@ export const ChatContextProvider: React.FC<childrenProp> = ({ children }) => {
       {children}
     </ChatContext.Provider>
   );
-};
+});
 
 ChatContextProvider.displayName = 'ChatContextProvider';

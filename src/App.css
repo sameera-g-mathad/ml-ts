@@ -47,7 +47,7 @@
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
     var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
   display: block;
-  transition-duration: 0.1s;
+  transition: transform 0.2s ease, width 0.2s, height 0.2s;
   margin-left: 5px;
 }
 

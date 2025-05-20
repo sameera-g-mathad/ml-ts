@@ -1,16 +1,21 @@
 // import { nt, NDArray } from './numts';
 
-type dataframe = (string | number)[][];
+type data = (string | number)[][];
 type column = (number | string)[];
 
+/**
+ * DataFrame class represents a 2D data structure similar to a table.
+ * It contains methods to load and process data from a file.
+ * The data is stored in a 2D array, and the class also keeps track of the column names,
+ */
 export class DataFrame {
-  public data: dataframe;
+  public data: data;
   public columns: column;
   public shape: [number, number];
   public dtypes: string[];
 
   constructor(
-    data: dataframe,
+    data: data,
     column: column,
     shape: [number, number],
     dtypes: string[]
@@ -22,24 +27,48 @@ export class DataFrame {
   }
 }
 
+/**
+ * Process class handles the loading and processing of data files.
+ * It reads the file, processes the data, and returns a DataFrame object.
+ */
 class Process {
+  /**
+   * loadFile method reads a file and returns its content as a 2D array.
+   * It also extracts the column names and shape of the data.
+   *
+   * @param {File} file - The file to be read.
+   * @param {boolean} header - Indicates if the first row contains headers.
+   * @param {string} delimiter - The delimiter used in the file (default is comma).
+   * @returns {Promise<{ data: data; index: column; shape: [number, number] }>} - A promise that resolves to an object containing the data, index, and shape.
+   */
   loadFile(
     file: File,
     header: boolean = true,
     delimiter: string = ','
-  ): Promise<{ data: dataframe; index: column; shape: [number, number] }> {
+  ): Promise<{ data: data; index: column; shape: [number, number] }> {
+
+    // This will return a promise as the file reading is asynchronous.
+    // The promise will resolve with the data, index, and shape of the file.
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
-      const data: dataframe = [];
+      const data: data = [];
       const index: column = [];
       const shape: [number, number] = [0, 0];
+
+      // The onload event is triggered when the file is read successfully.
       reader.onload = async ({ target }) => {
         try {
+          // The file is read as text.
           if (target && typeof target.result === 'string') {
+
+            // Split the file content by new line to get rows.
             const fileRead = target.result.trim().split('\n');
             shape[0] = fileRead.length;
             const columns = fileRead[0].trim().split(delimiter);
             shape[1] = columns.length;
+
+            // If header is true, the first row is treated as column names.
+            // Otherwise, the columns are numbered from 0 to shape[1] - 1.
             if (header) {
               shape[0] = fileRead.length - 1;
               for (let column of columns) index.push(column);
@@ -48,11 +77,17 @@ class Process {
                 index.push(i);
               }
             }
+
+            // Take sure from which row to start reading the data.
+            // If header is true, start from the second row.
+            // Otherwise, start from the first row.
             let row = header ? 1 : 0;
             for (row; row < fileRead.length; row++) {
               const row_data = fileRead[row].trim().split(delimiter);
               data.push(row_data);
             }
+
+            // The resovle method is called to resolve the promise with the data, index, and shape.
             resolve({ data, index, shape });
           }
         } catch (error) {
@@ -60,57 +95,23 @@ class Process {
         }
       };
 
+      // The onerror event is triggered when there is an error reading the file.
       reader.onerror = (error) => reject(error);
+
+      // The readAsText method is used to read the file as text.
       reader.readAsText(file);
     });
   }
-  // loadFile(
-  //   file: File,
-  //   header: boolean = true,
-  //   delimiter: string = ','
-  // ): { data: dataframe; index: column; shape: [number, number] } {
-  //   const reader = new FileReader();
-  //   const data: dataframe = [];
-  //   const index: column = [];
-  //   const shape: [number, number] = [0, 0];
-  //   let ready = false;
-  //   const checker = () => {
-  //     if (ready) {
-  //       return
-  //     }
-  //     setTimeout(checker, 1000);
-  //   };
-  //   reader.onloadend = async ({ target }) => {
-  //     try {
-  //       if (target && typeof target.result === 'string') {
-  //         const fileRead = target.result.trim().split('\n');
-  //         shape[0] = fileRead.length;
-  //         const columns = fileRead[0].trim().split(delimiter);
-  //         shape[1] = columns.length;
-  //         if (header) {
-  //           shape[0] = fileRead.length - 1;
-  //           for (let column of columns) index.push(column);
-  //         } else {
-  //           for (let i = 0; i < shape[1]; i++) {
-  //             index.push(i);
-  //           }
-  //         }
-  //         let row = header ? 1 : 0;
-  //         for (row; row < fileRead.length; row++) {
-  //           const row_data = fileRead[row].trim().split(delimiter);
-  //           data.push(row_data);
-  //         }
-  //       }
-  //       ready = true;
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //     reader.readAsText(file);
-  //     checker();
-  //   };
-  // }
+
+  /**
+   * 
+   * @param data - 2D array of data that is read fromt he file.
+   * @param columns - Column names or indices.
+   * @param shape - Shape of the data.
+   * @returns 
+   */
   process(
-    data: dataframe,
+    data: data,
     columns: column,
     shape: [number, number]
   ): DataFrame {
@@ -165,11 +166,22 @@ class Process {
   }
 }
 
+/**
+ * Frame class is a wrapper around the Process class.
+ * It provides a method to read a file and return a DataFrame object.
+ */
 class Frame {
   private process: Process;
   constructor() {
     this.process = new Process();
   }
+  /**
+   * Entry point to read a file and return a DataFrame object.
+   * @param file 
+   * @param header 
+   * @param delimiter 
+   * @returns Promise<DataFame>
+   */
   async read(
     file: File,
     header: boolean,

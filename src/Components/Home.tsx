@@ -1,4 +1,4 @@
-import React, { memo, useContext } from 'react';
+import React, { memo, useContext, useMemo } from 'react';
 import { Navbar, Content } from './index';
 import { ThemeContext, ChatContextProvider } from './Context';
 
@@ -17,17 +17,21 @@ export const Home: React.FC = memo(() => {
   // Use themecontext to extract the theme
   // and set the background color of the container
   const { theme } = useContext(ThemeContext);
+
+  // Memoizing the content to prevent re-renders during theme changes.
+  const content = useMemo(() => {
+    return <Content />
+  }, [])
   return (
     <div
-      className={`web-container transition duration-300 ease-in-out ${
-        theme === 'light' ? 'bg-white' : 'bg-gray-900'
-      }`}
+      className={`web-container transition duration-300 ease-in-out ${theme === 'light' ? 'bg-white' : 'bg-gray-900'
+        }`}
     >
       {/* Make sure Navbar is displayed on the top always*/}
       <Navbar />
       {/* ChatContextProvider is added here to prevent re-renders of the Home component.*/}
       <ChatContextProvider>
-        <Content />
+        {content}
       </ChatContextProvider>
     </div>
   );
