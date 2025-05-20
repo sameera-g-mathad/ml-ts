@@ -1,4 +1,4 @@
-import React, { createContext, useReducer } from 'react';
+import React, { createContext, useReducer, useRef } from 'react';
 import { childrenProp, chatInterfaceByContext } from '../../interface';
 import { WelcomeText } from '../Templates';
 import { Chat } from '../Chat';
@@ -15,7 +15,7 @@ import { NDArray } from '../../ml-ts/numts';
 export const ChatContext = createContext<chatInterfaceByContext>({
   chatComponents: [],
   task: 'Regression',
-  df: new DataFrame([], [], [0, 0], []),
+  df: null,
   trainX: null,
   trainY: null,
   testX: null,
@@ -35,7 +35,7 @@ const chatContextReducer = (
   state: {
     chatComponents: JSX.Element[];
     task: 'Regression' | 'Classification';
-    df: DataFrame;
+    // df: DataFrame;
     trainX: NDArray | null;
     trainY: NDArray | null;
     testX: NDArray | null;
@@ -59,8 +59,8 @@ const chatContextReducer = (
         task: payload.value[0],
         chatComponents: [...state.chatComponents, payload.value[1]],
       };
-    case 'addDataFrame':
-      return { ...state, df: payload.value };
+    // case 'addDataFrame':
+    //   return { ...state, df: payload.value };
     default:
       return state;
   }
@@ -85,7 +85,7 @@ export const ChatContextProvider: React.FC<childrenProp> = React.memo(({ childre
       </Chat>,
     ],
     task: '',
-    df: new DataFrame([], [], [0, 0], []),
+    // df: new DataFrame([], [], [0, 0], []),
     trainX: null,
     trainY: null,
     testX: null,
@@ -93,6 +93,8 @@ export const ChatContextProvider: React.FC<childrenProp> = React.memo(({ childre
     // header: false,
     // delimeter: '',
   });
+
+  const dfRef = useRef<DataFrame | null>(null);
 
   /**
    * This function is used to update the task and append a chat component to the chat components array.
@@ -117,7 +119,7 @@ export const ChatContextProvider: React.FC<childrenProp> = React.memo(({ childre
    * @param df - The dataframe to be added to the state.
    */
   const addDataframe = (df: DataFrame) => {
-    dispatch({ action: 'addDataFrame', value: df });
+    dfRef.current = df;
   };
 
   /**
@@ -145,6 +147,7 @@ export const ChatContextProvider: React.FC<childrenProp> = React.memo(({ childre
     <ChatContext.Provider
       value={{
         ...state,
+        df: dfRef.current,
         appendChatComponent,
         addDataframe,
         updateTaskAndAppendChat,

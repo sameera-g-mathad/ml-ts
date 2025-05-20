@@ -7,6 +7,10 @@ import { TerminateAbruptly } from './TerminateAbruptly';
 export const DisplayDf: React.FC = memo(() => {
   const { df, appendChatComponent } = useContext(ChatContext);
   const [complete, setComplete] = useState(false);
+  if (!df) {
+    return null;
+  }
+  // Check if df is empty
   return (
     <div>
       <ConversationTyping

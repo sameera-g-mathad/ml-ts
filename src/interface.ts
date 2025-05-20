@@ -25,7 +25,7 @@ export interface themeInterfaceByContext {
 export interface chatInterfaceByContext {
   chatComponents: JSX.Element[];
   task: 'Regression' | 'Classification';
-  df: DataFrame;
+  df: DataFrame | null;
   trainX: NDArray | null;
   trainY: NDArray | null;
   testX: NDArray | null;
