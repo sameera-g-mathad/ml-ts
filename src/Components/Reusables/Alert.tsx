@@ -20,7 +20,7 @@ export const Alert: React.FC<childrenProp & alertInterface> = ({
   return (
     <div
       style={{ ...allowedColors[type] }}
-      className="w-full max-h-20 border my-1 p-2 rounded-lg"
+      className="w-full max-h-20 border my-2 p-2 rounded-lg"
     >
       {children}
     </div>

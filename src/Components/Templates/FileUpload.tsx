@@ -1,4 +1,4 @@
-import React, { useReducer, useCallback, useContext } from 'react';
+import React, { useCallback, useContext, useReducer } from 'react';
 import {
   Button,
   // Alert,
@@ -6,11 +6,12 @@ import {
   FileInput,
   HorizontalRule,
   Input,
+  InputGroup,
   Switch,
 } from '../Reusables';
 import { ChatContext } from '../Context';
 import { Chat } from '../Chat';
-import { FileUploadAck } from './FileUploadAck';
+import { FileUploadAck } from './index';
 
 const fileUploadReducer = (
   state: {
@@ -47,6 +48,10 @@ export const FileUpload: React.FC = React.memo(() => {
     file: null,
     submitStatus: true
   });
+
+  const setDelimeter = useCallback((delimiter: string) => {
+    dispatch({ action: 'setDelimeter', value: delimiter })
+  }, []);
   const setFile = useCallback((file: File) => {
     dispatch({ action: 'setFile', value: file });
   }, []);
@@ -80,14 +85,12 @@ export const FileUpload: React.FC = React.memo(() => {
           <HorizontalRule />
           <div className="flex flex-wrap items-center justify-evenly mt-3">
             <FileInput callback={setFile} />
-            <span className="flex items-center">
-              <span className="mr-2">Delimeter</span>
-              <Input size="small" defaultValue={state.delimiter} />
-            </span>
-            <span className="flex items-center ">
-              <span className="mr-2">Header</span>
+            <InputGroup label='Delimeter'>
+              <Input size="small" defaultValue={state.delimiter} callback={setDelimeter} />
+            </InputGroup>
+            <InputGroup label='Header'>
               <Switch switchName="Header" callback={setSwitch} />
-            </span>
+            </InputGroup>
             <Button
               icon={false}
               name="Submit"

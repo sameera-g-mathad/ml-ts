@@ -12,9 +12,12 @@ export interface fileUploadAckInterface {
 export const FileUploadAck: React.FC<fileUploadAckInterface> = memo(
   ({ file, header, delimeter }) => {
     const { addDataframe, appendChatComponent } = useContext(ChatContext);
-
     useEffect(() => {
-      fr.read(file, header, delimeter).then((data) => addDataframe(data));
+      async function readFile() {
+        const df = await fr.read(file, header, delimeter);
+        addDataframe(df);
+      }
+      readFile();
       // eslint-disable-next-line
     }, []);
 

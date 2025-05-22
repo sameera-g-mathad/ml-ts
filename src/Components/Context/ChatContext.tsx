@@ -1,4 +1,4 @@
-import React, { createContext, useReducer, useRef } from 'react';
+import React, { createContext, useCallback, useReducer, useRef } from 'react';
 import { childrenProp, chatInterfaceByContext } from '../../interface';
 import { WelcomeText } from '../Templates';
 import { Chat } from '../Chat';
@@ -75,13 +75,15 @@ const chatContextReducer = (
  * 
  * 
  * @param param0 - children
- * @returns 
+ * @returns JSX.Element
  */
 export const ChatContextProvider: React.FC<childrenProp> = React.memo(({ children }) => {
   const [state, dispatch] = useReducer(chatContextReducer, {
     chatComponents: [
       <Chat key={1} gerneratedBy="system">
-        <WelcomeText key={new Date().getTime()} />
+        {/* <WelcomeText key={new Date().getTime()} />
+         */}
+        <WelcomeText />
       </Chat>,
     ],
     task: '',
@@ -101,47 +103,47 @@ export const ChatContextProvider: React.FC<childrenProp> = React.memo(({ childre
    * @param task - The task to be updated.
    * @param Component - The chat component to be appended.
    */
-  const updateTaskAndAppendChat = (task: string, Component: JSX.Element) => {
+  const updateTaskAndAppendChat = useCallback((task: string, Component: JSX.Element) => {
     dispatch({
       action: 'updateTaskAndAppendChat',
       value: [
         task,
         React.cloneElement(Component, {
-          key: state.chatComponents.length + 1,
+          key: new Date().getTime(),
         }),
       ],
     });
-  };
+  }, []);
 
   /**
    * This function is used to add a dataframe to the state.
    * It is used to update the dataframe in the state when the file is read.
    * @param df - The dataframe to be added to the state.
    */
-  const addDataframe = (df: DataFrame) => {
+  const addDataframe = useCallback((df: DataFrame) => {
     dfRef.current = df;
-  };
+  }, []);
 
   /**
    * This function is used to update the task in the state.
    * @param task - The task to be updated.
    */
-  const updateTask = (task: string) => {
+  const updateTask = useCallback((task: string) => {
     dispatch({ action: 'updateTask', value: task });
-  };
+  }, []);
 
   /**
    * This function is used to append a chat component to the chat components array.
    * @param Component - The chat component to be appended.
    */
-  const appendChatComponent = (Component: JSX.Element) => {
+  const appendChatComponent = useCallback((Component: JSX.Element) => {
     dispatch({
       action: 'appendChatComponent',
       value: React.cloneElement(Component, {
-        key: state.chatComponents.length + 1,
+        key: new Date().getTime()
       }),
     });
-  };
+  }, []);
   // Return the context provider with the state and functions
   return (
     <ChatContext.Provider

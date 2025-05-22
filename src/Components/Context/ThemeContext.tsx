@@ -1,4 +1,4 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useCallback, useMemo, useState } from 'react';
 import { childrenProp, themeInterfaceByContext } from '../../interface';
 
 export const ThemeContext = createContext<themeInterfaceByContext>({
@@ -30,14 +30,19 @@ export const ThemeContextProvider: React.FC<childrenProp> = ({ children }) => {
     'rgb(96, 165, 250)', // bg-blue-400
     'rgb(250, 204, 21)', // bg-yellow-400
   ];
-  let choice = Math.floor(Math.random() * webColors.length);
-  let color = webColors[choice];
+
+  const color = useMemo(() => {
+    // Randomly select a color from the webColors array
+    // and return it as a string
+    let choice = Math.floor(Math.random() * webColors.length);
+    return webColors[choice];
+  }, []);
 
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
   // const useColor = useState(color);
-  const changeTheme = (change: boolean) => {
+  const changeTheme = useCallback((change: boolean) => {
     setTheme(change ? 'dark' : 'light');
-  };
+  }, []);
   return (
     <ThemeContext.Provider
       value={{

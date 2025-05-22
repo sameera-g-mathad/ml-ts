@@ -75,7 +75,10 @@ export interface chatInterface {
 }
 
 export interface tableInterface {
-  data: DataFrame;
+  columns: (string | number)[];
+  data: (string | number)[][];
+  displayFrom?:number;
+  displayTo?:number;
 }
 
 /**
@@ -118,5 +121,11 @@ export interface alertInterface {
  */
 export interface inputInterface {
   size: 'small' | 'large' | 'medium' | 'full';
-  defaultValue: string;
+  defaultValue: string | number;
+  callback?: (e:string)=>void;
+}
+
+export interface inputGroupInterface
+{
+  label: string;
 }

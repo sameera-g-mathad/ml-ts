@@ -83,7 +83,9 @@ class Process {
             // Otherwise, start from the first row.
             let row = header ? 1 : 0;
             for (row; row < fileRead.length; row++) {
-              const row_data = fileRead[row].trim().split(delimiter);
+              // console.log(fileRead[row]);
+              // break;
+              const row_data = fileRead[row].trim().split(new RegExp(`(?<!\\s)${delimiter}(?!\\s)`));
               data.push(row_data);
             }
 
@@ -189,6 +191,7 @@ class Frame {
   ): Promise<DataFrame> {
     return await this.process.read(file, header, delimiter);
   }
+
 }
 
 export const fr = new Frame();

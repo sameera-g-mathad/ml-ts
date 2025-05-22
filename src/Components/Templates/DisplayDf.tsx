@@ -1,16 +1,33 @@
-import React, { memo, useContext, useState } from 'react';
+import React, { memo, useCallback, useContext, useState } from 'react';
 import { ChatContext } from '../Context';
 import { Table } from '../Reusables/Table';
-import { ConversationTyping } from '../Reusables';
+import { Alert, ConversationTyping, HorizontalRule, Input, InputGroup } from '../Reusables';
 import { Chat } from '../Chat';
 import { TerminateAbruptly } from './TerminateAbruptly';
 export const DisplayDf: React.FC = memo(() => {
   const { df, appendChatComponent } = useContext(ChatContext);
   const [complete, setComplete] = useState(false);
+  const [displayFrom, setDisplayFrom] = useState<number>(0);
+  const [displayTo, setDisplayTo] = useState<number>(20);
+
+  const handleDisplayFrom = useCallback((value: string) => {
+    if (value === '')
+      return setDisplayFrom(0);
+    let newValue = parseInt(value);
+    setDisplayFrom(newValue);
+  }, [])
+
+  const handleDisplayTo = useCallback((value: string) => {
+    if (value === '')
+      return setDisplayTo(0);
+    let newValue = parseInt(value);
+    setDisplayTo(newValue);
+  }, [])
+
+  // Check if df is empty
   if (!df) {
     return null;
   }
-  // Check if df is empty
   return (
     <div>
       <ConversationTyping
@@ -27,7 +44,23 @@ export const DisplayDf: React.FC = memo(() => {
           }
         }}
       />
-      {complete && <Table data={df} key={new Date().getTime()} />}
+      <HorizontalRule />
+      <Alert type='note'>
+        <span>You can use the below input fields to view your data within a range of 100 data points.</span>
+      </Alert>
+      {complete &&
+        <div>
+          <span className='flex gap-5 my-2'>
+            <InputGroup label='from'>
+              <Input defaultValue={displayFrom} size='medium' callback={handleDisplayFrom} />
+            </InputGroup>
+            <InputGroup label='to'>
+              <Input defaultValue={displayTo} size='medium' callback={handleDisplayTo} />
+            </InputGroup>
+          </span>
+          <Table columns={df.columns} data={df.data} displayFrom={displayFrom} displayTo={(displayTo - displayFrom) > 100 ? displayFrom + 100 : displayTo} key={new Date().getTime()} />
+        </div>
+      }
     </div>
   );
 });
