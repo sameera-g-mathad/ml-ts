@@ -1,10 +1,13 @@
 import React, { memo, useCallback, useContext, useState } from 'react';
 import { ChatContext } from '../Context';
-import { Table } from '../Reusables/Table';
-import { Alert, ConversationTyping, HorizontalRule, Input, InputGroup } from '../Reusables';
+import { Alert, ConversationTyping, HorizontalRule, Input, InputGroup, Table } from '../Reusables';
 import { Chat } from '../Chat';
-import { TerminateAbruptly } from './TerminateAbruptly';
+import { DfInfo } from './index';
+
+
 export const DisplayDf: React.FC = memo(() => {
+
+
   const { df, appendChatComponent } = useContext(ChatContext);
   const [complete, setComplete] = useState(false);
   const [displayFrom, setDisplayFrom] = useState<number>(0);
@@ -35,21 +38,19 @@ export const DisplayDf: React.FC = memo(() => {
       there are any discripancies in the data, I am highlighting them.`}
         callback={() => {
           setComplete(true);
-          if (df.dtypes.includes('string')) {
-            appendChatComponent(
-              <Chat gerneratedBy="system">
-                <TerminateAbruptly />
-              </Chat>
-            );
-          }
+          appendChatComponent(
+            <Chat gerneratedBy="system">
+              <DfInfo />
+            </Chat>
+          );
         }}
       />
-      <HorizontalRule />
-      <Alert type='note'>
-        <span>You can use the below input fields to view your data within a range of 100 data points.</span>
-      </Alert>
       {complete &&
         <div>
+          <HorizontalRule />
+          <Alert type='note'>
+            <span>You can use the below input fields to view your data within a range of 100 data points.</span>
+          </Alert>
           <span className='flex gap-5 my-2'>
             <InputGroup label='from'>
               <Input defaultValue={displayFrom} size='medium' callback={handleDisplayFrom} />

@@ -7,9 +7,9 @@ const TableComponent: React.FC<tableInterface & themeInterface> = memo(
       <div>
         <table className="w-full border border-separate rounded-lg">
           <thead>
-            <tr className='table table-fixed w-full' style={{ backgroundColor: color }}>
+            <tr className='table table-fixed w-full' >
               {columns.map((el, index) => (
-                <th className="border rounded" key={index}>
+                <th className="border rounded capitalize" key={index} style={{ backgroundColor: color }}>
                   {el}
                 </th>
               ))}

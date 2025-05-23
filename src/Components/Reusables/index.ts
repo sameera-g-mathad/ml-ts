@@ -1,8 +1,13 @@
-export * from './Switch';
-export * from './ConversationTyping';
-export * from './Button';
 export * from './Alert';
-export * from './HorizontalRule';
+export * from './Button';
+export * from './ConversationTyping';
 export * from './FileInput';
+export * from './HorizontalRule';
 export * from './Input';
 export * from "./InputGroup"
+export * from './Switch';
+export * from './Table'
+;
+
+
+

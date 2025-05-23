@@ -118,30 +118,49 @@ class Process {
     shape: [number, number]
   ): DataFrame {
     const dtypes = [];
+    // Initially all the datatypes are string, as the readFile returns list[strings]
     for (let i = 0; i < columns.length; i++) {
       dtypes.push('string');
     }
-    for (let column = 0; column < shape[1]; column++) {
+
+    // Iterate each column assuming that the column has numbers.
+    for (let column = 0; column < shape[1]; column++) 
+    {
+      // set a flag that is used later. By default set to true
       let dtype_number = true;
+
+      // Iterate all the rows in the dataframe, for each column.
       for (let row = 0; row < shape[0]; row++) {
+        // Convert the value to string, as empty string will have length 0.
         let value = data[row][column].toString();
+
+        // If there exist an entry which is empty, then the column
+        // is not made of numbers, even though it could be.
         if (value.length === 0) {
           dtype_number = false;
           data[row][column] = 'undefined';
         }
+        // This will test if the value is string or number, ex: 'Male' or '45'
         let new_value = parseInt(value) || parseFloat(value);
         if (isNaN(new_value)) {
           dtype_number = false;
         }
       }
+      // If all the values in the column is tested and dtype_number = true,
+      // then the column is made up of numbers.
       if (dtype_number) {
         dtypes[column] = 'number';
       }
     }
 
+    // We tested whether a column is number or not in the above loop.
+    // Now we will convert them into numbers.
+    // We did not do this in the previous loop as we weren't sure
+    // if there were undefined values.
     for (let column = 0; column < shape[1]; column++) {
       if (dtypes[column] === 'number') {
         for (let row = 0; row < shape[0]; row++) {
+          // Convert values to number.
           let value = data[row][column].toString();
           data[row][column] = parseFloat(value);
         }
@@ -149,23 +168,62 @@ class Process {
     }
     return new DataFrame(data, columns, shape, dtypes);
   }
+
+  /**
+   * 
+   * @param file File which will be read.
+   * @param header If the file has header to consider or not.
+   * @param delimiter To split each row, ex: ',', '|' etc.
+   * @returns 
+   */
   async read(
     file: File,
     header: boolean = true,
     delimiter: string = ','
   ): Promise<DataFrame> {
     try {
+      // First read the file and get data, index(columns) and shape
       const { data, index, shape } = await this.loadFile(
         file,
         header,
         delimiter
       );
+      // Process the data to convert data types if any.
       return this.process(data, index, shape);
     } catch (error) {
       console.log(error);
       throw error;
     }
   }
+  /**
+   * This method is used to return the info of the dataframe that is 
+   * passed. similar to `DataFrame.info()` in pandas.
+   * @param df The Dataframe instance for which the info will be returned
+   * @returns New Dataframe that consists of info of the requested dataframe
+   */
+  info(df:DataFrame):DataFrame
+  {
+    // Name the columns as 'columns', 'data type', 'non-null values' as they are fixed.
+    let columns:column = ['columns', 'data type', 'non-null values'] 
+    let info: data = [];
+    // Loop through each column
+    for(let column=0; column < df.shape[1]; column++)
+    {
+      // To count the non-null values in a column
+      let count = 0
+      // Loop through each row in a column
+      for(let row = 0; row < df.shape[0]; row++)
+      {
+        // Skip the undefined values
+        if(df.data[row][column] === 'undefined')
+          continue;
+        count++;
+      }
+      // We push the column name, its dtype and unique count.
+      info.push([df.columns[column], df.dtypes[column], count])
+    }
+    return new DataFrame(info, columns, [info.length, info[0].length], ['string', 'string', 'number'])
+    }
 }
 
 /**
@@ -177,6 +235,12 @@ class Frame {
   constructor() {
     this.process = new Process();
   }
+
+  getInfo(df:DataFrame):DataFrame
+  {
+    return this.process.info(df)
+  }
+
   /**
    * Entry point to read a file and return a DataFrame object.
    * @param file 

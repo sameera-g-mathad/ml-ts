@@ -4,7 +4,7 @@ import withTheme from '../HOC/withTheme';
 export const HorizontalRuleComponent: React.FC<themeInterface> = ({
   color,
 }) => {
-  return <hr style={{ borderColor: color }} className="mt-3 border" />;
+  return <hr style={{ borderColor: color }} className="my-3 border" />;
 };
 
 HorizontalRuleComponent.displayName = 'HorizontalRuleComponent';

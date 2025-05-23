@@ -1,5 +1,7 @@
 // D
+export * from './DfInfo'
 export * from './DisplayDf';
+
 
 // F
 export * from './FileUpload';
