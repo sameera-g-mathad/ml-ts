@@ -13,17 +13,20 @@ export class DataFrame {
   public columns: column;
   public shape: [number, number];
   public dtypes: string[];
+  public isNan: boolean[]; // This can be used to test if the column has NaN ('undefined') and can be dropped.
 
   constructor(
     data: data,
     column: column,
     shape: [number, number],
-    dtypes: string[]
+    dtypes: string[],
+    isNan: boolean[]
   ) {
     this.data = data;
     this.columns = column;
     this.shape = shape;
     this.dtypes = dtypes;
+    this.isNan = isNan
   }
 }
 
@@ -117,7 +120,8 @@ class Process {
     columns: column,
     shape: [number, number]
   ): DataFrame {
-    const dtypes = [];
+    const dtypes:string[] = [];
+    const isNan:boolean[] = []; 
     // Initially all the datatypes are string, as the readFile returns list[strings]
     for (let i = 0; i < columns.length; i++) {
       dtypes.push('string');
@@ -166,7 +170,7 @@ class Process {
         }
       }
     }
-    return new DataFrame(data, columns, shape, dtypes);
+    return new DataFrame(data, columns, shape, dtypes, isNan);
   }
 
   /**
@@ -222,7 +226,7 @@ class Process {
       // We push the column name, its dtype and unique count.
       info.push([df.columns[column], df.dtypes[column], count])
     }
-    return new DataFrame(info, columns, [info.length, info[0].length], ['string', 'string', 'number'])
+    return new DataFrame(info, columns, [info.length, info[0].length], ['string', 'string', 'number'], [false, false, false])
     }
 }
 

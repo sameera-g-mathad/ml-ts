@@ -6,8 +6,7 @@ export * from './HorizontalRule';
 export * from './Input';
 export * from "./InputGroup"
 export * from './Switch';
-export * from './Table'
-;
-
+export * from './Table';
+export * from './TableGroup'
 
 

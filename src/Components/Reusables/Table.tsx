@@ -2,23 +2,23 @@ import React, { memo } from 'react';
 import withTheme from '../HOC/withTheme';
 import { tableInterface, themeInterface } from '../../interface';
 const TableComponent: React.FC<tableInterface & themeInterface> = memo(
-  ({ columns, color, data, displayFrom, displayTo }) => {
+  ({ columns, color, data, colFrom, colTo, rowFrom, rowTo }) => {
     return (
-      <div>
-        <table className="w-full border border-separate rounded-lg">
+      <div className='overflow-x-scroll'>
+        <table className="w-full border border-separate rounded-lg ">
           <thead>
-            <tr className='table table-fixed w-full' >
-              {columns.map((el, index) => (
-                <th className="border rounded capitalize" key={index} style={{ backgroundColor: color }}>
+            <tr className='table table-fixed w-full ' >
+              {columns.slice(colFrom, colTo).map((el, index) => (
+                <th className="border rounded capitalize w-48" key={index} style={{ backgroundColor: color }}>
                   {el}
                 </th>
               ))}
             </tr>
           </thead>
           <tbody className="block max-h-96 overflow-y-scroll">
-            {data.slice(displayFrom, displayTo).map((row, row_index) => (
+            {data.slice(rowFrom, rowTo).map((row, row_index) => (
               <tr className='table table-fixed w-full' key={row_index}>
-                {row.map((el, col_index) => (
+                {row.slice(colFrom, colTo).map((el, col_index) => (
                   <td className="border" key={col_index}>
                     <span
                       className={`w-full flex justify-center ${el === 'undefined' ? 'text-red-500' : ''

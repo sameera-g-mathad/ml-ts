@@ -3,7 +3,7 @@ import { fr } from '../../ml-ts/frame';
 import { ConversationTyping } from '../Reusables';
 import { ChatContext } from '../Context';
 import { Chat } from '../Chat';
-import { DisplayDf } from './DisplayDf';
+import { DisplayDf, DfInfo } from './index';
 export interface fileUploadAckInterface {
   file: File;
   header: boolean;

@@ -2,8 +2,8 @@ import React from 'react'
 import { childrenProp, inputGroupInterface } from '../../interface'
 export const InputGroup: React.FC<childrenProp & inputGroupInterface> = ({ children, label }) => {
     return (
-        <div className="flex items-center capitalize">
-            <span className="mr-2">{label}:</span>
+        <div className="flex items-center">
+            <span className="mr-2">{label}</span>
             {children}
         </div>
     )

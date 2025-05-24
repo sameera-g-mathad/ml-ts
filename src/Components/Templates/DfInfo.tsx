@@ -1,6 +1,6 @@
 import React, { memo, useContext, useMemo } from 'react'
 import { ChatContext } from '../Context';
-import { ConversationTyping, HorizontalRule, Table } from '../Reusables';
+import { ConversationTyping, HorizontalRule, TableGroup } from '../Reusables';
 import { fr, DataFrame } from './../../ml-ts'
 // import { DataFrame } from '../../ml-ts/frame';
 
@@ -17,7 +17,7 @@ export const DfInfo: React.FC = memo(() => {
             </p>
             `} />
             <HorizontalRule />
-            <Table data={info.data} columns={info.columns} />
+            <TableGroup df={info} requireRowFilter={true} />
         </>
     )
 });

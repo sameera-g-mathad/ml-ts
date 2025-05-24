@@ -77,8 +77,15 @@ export interface chatInterface {
 export interface tableInterface {
   columns: (string | number)[];
   data: (string | number)[][];
-  displayFrom?:number;
-  displayTo?:number;
+  colFrom?:number;
+  colTo?:number;
+  rowFrom?: number;
+  rowTo?: number;
+}
+export interface tableGroupInterface {
+    df: DataFrame;
+    requireColumnFilter?: boolean;
+    requireRowFilter?: boolean
 }
 
 /**
