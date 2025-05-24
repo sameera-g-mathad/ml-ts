@@ -5,11 +5,11 @@ const TableComponent: React.FC<tableInterface & themeInterface> = memo(
   ({ columns, color, data, colFrom, colTo, rowFrom, rowTo }) => {
     return (
       <div className='overflow-x-scroll'>
-        <table className="w-full border border-separate rounded-lg ">
+        <table className="w-full border border-separate rounded-lg">
           <thead>
             <tr className='table table-fixed w-full ' >
               {columns.slice(colFrom, colTo).map((el, index) => (
-                <th className="border rounded capitalize w-48" key={index} style={{ backgroundColor: color }}>
+                <th className="border rounded capitalize w-32 truncate hover:text-xs" key={index} style={{ backgroundColor: color }}>
                   {el}
                 </th>
               ))}
@@ -19,10 +19,10 @@ const TableComponent: React.FC<tableInterface & themeInterface> = memo(
             {data.slice(rowFrom, rowTo).map((row, row_index) => (
               <tr className='table table-fixed w-full' key={row_index}>
                 {row.slice(colFrom, colTo).map((el, col_index) => (
-                  <td className="border" key={col_index}>
+                  <td className="border w-full truncate hover:text-base text-sm" key={col_index}>
                     <span
                       className={`w-full flex justify-center ${el === 'undefined' ? 'text-red-500' : ''
-                        }`}
+                        } `}
                     >
                       {el}
                     </span>
@@ -32,7 +32,7 @@ const TableComponent: React.FC<tableInterface & themeInterface> = memo(
             ))}
           </tbody>
         </table>
-      </div>
+      </div >
     );
   }
 );

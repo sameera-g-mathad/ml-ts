@@ -125,6 +125,7 @@ class Process {
     // Initially all the datatypes are string, as the readFile returns list[strings]
     for (let i = 0; i < columns.length; i++) {
       dtypes.push('string');
+      isNan.push(false);
     }
 
     // Iterate each column assuming that the column has numbers.
@@ -143,6 +144,7 @@ class Process {
         if (value.length === 0) {
           dtype_number = false;
           data[row][column] = 'undefined';
+          isNan[column] = true;
         }
         // This will test if the value is string or number, ex: 'Male' or '45'
         let new_value = parseInt(value) || parseFloat(value);
@@ -208,7 +210,7 @@ class Process {
   info(df:DataFrame):DataFrame
   {
     // Name the columns as 'columns', 'data type', 'non-null values' as they are fixed.
-    let columns:column = ['columns', 'data type', 'non-null values'] 
+    let columns:column = ['columns', 'data type', 'non-null values', 'null values'] 
     let info: data = [];
     // Loop through each column
     for(let column=0; column < df.shape[1]; column++)
@@ -224,7 +226,7 @@ class Process {
         count++;
       }
       // We push the column name, its dtype and unique count.
-      info.push([df.columns[column], df.dtypes[column], count])
+      info.push([df.columns[column], df.dtypes[column], count, String(df.isNan[column])])
     }
     return new DataFrame(info, columns, [info.length, info[0].length], ['string', 'string', 'number'], [false, false, false])
     }
