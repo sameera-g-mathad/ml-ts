@@ -7,7 +7,7 @@ const TableComponent: React.FC<tableInterface & themeInterface> = memo(
       <div className='overflow-x-scroll'>
         <table className="w-full border border-separate rounded-lg">
           <thead>
-            <tr className='table table-fixed w-full ' >
+            <tr className='table table-fixed w-full font-light' >
               {columns.slice(colFrom, colTo).map((el, index) => (
                 <th className="border rounded capitalize w-32 truncate hover:text-xs" key={index} style={{ backgroundColor: color }}>
                   {el}
