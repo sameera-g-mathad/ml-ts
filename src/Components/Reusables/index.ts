@@ -4,9 +4,8 @@ export * from './ConversationTyping';
 export * from './FileInput';
 export * from './HorizontalRule';
 export * from './Input';
-export * from "./InputGroup"
+export * from './InputGroup';
+export * from './SelectionPrompt';
 export * from './Switch';
 export * from './Table';
-export * from './TableGroup'
-
-
+export * from './TableGroup';

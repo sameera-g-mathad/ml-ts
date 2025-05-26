@@ -1,4 +1,4 @@
-import React, { memo, useContext } from 'react';
+import React, { memo, useContext, useEffect, useRef } from 'react';
 import { ChatContext } from './Context';
 
 /**
@@ -10,8 +10,14 @@ import { ChatContext } from './Context';
 export const Content: React.FC = memo(() => {
   // Use chatcontext to extract the chat components
   const { chatComponents } = useContext(ChatContext);
+  const scroller = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    if (scroller.current) {
+      scroller.current.scrollTop = scroller.current.scrollHeight
+    }
+  }, [chatComponents])
   return (
-    <div className="web-content w-full overflow-y-scroll">
+    <div ref={scroller} className="web-content w-full overflow-y-scroll">
       <div>{chatComponents}</div>
     </div>
   );
