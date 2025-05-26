@@ -1,6 +1,7 @@
 export * from './Alert';
 export * from './Button';
 export * from './ConversationTyping';
+export * from './DraggableContainer';
 export * from './FileInput';
 export * from './HorizontalRule';
 export * from './Input';

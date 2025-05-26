@@ -1,5 +1,5 @@
 import React, { memo, useState } from 'react'
-import { Button } from '../Reusables';
+import { Button, DraggableContainer } from '../Reusables';
 
 interface filterColumnsInterface {
     columns: string[];
@@ -30,28 +30,13 @@ export const FilterColumns: React.FC<filterColumnsInterface> = memo(({ columns }
     }
 
     return (
-        <div className='flex justify-between'>
-            <div className='border rounded w-64'>
-                {
-                    initialCols.map(
-                        (el, index) =>
-                            <div
-                                className='border-b p-1'
-                                draggable onDragStart={(e) => dragFromSource(e, el)}
-                                key={index}>{el}
-                            </div>
-                    )
-                }
-            </div>
+        <div className='flex justify-center gap-5'>
+            <DraggableContainer data={initialCols} draggable={true} onDragStart={dragFromSource} />
             <span className='flex flex-col justify-center gap-2'>
                 <Button name='Reset' callback={resetAll} />
                 <Button name='move all' callback={moveAll} />
             </span>
-            <div className='border rounded w-64' onDragOver={(e) => e.preventDefault()} onDrop={(e) => dropFromSource(e)}>
-                {
-                    filteredCols.map((el, index) => <div className='border-b p-1' key={index}>{el}</div>)
-                }
-            </div>
+            <DraggableContainer data={filteredCols} draggable={false} onDrop={dropFromSource} />
         </div >
     )
 })
