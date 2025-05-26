@@ -5,7 +5,7 @@ import { Chat } from '../Chat';
 import { DataFrame } from '../../ml-ts/frame';
 import { NDArray } from '../../ml-ts/numts';
 
-
+const dummyDataFrame = new DataFrame([], [], [0, 0], [], []);
 /**
  * This is the context provider for the chat application.
  * It provides the chat components and the task to the rest of the application.
@@ -15,7 +15,7 @@ import { NDArray } from '../../ml-ts/numts';
 export const ChatContext = createContext<chatInterfaceByContext>({
   chatComponents: [],
   task: 'Regression',
-  df: null,
+  df: dummyDataFrame,
   trainX: null,
   trainY: null,
   testX: null,
@@ -96,7 +96,7 @@ export const ChatContextProvider: React.FC<childrenProp> = React.memo(({ childre
     // delimeter: '',
   });
 
-  const dfRef = useRef<DataFrame | null>(null);
+  const dfRef = useRef<DataFrame>(dummyDataFrame);
 
   /**
    * This function is used to update the task and append a chat component to the chat components array.

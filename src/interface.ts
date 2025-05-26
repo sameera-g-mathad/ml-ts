@@ -25,7 +25,7 @@ export interface themeInterfaceByContext {
 export interface chatInterfaceByContext {
   chatComponents: JSX.Element[];
   task: 'Regression' | 'Classification';
-  df: DataFrame | null;
+  df: DataFrame;
   trainX: NDArray | null;
   trainY: NDArray | null;
   testX: NDArray | null;
@@ -77,15 +77,15 @@ export interface chatInterface {
 export interface tableInterface {
   columns: (string | number)[];
   data: (string | number)[][];
-  colFrom?:number;
-  colTo?:number;
+  colFrom?: number;
+  colTo?: number;
   rowFrom?: number;
   rowTo?: number;
 }
 export interface tableGroupInterface {
-    df: DataFrame;
-    requireColumnFilter?: boolean;
-    requireRowFilter?: boolean
+  df: DataFrame;
+  requireColumnFilter?: boolean;
+  requireRowFilter?: boolean;
 }
 
 /**
@@ -129,11 +129,9 @@ export interface alertInterface {
 export interface inputInterface {
   size: 'small' | 'large' | 'medium' | 'full';
   defaultValue: string | number;
-  callback?: (e:string)=>void;
+  callback?: (e: string) => void;
 }
 
-export interface inputGroupInterface
-{
+export interface inputGroupInterface {
   label: string;
 }
-

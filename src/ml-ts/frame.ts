@@ -1,7 +1,7 @@
 // import { nt, NDArray } from './numts';
 
 type data = (string | number)[][];
-type column = (number | string)[];
+type column = string[];
 
 /**
  * DataFrame class represents a 2D data structure similar to a table.
@@ -26,7 +26,7 @@ export class DataFrame {
     this.columns = column;
     this.shape = shape;
     this.dtypes = dtypes;
-    this.isNan = isNan
+    this.isNan = isNan;
   }
 }
 
@@ -49,7 +49,6 @@ class Process {
     header: boolean = true,
     delimiter: string = ','
   ): Promise<{ data: data; index: column; shape: [number, number] }> {
-
     // This will return a promise as the file reading is asynchronous.
     // The promise will resolve with the data, index, and shape of the file.
     return new Promise((resolve, reject) => {
@@ -63,7 +62,6 @@ class Process {
         try {
           // The file is read as text.
           if (target && typeof target.result === 'string') {
-
             // Split the file content by new line to get rows.
             const fileRead = target.result.trim().split('\n');
             shape[0] = fileRead.length;
@@ -77,7 +75,7 @@ class Process {
               for (let column of columns) index.push(column);
             } else {
               for (let i = 0; i < shape[1]; i++) {
-                index.push(i);
+                index.push(String(i));
               }
             }
 
@@ -88,7 +86,9 @@ class Process {
             for (row; row < fileRead.length; row++) {
               // console.log(fileRead[row]);
               // break;
-              const row_data = fileRead[row].trim().split(new RegExp(`(?<!\\s)${delimiter}(?!\\s)`));
+              const row_data = fileRead[row]
+                .trim()
+                .split(new RegExp(`(?<!\\s)${delimiter}(?!\\s)`));
               data.push(row_data);
             }
 
@@ -109,19 +109,15 @@ class Process {
   }
 
   /**
-   * 
+   *
    * @param data - 2D array of data that is read fromt he file.
    * @param columns - Column names or indices.
    * @param shape - Shape of the data.
-   * @returns 
+   * @returns
    */
-  process(
-    data: data,
-    columns: column,
-    shape: [number, number]
-  ): DataFrame {
-    const dtypes:string[] = [];
-    const isNan:boolean[] = []; 
+  process(data: data, columns: column, shape: [number, number]): DataFrame {
+    const dtypes: string[] = [];
+    const isNan: boolean[] = [];
     // Initially all the datatypes are string, as the readFile returns list[strings]
     for (let i = 0; i < columns.length; i++) {
       dtypes.push('string');
@@ -129,8 +125,7 @@ class Process {
     }
 
     // Iterate each column assuming that the column has numbers.
-    for (let column = 0; column < shape[1]; column++) 
-    {
+    for (let column = 0; column < shape[1]; column++) {
       // set a flag that is used later. By default set to true
       let dtype_number = true;
 
@@ -176,11 +171,11 @@ class Process {
   }
 
   /**
-   * 
+   *
    * @param file File which will be read.
    * @param header If the file has header to consider or not.
    * @param delimiter To split each row, ex: ',', '|' etc.
-   * @returns 
+   * @returns
    */
   async read(
     file: File,
@@ -202,34 +197,46 @@ class Process {
     }
   }
   /**
-   * This method is used to return the info of the dataframe that is 
+   * This method is used to return the info of the dataframe that is
    * passed. similar to `DataFrame.info()` in pandas.
    * @param df The Dataframe instance for which the info will be returned
    * @returns New Dataframe that consists of info of the requested dataframe
    */
-  info(df:DataFrame):DataFrame
-  {
+  info(df: DataFrame): DataFrame {
     // Name the columns as 'columns', 'data type', 'non-null values' as they are fixed.
-    let columns:column = ['columns', 'data type', 'non-null values', 'null values'] 
+    let columns: column = [
+      'columns',
+      'data type',
+      'non-null values',
+      'null values',
+    ];
     let info: data = [];
     // Loop through each column
-    for(let column=0; column < df.shape[1]; column++)
-    {
+    for (let column = 0; column < df.shape[1]; column++) {
       // To count the non-null values in a column
-      let count = 0
+      let count = 0;
       // Loop through each row in a column
-      for(let row = 0; row < df.shape[0]; row++)
-      {
+      for (let row = 0; row < df.shape[0]; row++) {
         // Skip the undefined values
-        if(df.data[row][column] === 'undefined')
-          continue;
+        if (df.data[row][column] === 'undefined') continue;
         count++;
       }
       // We push the column name, its dtype and unique count.
-      info.push([df.columns[column], df.dtypes[column], count, String(df.isNan[column])])
+      info.push([
+        df.columns[column],
+        df.dtypes[column],
+        count,
+        String(df.isNan[column]),
+      ]);
     }
-    return new DataFrame(info, columns, [info.length, info[0].length], ['string', 'string', 'number'], [false, false, false])
-    }
+    return new DataFrame(
+      info,
+      columns,
+      [info.length, info[0].length],
+      ['string', 'string', 'number'],
+      [false, false, false]
+    );
+  }
 }
 
 /**
@@ -242,16 +249,15 @@ class Frame {
     this.process = new Process();
   }
 
-  getInfo(df:DataFrame):DataFrame
-  {
-    return this.process.info(df)
+  getInfo(df: DataFrame): DataFrame {
+    return this.process.info(df);
   }
 
   /**
    * Entry point to read a file and return a DataFrame object.
-   * @param file 
-   * @param header 
-   * @param delimiter 
+   * @param file
+   * @param header
+   * @param delimiter
    * @returns Promise<DataFame>
    */
   async read(
@@ -261,7 +267,6 @@ class Frame {
   ): Promise<DataFrame> {
     return await this.process.read(file, header, delimiter);
   }
-
 }
 
 export const fr = new Frame();

@@ -24,7 +24,7 @@ export const Home: React.FC = memo(() => {
   }, [])
   return (
     <div
-      className={`web-container transition duration-300 ease-in-out ${theme === 'light' ? 'bg-white' : 'bg-gray-900'
+      className={`web-container transition duration-300 ease-in-out ${theme === 'light' ? 'bg-stone-100' : 'bg-gray-900'
         }`}
     >
       {/* Make sure Navbar is displayed on the top always*/}
