@@ -101,7 +101,7 @@ export interface switchProps {
  */
 export interface buttonInterface {
   name: string;
-  icon: boolean;
+  icon?: boolean;
   disabled?: boolean;
   iconComponent?: () => JSX.Element;
   callback?: () => any;

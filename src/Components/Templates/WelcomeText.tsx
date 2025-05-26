@@ -13,6 +13,7 @@ import { RegressionSvg, ClassificationSvg } from '../Svgs';
  */
 export const WelcomeText: React.FC = React.memo(() => {
   const [complete, setComplete] = useState(false);
+  const [displayButtons, setDisplayButtons] = useState(true);
   const { appendChatComponent } = useContext(ChatContext);
   return (
     <div className="flex-col leading-7 text-sm sm:text-md">
@@ -30,46 +31,52 @@ export const WelcomeText: React.FC = React.memo(() => {
         callback={() => setComplete(true)}
       />
       {/*Once the conversation is complete display the next block */}
-      {complete && (
-        <div>
-          {/* <Alert type="note">Everything here is manually generated.</Alert> */}
-          <HorizontalRule />
-          <span className="font-medium my-1">
-            {' '}
-            What are you here for today?{' '}
-          </span>
-          {/* This block below displays two buttons that allows user to select either "classification" or "regression" */}
-          <span className="flex">
-            <Button
-              name="Classification"
-              icon={true}
-              iconComponent={() => <ClassificationSvg />}
-              callback={() =>
-                appendChatComponent(
-                  <Chat gerneratedBy="user">
-                    <TaskEntry
-                      task="Classification"
-                      key={new Date().getTime()}
-                    />
-                  </Chat>
-                )
-              }
-            />
-            <Button
-              name="Regression"
-              icon={true}
-              iconComponent={() => <RegressionSvg />}
-              callback={() =>
-                appendChatComponent(
-                  <Chat gerneratedBy="user">
-                    <TaskEntry task="Regression" />
-                  </Chat>
-                )
-              }
-            />
-          </span>
-        </div>
-      )}
+      {
+        complete && (
+          <div>
+            {/* <Alert type="note">Everything here is manually generated.</Alert> */}
+            {
+              displayButtons && <span>
+                <HorizontalRule />
+                <span className="font-medium my-1">
+                  {' '}
+                  What are you here for today?{' '}
+                </span>
+                {/* This block below displays two buttons that allows user to select either "classification" or "regression" */}
+                <span className="flex">
+                  <Button
+                    name="Classification"
+                    icon={true}
+                    iconComponent={() => <ClassificationSvg />}
+                    callback={() => {
+                      appendChatComponent(
+                        <Chat gerneratedBy="user">
+                          <TaskEntry
+                            task="Classification"
+                            key={new Date().getTime()}
+                          />
+                        </Chat>
+                      )
+                      setDisplayButtons(false);
+                    }}
+                  />
+                  <Button
+                    name="Regression"
+                    icon={true}
+                    iconComponent={() => <RegressionSvg />}
+                    callback={() => {
+                      appendChatComponent(
+                        <Chat gerneratedBy="user">
+                          <TaskEntry task="Regression" />
+                        </Chat>
+                      )
+                      setDisplayButtons(false);
+                    }}
+                  />
+                </span>
+              </span>}
+          </div>
+        )}
     </div>
   );
 });

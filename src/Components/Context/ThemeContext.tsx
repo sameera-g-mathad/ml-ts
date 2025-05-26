@@ -36,6 +36,7 @@ export const ThemeContextProvider: React.FC<childrenProp> = ({ children }) => {
     // and return it as a string
     let choice = Math.floor(Math.random() * webColors.length);
     return webColors[choice];
+    // eslint-disable-next-line 
   }, []);
 
   const [theme, setTheme] = useState<'light' | 'dark'>('light');

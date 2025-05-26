@@ -646,8 +646,3 @@ class Numts {
 
 export const nt = new Numts();
 
-// Experimental feature
-// export const evaluate = (s: string): string => {
-//   // eslint-disable-next-line
-//   return eval(s).toString();
-// };
