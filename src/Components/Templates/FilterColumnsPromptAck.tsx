@@ -8,13 +8,13 @@ interface filterColumnsPromptAckInterface {
     decision: 'yes' | 'no'
 }
 export const FilterColumnsPromptAck: React.FC<filterColumnsPromptAckInterface> = memo(({ decision }) => {
-    const { df, appendChatComponent } = useContext(ChatContext)
+    const { appendChatComponent } = useContext(ChatContext)
     const messages = {
         'yes': 'Yes, help me filter some of the columns.',
         'no': 'No, I am fine with my data, I want to proceed.'
     }
     const systemRender = {
-        'yes': <FilterColumns columns={df?.columns} />,
+        'yes': <FilterColumns />,
         'no': <DropNaPrompt />
     }
     return (

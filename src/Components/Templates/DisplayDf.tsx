@@ -1,4 +1,4 @@
-import React, { memo, useContext, useState } from 'react';
+import React, { memo, useContext, useMemo, useState } from 'react';
 import { ChatContext } from '../Context';
 import { ConversationTyping, HorizontalRule, TableGroup } from '../Reusables';
 import { Chat } from '../Chat';
@@ -10,10 +10,7 @@ export const DisplayDf: React.FC = memo(() => {
   const { df, appendChatComponent } = useContext(ChatContext);
   const [complete, setComplete] = useState(false)
 
-  // Check if df is empty
-  if (!df) {
-    return null;
-  }
+  const memoisedDf = useMemo(() => df, []);
   return (
     <div>
       <ConversationTyping
@@ -31,7 +28,7 @@ export const DisplayDf: React.FC = memo(() => {
       {complete &&
         <div>
           <HorizontalRule />
-          <TableGroup df={df} requireColumnFilter={true} requireRowFilter={true} />
+          <TableGroup df={memoisedDf} requireColumnFilter={true} requireRowFilter={true} />
         </div>
       }
     </div>

@@ -195,6 +195,37 @@ class Process {
       throw error;
     }
   }
+
+  filterCols(df: DataFrame, columns: string[]): DataFrame {
+    let new_data: data = [];
+    let new_cols: column = [];
+    let filteredCols: number[] = [];
+    let new_dtypes: string[] = [];
+    let new_isNan: boolean[] = [];
+
+    for (let column in columns) {
+      for (let iter = 0; iter < df.columns.length; iter++) {
+        if (columns[column] === df.columns[iter]) {
+          filteredCols.push(iter);
+          new_cols.push(df.columns[iter]);
+          new_dtypes.push(df.dtypes[iter]);
+          new_isNan.push(df.isNan[iter]);
+          break;
+        }
+      }
+    }
+    let new_shape: [number, number] = [df.shape[0], filteredCols.length];
+    for (let i = 0; i < df.shape[0]; i++) {
+      let row = [];
+      for (let filteredCol in filteredCols) {
+        row.push(df.data[i][filteredCol]);
+      }
+      new_data.push(row);
+    }
+    console.log(new_data, new_cols, new_shape, new_dtypes, new_isNan);
+    return new DataFrame(new_data, new_cols, new_shape, new_dtypes, new_isNan);
+  }
+
   /**
    * This method is used to return the info of the dataframe that is
    * passed. similar to `DataFrame.info()` in pandas.
@@ -209,6 +240,7 @@ class Process {
       'non-null values',
       'null values',
     ];
+    console.log(df);
     let info: data = [];
     // Loop through each column
     for (let column = 0; column < df.shape[1]; column++) {
@@ -247,7 +279,9 @@ class Frame {
   constructor() {
     this.process = new Process();
   }
-
+  filterCols(df: DataFrame, columns: string[]): DataFrame {
+    return this.process.filterCols(df, columns);
+  }
   getInfo(df: DataFrame): DataFrame {
     return this.process.info(df);
   }
