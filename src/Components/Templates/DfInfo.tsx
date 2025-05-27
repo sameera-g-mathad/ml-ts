@@ -1,4 +1,4 @@
-import React, { memo, useContext, useMemo } from 'react'
+import React, { memo, useContext, useMemo, useRef } from 'react'
 import { ChatContext } from '../Context';
 import { ConversationTyping, HorizontalRule, TableGroup } from '../Reusables';
 import { fr, DataFrame } from './../../ml-ts'
@@ -9,7 +9,7 @@ import { FilterColumnsPrompt } from './FilterColumnsPrompt';
 export const DfInfo: React.FC = memo(() => {
     const { df, appendChatComponent } = useContext(ChatContext)
 
-    const info = useMemo(() => { if (df instanceof (DataFrame)) return fr.getInfo(df) }, [df])
+    const info = useRef(fr.getInfo(df));
     if (!df || !info) return null;
     return (
         <>
@@ -21,7 +21,7 @@ export const DfInfo: React.FC = memo(() => {
                 <FilterColumnsPrompt />
             </Chat>)} />
             <HorizontalRule />
-            <TableGroup df={info} requireRowFilter={true} />
+            <TableGroup df={info.current} requireRowFilter={true} />
         </>
     )
 });
