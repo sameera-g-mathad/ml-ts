@@ -86,9 +86,8 @@ class Process {
             for (row; row < fileRead.length; row++) {
               // console.log(fileRead[row]);
               // break;
-              const row_data = fileRead[row]
-                .trim()
-                .split(new RegExp(`(?<!\\s)${delimiter}(?!\\s)`));
+              const row_data = fileRead[row].trim().split(delimiter); // Fix for jokes.csv
+              // .split(new RegExp(`(?<!\\s)${delimiter}(?!\\s)`));
               data.push(row_data);
             }
 

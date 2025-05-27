@@ -12,6 +12,7 @@ export interface fileUploadAckInterface {
 export const FileUploadAck: React.FC<fileUploadAckInterface> = memo(
   ({ file, header, delimeter }) => {
     const { addDataframe, appendChatComponent } = useContext(ChatContext);
+
     useEffect(() => {
       async function readFile() {
         const df = await fr.read(file, header, delimeter);
@@ -19,7 +20,7 @@ export const FileUploadAck: React.FC<fileUploadAckInterface> = memo(
       }
       readFile();
       // eslint-disable-next-line
-    }, []);
+    }, [file, header, delimeter,]);
 
     return (
       <ConversationTyping
