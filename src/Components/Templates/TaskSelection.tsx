@@ -1,4 +1,4 @@
-import React, { memo, useContext, useRef } from 'react';
+import React, { memo, useContext, useMemo, useRef } from 'react';
 import { ChatContext } from '../Context';
 import { ConversationTyping } from '../Reusables';
 import { Chat } from '../Chat';
@@ -40,18 +40,18 @@ export const TaskSelection: React.FC<taskInterface> = memo(({ task }) => {
   const msgSelected = useRef(
     Math.floor(Math.random() * taskSelected[task].length)
   );
-  return (
-    <ConversationTyping
-      text={taskSelected[task][msgSelected.current]}
-      callback={() =>
-        appendChatComponent(
-          <Chat gerneratedBy="system">
-            <FileUpload key={new Date().getTime()} />
-          </Chat>
-        )
-      }
-    />
-  );
+
+  const taskSelection = useMemo(() => <ConversationTyping
+    text={taskSelected[task][msgSelected.current]}
+    callback={() =>
+      appendChatComponent(
+        <Chat gerneratedBy="system">
+          <FileUpload />
+        </Chat>
+      )
+    }
+  />, [])
+  return taskSelection;
 });
 
 TaskSelection.displayName = 'TaskSelection';

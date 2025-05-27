@@ -203,7 +203,9 @@ class Process {
     let new_dtypes: string[] = [];
     let new_isNan: boolean[] = [];
 
+    // loop through the filteredCols to store its information.
     for (let column in columns) {
+      // for each column present, loop through all the df columns to find a match.
       for (let iter = 0; iter < df.columns.length; iter++) {
         if (columns[column] === df.columns[iter]) {
           filteredCols.push(iter);

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useMemo, useState } from 'react';
 import { Button, ConversationTyping, HorizontalRule } from '../Reusables';
 import { ChatContext } from '../Context';
 import { TaskEntry } from './TaskEntry';
@@ -15,11 +15,11 @@ export const WelcomeText: React.FC = React.memo(() => {
   const [complete, setComplete] = useState(false);
   const [displayButtons, setDisplayButtons] = useState(true);
   const { appendChatComponent } = useContext(ChatContext);
-  return (
-    <div className="flex-col leading-7 text-sm sm:text-md">
-      {/* Conversational Typing prints the sentences in conversation style mimicing llms */}
-      <ConversationTyping
-        text={`
+
+  const welcomeText = useMemo(() => <div className="flex-col leading-7 text-sm sm:text-md">
+    {/* Conversational Typing prints the sentences in conversation style mimicing llms */}
+    <ConversationTyping
+      text={`
             <span class='font-bold text-md sm:text-lg'>Welcome to chat(ML)! 🤖💬</span>
             <br>
             <p>
@@ -27,58 +27,59 @@ export const WelcomeText: React.FC = React.memo(() => {
             Feel free to ask about anything—from basic concepts to complex models. ✨
             </p>          
 `}
-        speed={1.5}
-        callback={() => setComplete(true)}
-      />
-      {/*Once the conversation is complete display the next block */}
-      {
-        complete && (
-          <div>
-            {/* <Alert type="note">Everything here is manually generated.</Alert> */}
-            {
-              displayButtons && <span>
-                <HorizontalRule />
-                <span className="font-medium my-1">
-                  {' '}
-                  What are you here for today?{' '}
-                </span>
-                {/* This block below displays two buttons that allows user to select either "classification" or "regression" */}
-                <span className="flex">
-                  <Button
-                    name="Classification"
-                    icon={true}
-                    iconComponent={() => <ClassificationSvg />}
-                    callback={() => {
-                      appendChatComponent(
-                        <Chat gerneratedBy="user">
-                          <TaskEntry
-                            task="Classification"
-                            key={new Date().getTime()}
-                          />
-                        </Chat>
-                      )
-                      setDisplayButtons(false);
-                    }}
-                  />
-                  <Button
-                    name="Regression"
-                    icon={true}
-                    iconComponent={() => <RegressionSvg />}
-                    callback={() => {
-                      appendChatComponent(
-                        <Chat gerneratedBy="user">
-                          <TaskEntry task="Regression" />
-                        </Chat>
-                      )
-                      setDisplayButtons(false);
-                    }}
-                  />
-                </span>
-              </span>}
-          </div>
-        )}
-    </div>
-  );
+      speed={1.5}
+      callback={() => setComplete(true)}
+    />
+    {/*Once the conversation is complete display the next block */}
+    {
+      complete && (
+        <div>
+          {/* <Alert type="note">Everything here is manually generated.</Alert> */}
+          {
+            displayButtons && <span>
+              <HorizontalRule />
+              <span className="font-medium my-1">
+                {' '}
+                What are you here for today?{' '}
+              </span>
+              {/* This block below displays two buttons that allows user to select either "classification" or "regression" */}
+              <span className="flex">
+                <Button
+                  name="Classification"
+                  icon={true}
+                  iconComponent={() => <ClassificationSvg />}
+                  callback={() => {
+                    appendChatComponent(
+                      <Chat gerneratedBy="user">
+                        <TaskEntry
+                          task="Classification"
+                        />
+                      </Chat>
+                    )
+                    setDisplayButtons(false);
+                  }}
+                />
+                <Button
+                  name="Regression"
+                  icon={true}
+                  iconComponent={() => <RegressionSvg />}
+                  callback={() => {
+                    appendChatComponent(
+                      <Chat gerneratedBy="user">
+                        <TaskEntry task="Regression" />
+                      </Chat>
+                    )
+                    setDisplayButtons(false);
+                  }}
+                />
+              </span>
+            </span>}
+        </div>
+      )}
+    {/* eslint-disable-next-line */}
+  </div>, [complete, displayButtons])
+
+  return welcomeText
 });
 
 WelcomeText.displayName = 'WelcomeText';

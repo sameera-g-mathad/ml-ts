@@ -14,11 +14,11 @@ export const FilterColumnsAck: React.FC<filterColumnsAckInterface> = memo(({ fil
     useEffect(() => {
         addDataframe(fr.filterCols(df, filteredCols));
     }, [])
-    return <ConversationTyping text={`<p>Please filter the dataset and keep the columns: [${filteredCols}]</p>`}
+    return <ConversationTyping text={`<p className='flex w-full overflow-hidden flex-wrap'>Please filter the dataset and keep the columns: <span >[${filteredCols}]</span></p>`}
         callback={() =>
             appendChatComponent(
                 <Chat gerneratedBy="system" widthFull={true}>
-                    <DisplayDf key={new Date().getTime()} />
+                    <DisplayDf />
                 </Chat>
             )
         }

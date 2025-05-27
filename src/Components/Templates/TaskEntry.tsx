@@ -1,4 +1,4 @@
-import React, { memo, useContext, useRef } from 'react';
+import React, { memo, useContext, useMemo, useRef } from 'react';
 import { ChatContext } from '../Context';
 import { ConversationTyping } from '../Reusables';
 import { Chat } from '../Chat';
@@ -31,7 +31,8 @@ export const TaskEntry: React.FC<taskInterface> = memo(({ task }) => {
       `<b>${task}</b>`
     )
   );
-  return (
+
+  const taskEntry = useMemo(() =>
     <ConversationTyping
       text={reply.current}
       speed={3}
@@ -39,12 +40,13 @@ export const TaskEntry: React.FC<taskInterface> = memo(({ task }) => {
         updateTaskAndAppendChat(
           task,
           <Chat gerneratedBy="system">
-            <TaskSelection task={task} key={new Date().getTime()} />
+            <TaskSelection task={task} />
           </Chat>
         )
       }
-    />
-  );
+    />, [])
+
+  return taskEntry;
 });
 
 TaskEntry.displayName = 'TaskEntry';
