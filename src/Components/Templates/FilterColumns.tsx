@@ -1,4 +1,4 @@
-import React, { memo, useState } from 'react'
+import React, { memo, useCallback, useState } from 'react'
 import { Button, DraggableContainer } from '../Reusables';
 
 interface filterColumnsInterface {
@@ -9,25 +9,25 @@ export const FilterColumns: React.FC<filterColumnsInterface> = memo(({ columns }
     const [filteredCols, setFilteredCols] = useState<string[]>([]);
 
 
-    const dragFromSource = (e: React.DragEvent<HTMLDivElement>, column: string | number) => {
+    const dragFromSource = useCallback((e: React.DragEvent<HTMLDivElement>, column: string | number) => {
         e.dataTransfer?.setData('column', String(column))
-    }
-    const dropFromSource = (e: React.DragEvent<HTMLDivElement>) => {
+    }, []);
+    const dropFromSource = useCallback((e: React.DragEvent<HTMLDivElement>) => {
         e.preventDefault();
         let column = e.dataTransfer.getData('column');
         setFilteredCols(prevFilteredCols => [...prevFilteredCols, column])
         setInititalCols(prevInitialCols => prevInitialCols.filter(el => el !== column))
-    }
+    }, []);
 
-    const resetAll = () => {
+    const resetAll = useCallback(() => {
         setInititalCols([...columns])
         setFilteredCols([]);
-    }
+    }, []);
 
-    const moveAll = () => {
+    const moveAll = useCallback(() => {
         setInititalCols([])
         setFilteredCols([...columns]);
-    }
+    }, []);
 
     return (
         <div className='flex justify-center gap-5'>
