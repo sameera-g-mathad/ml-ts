@@ -6,7 +6,8 @@ import { FilterColumnsAck } from './FilterColumnsAck';
 
 
 export const FilterColumns: React.FC = memo(() => {
-    const { df, appendChatComponent } = useContext(ChatContext)
+    const { df, appendChatComponent } = useContext(ChatContext);
+    const [displayButtons, setDisplayButtons] = useState(true);
     const [initialCols, setInititalCols] = useState<string[]>(df.columns)
     const [filteredCols, setFilteredCols] = useState<string[]>([]);
 
@@ -38,17 +39,22 @@ export const FilterColumns: React.FC = memo(() => {
     return (
         <div>
             <ConversationTyping text='<p>You can filter the columns by selecting them as needed.</p>' />
-            <HorizontalRule />
-            <span className='flex justify-center gap-5'>
-                <DraggableContainer data={initialCols} draggable={true} onDragStart={dragFromSource} />
-                <span className='flex flex-col justify-center gap-2'>
-                    <Button name='Reset' callback={resetAll} />
-                    <Button name='move all' callback={moveAll} />
-                </span>
-                <DraggableContainer data={filteredCols} draggable={false} onDrop={dropFromSource} />
-            </span>
-            <HorizontalRule />
-            <Button name='filter' callback={() => appendChatComponent(<Chat gerneratedBy='user'><FilterColumnsAck filteredCols={filteredCols} /></Chat>)} />
+            {
+                displayButtons &&
+                <>
+                    <HorizontalRule />
+                    <span className='flex justify-center gap-5'>
+                        <DraggableContainer data={initialCols} draggable={true} onDragStart={dragFromSource} />
+                        <span className='flex flex-col justify-center gap-2'>
+                            <Button name='Reset' callback={resetAll} />
+                            <Button name='move all' callback={moveAll} />
+                        </span>
+                        <DraggableContainer data={filteredCols} draggable={false} onDrop={dropFromSource} />
+                    </span>
+                    <HorizontalRule />
+                    <Button name='filter' callback={() => { appendChatComponent(<Chat gerneratedBy='user'><FilterColumnsAck filteredCols={filteredCols} /></Chat>); setDisplayButtons(false); }} />
+                </>
+            }
         </div >
     )
 })

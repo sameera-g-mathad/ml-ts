@@ -6,7 +6,11 @@ import { Chat } from '../Chat';
 import { FilterColumnsPrompt } from './FilterColumnsPrompt';
 // import { DataFrame } from '../../ml-ts/frame';
 
-export const DfInfo: React.FC = memo(() => {
+export interface displayDfInterface {
+    componentAfterInfo: React.ReactNode
+}
+
+export const DfInfo: React.FC<displayDfInterface> = memo(({ componentAfterInfo }) => {
     const { df, appendChatComponent } = useContext(ChatContext)
 
     const info = useRef(fr.getInfo(df));
@@ -18,7 +22,9 @@ export const DfInfo: React.FC = memo(() => {
             Here the info of the dataset provided.
             </p>
             `} callback={() => appendChatComponent(<Chat gerneratedBy='system'>
-                <FilterColumnsPrompt />
+                {/* <FilterColumnsPrompt />
+                 */}
+                {componentAfterInfo}
             </Chat>)} />
             <HorizontalRule />
             <TableGroup df={info.current} requireRowFilter={true} />

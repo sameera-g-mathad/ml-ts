@@ -3,7 +3,7 @@ import { fr } from '../../ml-ts/frame';
 import { ConversationTyping } from '../Reusables';
 import { ChatContext } from '../Context';
 import { Chat } from '../Chat';
-import { DisplayDf } from './index';
+import { DisplayDf, FilterColumnsPrompt } from './index';
 export interface fileUploadAckInterface {
   file: File;
   header: boolean;
@@ -30,7 +30,7 @@ export const FileUploadAck: React.FC<fileUploadAckInterface> = memo(
         callback={() =>
           appendChatComponent(
             <Chat gerneratedBy="system" widthFull={true}>
-              <DisplayDf key={new Date().getTime()} />
+              <DisplayDf componentAfterInfo={<FilterColumnsPrompt />} />
             </Chat>
           )
         }

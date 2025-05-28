@@ -4,6 +4,7 @@ import { ChatContext } from '../Context';
 import { Chat } from "../Chat";
 import { DisplayDf } from "./DisplayDf";
 import { ConversationTyping } from "../Reusables";
+import { DropNaPrompt } from "./index";
 
 export interface filterColumnsAckInterface {
     filteredCols: string[]
@@ -18,7 +19,7 @@ export const FilterColumnsAck: React.FC<filterColumnsAckInterface> = memo(({ fil
         callback={() =>
             appendChatComponent(
                 <Chat gerneratedBy="system" widthFull={true}>
-                    <DisplayDf />
+                    <DisplayDf componentAfterInfo={<DropNaPrompt />} />
                 </Chat>
             )
         }

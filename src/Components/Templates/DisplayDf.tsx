@@ -4,7 +4,12 @@ import { ConversationTyping, HorizontalRule, TableGroup } from '../Reusables';
 import { Chat } from '../Chat';
 import { DfInfo } from './index';
 
-export const DisplayDf: React.FC = memo(() => {
+
+export interface displayDfInfoInterface {
+  componentAfterInfo: React.ReactNode
+}
+
+export const DisplayDf: React.FC<displayDfInfoInterface> = memo(({ componentAfterInfo }) => {
   const { df, appendChatComponent } = useContext(ChatContext);
   const [complete, setComplete] = useState(false)
 
@@ -16,7 +21,7 @@ export const DisplayDf: React.FC = memo(() => {
       setComplete(true)
       appendChatComponent(
         <Chat gerneratedBy="system">
-          <DfInfo />
+          <DfInfo componentAfterInfo={componentAfterInfo} />
         </Chat>
       );
     }}

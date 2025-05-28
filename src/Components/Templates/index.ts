@@ -1,6 +1,7 @@
 // D
 export * from './DfInfo';
 export * from './DisplayDf';
+export * from './DropNaPrompt';
 
 // F
 export * from './FilterColumns';
