@@ -32,21 +32,18 @@ export const TaskEntry: React.FC<taskInterface> = memo(({ task }) => {
     )
   );
 
-  const taskEntry = useMemo(() =>
-    <ConversationTyping
-      text={reply.current}
-      speed={3}
-      callback={() =>
-        updateTaskAndAppendChat(
-          task,
-          <Chat gerneratedBy="system">
-            <TaskSelection task={task} />
-          </Chat>
-        )
-      }
-    />, [])
-
-  return taskEntry;
+  return <ConversationTyping
+    text={reply.current}
+    speed={3}
+    callback={() =>
+      updateTaskAndAppendChat(
+        task,
+        <Chat gerneratedBy="system">
+          <TaskSelection task={task} />
+        </Chat>
+      )
+    }
+  />
 });
 
 TaskEntry.displayName = 'TaskEntry';

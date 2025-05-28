@@ -41,7 +41,7 @@ export const TaskSelection: React.FC<taskInterface> = memo(({ task }) => {
     Math.floor(Math.random() * taskSelected[task].length)
   );
 
-  const taskSelection = useMemo(() => <ConversationTyping
+  return <ConversationTyping
     text={taskSelected[task][msgSelected.current]}
     callback={() =>
       appendChatComponent(
@@ -50,8 +50,7 @@ export const TaskSelection: React.FC<taskInterface> = memo(({ task }) => {
         </Chat>
       )
     }
-  />, [])
-  return taskSelection;
+  />
 });
 
 TaskSelection.displayName = 'TaskSelection';
