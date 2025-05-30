@@ -84,8 +84,6 @@ class Process {
             // Otherwise, start from the first row.
             let row = header ? 1 : 0;
             for (row; row < fileRead.length; row++) {
-              // console.log(fileRead[row]);
-              // break;
               const row_data = fileRead[row].trim().split(delimiter); // Fix for jokes.csv
               // .split(new RegExp(`(?<!\\s)${delimiter}(?!\\s)`));
               data.push(row_data);
@@ -122,7 +120,6 @@ class Process {
       dtypes.push('string');
       isNan.push(false);
     }
-
     // Iterate each column assuming that the column has numbers.
     for (let column = 0; column < shape[1]; column++) {
       // set a flag that is used later. By default set to true
@@ -166,7 +163,8 @@ class Process {
         }
       }
     }
-    return new DataFrame(data, columns, shape, dtypes, isNan);
+    const df = new DataFrame(data, columns, shape, dtypes, isNan);
+    return df;
   }
 
   /**
@@ -260,7 +258,6 @@ class Process {
       'non-null values',
       'null values',
     ];
-    console.log(df);
     let info: data = [];
     // Loop through each column
     for (let column = 0; column < df.shape[1]; column++) {

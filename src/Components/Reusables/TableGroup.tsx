@@ -68,7 +68,7 @@ export const TableGroup: React.FC<tableGroupInterface> = ({ df, requireColumnFil
             <span className='flex flex-col gap-4 my-2'>
                 {requireRowFilter &&
                     <InputGroup label='Filter rows (upto 100)'>
-                        <span className='flex gap-3'>
+                        <span className='flex  gap-3'>
                             <InputGroup label='from:'>
                                 <Input defaultValue={rowFrom} size='medium' callback={handleRowFrom} />
                             </InputGroup>
@@ -80,7 +80,7 @@ export const TableGroup: React.FC<tableGroupInterface> = ({ df, requireColumnFil
                 }
                 {requireColumnFilter &&
                     <InputGroup label='Filter columns (upto 20)'>
-                        <span className='flex gap-3'>
+                        <span className='flex flex-wrap gap-3'>
                             <InputGroup label='from:'>
                                 <Input defaultValue={colFrom} size='medium' callback={handleColFrom} />
                             </InputGroup>
