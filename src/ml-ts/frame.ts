@@ -196,7 +196,20 @@ class Process {
     }
   }
 
+  /**
+   * This method is used to filter the columns of a DataFrame.
+   *
+   * @param df Dataframe that needs filtering.
+   * @param columns New column list to retain.
+   * @returns New Dataframe with the updated columns
+   */
   filterCols(df: DataFrame, columns: string[]): DataFrame {
+    // If no columns are passed, return the original dataframe.
+    if (columns.length === 0) {
+      return df;
+    }
+
+    // If the columns are not present in the dataframe, throw an error.
     let new_data: data = [];
     let new_cols: column = [];
     let filteredCols: number[] = [];
@@ -208,23 +221,28 @@ class Process {
       // for each column present, loop through all the df columns to find a match.
       for (let iter = 0; iter < df.columns.length; iter++) {
         if (columns[column] === df.columns[iter]) {
-          filteredCols.push(iter);
-          new_cols.push(df.columns[iter]);
-          new_dtypes.push(df.dtypes[iter]);
-          new_isNan.push(df.isNan[iter]);
-          break;
+          filteredCols.push(iter); // Store the index of the column to be filtered.
+          new_cols.push(df.columns[iter]); // Store the column name.
+          new_dtypes.push(df.dtypes[iter]); // Store the dtype of the column.
+          new_isNan.push(df.isNan[iter]); // Store the isNan value of the column.
         }
       }
     }
+    // If no columns are filtered, return the original dataframe.
     let new_shape: [number, number] = [df.shape[0], filteredCols.length];
+
+    // Loop through all the rows of the dataframe and push the filtered columns.
     for (let i = 0; i < df.shape[0]; i++) {
       let row = [];
+      // Loop through the filtered columns and push the values to the row.
       for (let filteredCol in filteredCols) {
         const j = filteredCols[filteredCol];
         row.push(df.data[i][j]);
       }
+      // Push the row to the new data.
       new_data.push(row);
     }
+    // Return the new DataFrame with the filtered columns.
     return new DataFrame(new_data, new_cols, new_shape, new_dtypes, new_isNan);
   }
 

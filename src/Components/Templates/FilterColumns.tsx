@@ -52,7 +52,7 @@ export const FilterColumns: React.FC = memo(() => {
                         <DraggableContainer data={filteredCols} draggable={false} onDrop={dropFromSource} />
                     </span>
                     <HorizontalRule />
-                    <Button name='filter' callback={() => { appendChatComponent(<Chat gerneratedBy='user'><FilterColumnsAck filteredCols={filteredCols} /></Chat>); setDisplayButtons(false); }} />
+                    <Button name='filter' callback={() => { appendChatComponent(<Chat gerneratedBy='user'><FilterColumnsAck filteredCols={filteredCols.length > 0 ? filteredCols : initialCols} /></Chat>); setDisplayButtons(false); }} />
                 </>
             }
         </div >
