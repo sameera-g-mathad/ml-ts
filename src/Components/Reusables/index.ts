@@ -6,6 +6,7 @@ export * from './FileInput';
 export * from './HorizontalRule';
 export * from './Input';
 export * from './InputGroup';
+export * from './RadioBtn';
 export * from './SelectionPrompt';
 export * from './Switch';
 export * from './Table';

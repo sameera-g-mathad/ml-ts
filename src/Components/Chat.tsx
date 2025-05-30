@@ -44,7 +44,7 @@ export const Chat: React.FC<childrenProp & chatInterface> = memo(({
   const textColor = theme === 'dark' ? 'text-white' : 'text-gray-900';
   return (
     <div
-      className={`w-full flex p-2 sm:p-4 justify-start ${displayPosition[gerneratedBy]}`}
+      className={`w-full flex p-2 my-4 sm:p-4 justify-start ${displayPosition[gerneratedBy]}`}
     >
       <div
         style={{ background: useColor }}

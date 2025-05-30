@@ -2,6 +2,7 @@
 export * from './DfInfo';
 export * from './DisplayDf';
 export * from './DropNaPrompt';
+export * from './DropNa';
 
 // F
 export * from './FilterColumns';

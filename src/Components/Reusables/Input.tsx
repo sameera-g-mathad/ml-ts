@@ -18,7 +18,7 @@ const InputComponent: React.FC<themeInterface & inputInterface> = ({
     <input
       type="text"
       style={{ borderColor: color }}
-      className={`outline-none bg-none rounded-lg pl-2 border-2 text-black ${sizes[size]}`}
+      className={`outline-none bg-none rounded-xl pl-2 border-2 text-black ${sizes[size]}`}
       value={defaultValue}
       onChange={(e: ChangeEvent<HTMLInputElement>) => callback && callback(e.target.value)}
     />

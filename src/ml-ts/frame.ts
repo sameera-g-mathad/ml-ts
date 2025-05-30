@@ -285,6 +285,18 @@ class Process {
       [false, false, false]
     );
   }
+  /**
+   *
+   */
+  getNanColumns(df: DataFrame): string[] {
+    let result: string[] = [];
+    for (let i = 0; i < df.shape[1]; i++) {
+      if (df.isNan[i]) {
+        result.push(df.columns[i]);
+      }
+    }
+    return result;
+  }
 }
 
 /**
@@ -301,6 +313,10 @@ class Frame {
   }
   getInfo(df: DataFrame): DataFrame {
     return this.process.info(df);
+  }
+
+  getNanColumns(df: DataFrame): string[] {
+    return this.process.getNanColumns(df);
   }
 
   /**

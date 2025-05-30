@@ -58,6 +58,23 @@
   margin-left: 0;
 }
 
+.radio-label::before {
+  content: '';
+  width: 10px;
+  height: 10px;
+  display: none;
+  position: absolute;
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: var(--color);
+}
+
+.radio-input:checked + .radio-label::before {
+  display: block;
+}
+
 .button,
 .file-input {
   border-color: var(--use-color);

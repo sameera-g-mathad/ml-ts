@@ -93,6 +93,7 @@ export interface tableGroupInterface {
  */
 export interface switchProps {
   switchName: string;
+  isChecked?: boolean;
   callback?: (change: boolean) => any;
 }
 

@@ -27,7 +27,7 @@ export const FileInputComponent: React.FC<fileInterface & themeInterface> = ({
           style={{
             ...({ '--use-color': color } as React.CSSProperties),
           }}
-          className="file-input border-2 flex items-center justify-evenly px-3 rounded-lg py-2 "
+          className="file-input border-2 flex items-center justify-evenly px-3 rounded-xl py-2 "
           htmlFor="file-input"
         >
           <UploadSvg />
