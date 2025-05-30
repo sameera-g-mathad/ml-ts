@@ -220,11 +220,11 @@ class Process {
     for (let i = 0; i < df.shape[0]; i++) {
       let row = [];
       for (let filteredCol in filteredCols) {
-        row.push(df.data[i][filteredCol]);
+        const j = filteredCols[filteredCol];
+        row.push(df.data[i][j]);
       }
       new_data.push(row);
     }
-    console.log(new_data, new_cols, new_shape, new_dtypes, new_isNan);
     return new DataFrame(new_data, new_cols, new_shape, new_dtypes, new_isNan);
   }
 

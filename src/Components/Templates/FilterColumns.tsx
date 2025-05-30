@@ -43,11 +43,11 @@ export const FilterColumns: React.FC = memo(() => {
                 displayButtons &&
                 <>
                     <HorizontalRule />
-                    <span className='flex justify-center gap-5'>
+                    <span className='flex sm:flex-nowrap flex-wrap justify-between gap-5'>
                         <DraggableContainer data={initialCols} draggable={true} onDragStart={dragFromSource} />
                         <span className='flex flex-col justify-center gap-2'>
                             <Button name='Reset' callback={resetAll} />
-                            <Button name='move all' callback={moveAll} />
+                            <Button name='Retain' callback={moveAll} />
                         </span>
                         <DraggableContainer data={filteredCols} draggable={false} onDrop={dropFromSource} />
                     </span>
@@ -60,3 +60,5 @@ export const FilterColumns: React.FC = memo(() => {
 })
 
 FilterColumns.displayName = 'FilterColumns'
+
+
