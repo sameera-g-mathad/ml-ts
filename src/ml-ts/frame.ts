@@ -35,6 +35,57 @@ export class DataFrame {
  * It reads the file, processes the data, and returns a DataFrame object.
  */
 class Process {
+  dropAll(df: DataFrame): DataFrame {
+    // New variable to hold new Data.
+    let newData: data = [];
+
+    // New array to hold whether column has undefined values.
+    let newNan: boolean[] = df.isNan;
+
+    // This array is to track the rows that has an entry of 'undefined'. No matter of 'any' or 'all'.
+    let trackNan: number[] = [];
+    for (let row = 0; row < df.shape[0]; row++) {
+      let nanCount = 0;
+      let instance = [];
+      for (let column = 0; column < df.shape[1]; column++) {
+        const dataPoint = df.data[row][column];
+        instance.push(dataPoint);
+        if (dataPoint === 'undefined') {
+          trackNan.push(row);
+          nanCount++;
+        }
+      }
+      if (nanCount === df.shape[1]) continue;
+      newData.push(instance);
+    }
+
+    for (let column = 0; column < df.shape[1]; column++) {
+      for (let row = 0; row < trackNan.length; row++) {
+        let rowNum = trackNan[row];
+        if (newData[rowNum][column] === 'undefined') {
+          newNan[column] = true;
+          break;
+        }
+      }
+      newNan[column] = false;
+    }
+    return new DataFrame(
+      newData,
+      df.columns,
+      [newData.length, newData[0].length],
+      df.dtypes,
+      newNan
+    );
+  }
+
+  dropAny(df: DataFrame): DataFrame {
+    return df;
+  }
+
+  dropSubset(df: DataFrame, subset: string[]): DataFrame {
+    return df;
+  }
+
   /**
    * loadFile method reads a file and returns its content as a 2D array.
    * It also extracts the column names and shape of the data.
@@ -307,6 +358,22 @@ class Frame {
   private process: Process;
   constructor() {
     this.process = new Process();
+  }
+  dropna(
+    df: DataFrame,
+    how: 'all' | 'any' | 'subset',
+    subset: string[] = []
+  ): DataFrame {
+    // This method is not implemented in the original code.
+    // It should be implemented to drop NaN values based on the specified criteria.
+    switch (how) {
+      case 'all':
+        return this.process.dropAll(df);
+      case 'any':
+        return this.process.dropAny(df);
+      case 'subset':
+        return this.process.dropSubset(df, subset);
+    }
   }
   filterCols(df: DataFrame, columns: string[]): DataFrame {
     return this.process.filterCols(df, columns);
