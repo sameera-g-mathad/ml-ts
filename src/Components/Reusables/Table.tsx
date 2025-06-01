@@ -9,7 +9,7 @@ const TableComponent: React.FC<tableInterface & themeInterface> = memo(
           <thead>
             <tr className='table table-fixed w-full font-light !text-white' >
               {columns.slice(colFrom, colTo).map((el, index) => (
-                <th className="border rounded capitalize w-32 truncate hover:text-xs" key={index} style={{ backgroundColor: color }}>
+                <th className="border rounded capitalize w-32 truncate hover:text-xs p-1" key={index} style={{ backgroundColor: color }}>
                   {el}
                 </th>
               ))}
@@ -19,9 +19,9 @@ const TableComponent: React.FC<tableInterface & themeInterface> = memo(
             {data.slice(rowFrom, rowTo).map((row, row_index) => (
               <tr className='table table-fixed w-full' key={row_index}>
                 {row.slice(colFrom, colTo).map((el, col_index) => (
-                  <td className="border w-full truncate hover:text-base text-sm" key={col_index}>
+                  <td className="border w-full truncate hover:text-base text-sm p-1" key={col_index}>
                     <span
-                      className={`w-full flex justify-center ${el === 'undefined' ? 'text-red-500' : ''
+                      className={`w-full flex justify-center ${el === 'undefined' ? 'font-bold italic text-red-500' : ''
                         } `}
                     >
                       {el}
