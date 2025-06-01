@@ -2,10 +2,12 @@ import React, { memo, useCallback, useContext, useState } from "react";
 import { ChatContext } from "../Context";
 import { Button, ConversationTyping, DraggableContainer, HorizontalRule, InputGroup, RadioBtn } from "../Reusables";
 import { fr } from "../../ml-ts";
+import { DisplayDf, DropNaPrompt } from "./index";
+import { Chat } from "../Chat";
 
 
 export const DropNa: React.FC = memo(() => {
-    const { df } = useContext(ChatContext);
+    const { df, appendChatComponent, addDataframe } = useContext(ChatContext);
     const getNanColumns = fr.getNanColumns(df)
     const [nanColumns, setNanColumns] = useState<string[]>(getNanColumns);
     const [subsetColumns, setSubsetColumns] = useState<string[]>([]);
@@ -29,8 +31,6 @@ export const DropNa: React.FC = memo(() => {
         // eslint-disable-next-line 
     }, []);
 
-
-
     return <>
         <ConversationTyping text='Will drop the values as requested.' />
         <HorizontalRule />
@@ -53,6 +53,12 @@ export const DropNa: React.FC = memo(() => {
                 </span>
                 <DraggableContainer draggable={false} data={subsetColumns} onDrop={onDrop} />
             </span> : ''}
+        <Button name='Drop' callback={() => {
+            addDataframe(fr.dropna(df, how, subsetColumns))
+            appendChatComponent(<Chat gerneratedBy="system" widthFull={true}>
+                <DisplayDf componentAfterInfo={<DropNaPrompt />} />
+            </Chat>)
+        }} />
     </>;
 })
 

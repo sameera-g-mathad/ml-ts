@@ -35,55 +35,167 @@ export class DataFrame {
  * It reads the file, processes the data, and returns a DataFrame object.
  */
 class Process {
+  private fillNan(isNan: boolean[], columns: number): boolean[] {
+    for (let i = 0; i < columns; i++) {
+      isNan.push(false);
+    }
+    return isNan;
+  }
+  private checkNan(data: data): boolean[] {
+    let isNan: boolean[] = this.fillNan([], data[0].length);
+    for (let row = 0; row < data.length; row++) {
+      for (let column = 0; column < data[0].length; column++) {
+        if (data[row][column] === 'undefined') {
+          isNan[column] = true;
+          break;
+        }
+      }
+    }
+    return isNan;
+  }
   dropAll(df: DataFrame): DataFrame {
     // New variable to hold new Data.
     let newData: data = [];
 
-    // New array to hold whether column has undefined values.
-    let newNan: boolean[] = df.isNan;
-
     // This array is to track the rows that has an entry of 'undefined'. No matter of 'any' or 'all'.
-    let trackNan: number[] = [];
     for (let row = 0; row < df.shape[0]; row++) {
+      // Variable to count the number of NaN values in a row.
       let nanCount = 0;
+      // Variable to hold the instance of a row.
       let instance = [];
+      // Loop through each column in the row.
       for (let column = 0; column < df.shape[1]; column++) {
+        // Get the data point at the current row and column.
         const dataPoint = df.data[row][column];
+        // Push the data point to the instance.
         instance.push(dataPoint);
+        // If the data point is 'undefined', increment the nanCount.
         if (dataPoint === 'undefined') {
-          trackNan.push(row);
           nanCount++;
         }
       }
-      if (nanCount === df.shape[1]) continue;
+      // If the nanCount is equal to the number of columns, it means all values are NaN.
+      // In that case, we skip the row and do not add it to the newData.
+      if (nanCount === df.shape[1]) {
+        continue;
+      }
+      // If the row has at least one non-NaN value, we add it to the newData.
       newData.push(instance);
     }
 
-    for (let column = 0; column < df.shape[1]; column++) {
-      for (let row = 0; row < trackNan.length; row++) {
-        let rowNum = trackNan[row];
-        if (newData[rowNum][column] === 'undefined') {
-          newNan[column] = true;
-          break;
-        }
-      }
-      newNan[column] = false;
-    }
+    // return a new DataFrame with the filtered data.
     return new DataFrame(
       newData,
       df.columns,
       [newData.length, newData[0].length],
       df.dtypes,
-      newNan
+      this.checkNan(newData)
     );
   }
 
   dropAny(df: DataFrame): DataFrame {
-    return df;
+    let newData: data = [];
+    // Loop through each row in the DataFrame.
+    for (let row = 0; row < df.shape[0]; row++) {
+      // Variable to hold the instance of a row.
+      let instance: (string | number)[] | null = [];
+      for (let column = 0; column < df.shape[1]; column++) {
+        // Get the data point at the current row and column.
+        const dataPoint = df.data[row][column];
+        // If the data point is not 'undefined', break.
+        if (dataPoint === 'undefined') {
+          instance = null; // If any value is NaN, we will not add this row.
+          break;
+        }
+        // Push the data point to the instance.
+        instance.push(dataPoint);
+      }
+      // If the instance is not empty, it means there is at least one non-NaN value.
+      if (instance !== null) {
+        // Add the instance to the newData.
+        newData.push(instance);
+      }
+    }
+    // return a new DataFrame with the filtered data.
+    const dfShape: [number, number] = [newData.length, newData[0].length];
+    return new DataFrame(
+      newData,
+      df.columns,
+      dfShape,
+      df.dtypes,
+      this.fillNan([], dfShape[1])
+    );
   }
 
   dropSubset(df: DataFrame, subset: string[]): DataFrame {
-    return df;
+    // variable to hold the columns that are to be dropped.
+    let columns: number[] = [];
+    // store the length of the subset array.
+    let subsetLength = subset.length;
+    // Go through each column in the subset
+    for (let i = 0; i < subsetLength; i++) {
+      // For each column in the dataframe, check if it matches the subset column.
+      for (let j = 0; j < df.shape[1]; j++) {
+        if (subset[i] === df.columns[j]) {
+          columns.push(j); // Store only the index of the column to be dropped.
+        }
+      }
+      // If the columns length is equal to the subset length, break the loop.
+      // This is to avoid unnecessary iterations if all columns are found.
+      if (columns.length === subsetLength) break;
+    }
+    let removeRows = [];
+    // Iterate through each row in the DataFrame.
+    for (let row = 0; row < df.shape[0]; row++) {
+      // Variable to count the number of columns that are 'undefined' in the current row
+      // that match the subset.
+      let columnCount = 0;
+      // Loop through each column in the columns array.
+      for (let column = 0; column < columns.length; column++) {
+        // Get the column index from the columns array.
+        let dropColumn = columns[column];
+        // If the value in the current row and column is 'undefined', increment the columnCount.
+        if (df.data[row][dropColumn] === 'undefined') columnCount++;
+      }
+      // If the columnCount is equal to the subset length, it means all columns in the subset
+      // are 'undefined' in the current row, so we add the row index to removeRows.
+      // This means that the row will be dropped from the DataFrame.
+      if (columnCount === subsetLength) removeRows.push(row);
+    }
+
+    // variable to hold the new data after filtering.
+    let newData: data = [];
+    // variable to iterate through the removeRows array.
+    let removeRowsIter = 0;
+    // Loop through each row in the DataFrame.
+    for (let row = 0; row < df.shape[0]; row++) {
+      // instance variable to hold the data of the current row.
+      let instance = [];
+      // If the current row index is in the removeRows array, skip this row.
+      if (row === removeRows[removeRowsIter]) {
+        // If the current row is to be removed, increment the removeRowsIter.
+        // This is because all the indeces in removeRows are sorted.
+        // Hence we can just increment the removeRowsIter.
+        removeRowsIter++;
+        continue;
+      }
+      // Loop through each column in the DataFrame if the row is not to be removed.
+      for (let column = 0; column < df.shape[1]; column++) {
+        // push the data point at the current row and column to the instance.
+        instance.push(df.data[row][column]);
+      }
+      // After looping through all the columns, push the instance to the newData.
+      newData.push(instance);
+    }
+    // return a new DataFrame with the filtered data.
+    const dfShape: [number, number] = [newData.length, newData[0].length];
+    return new DataFrame(
+      newData,
+      df.columns,
+      dfShape,
+      df.dtypes,
+      this.checkNan(newData)
+    );
   }
 
   /**

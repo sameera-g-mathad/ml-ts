@@ -19,13 +19,15 @@ export const Chat: React.FC<childrenProp & chatInterface> = memo(({
   gerneratedBy,
   widthFull,
 }) => {
+  // This is to set the background color of the container.
+  const { theme, useColor } = useContext(ThemeContext);
 
   // This is to place the chat message on either side of the display.
   // It uses enum which specifies that the generatedBy can have only two values.
   // If system, it will be on the left side of the display.
   // If user, it will be on the right side of the display.
   const displayPosition = {
-    user: 'items-end flex-row-reverse',
+    user: `items-end flex-row-reverse ${theme === 'dark' ? 'bg-slate-700' : 'bg-slate-200'}`,
     system: '',
   };
 
@@ -35,20 +37,19 @@ export const Chat: React.FC<childrenProp & chatInterface> = memo(({
     user: <UserSvg />,
     system: <SystemSvg />,
   };
-  // This is to set the background color of the container.
-  const { theme, useColor } = useContext(ThemeContext);
 
   // extracting background color and text color from the theme, as
   // tailwind css does not support multiple dynamic classes.
   const background = theme === 'dark' ? 'bg-gray-800' : 'bg-white';
-  const textColor = theme === 'dark' ? 'text-white' : 'text-gray-900';
+  const textColor = theme === 'dark' ? 'text-white' : 'text-slate-900';
+  const date = new Date();
   return (
     <div
       className={`w-full flex p-2 my-4 sm:p-4 justify-start ${displayPosition[gerneratedBy]}`}
     >
       <div
         style={{ background: useColor }}
-        className="mx-1 py-2 sm:mx-2 sm:py-4 w-8 h-8 sm:w-10 sm:h-10 relative flex justify-center items-center rounded-full"
+        className="mx-1 py-2 sm:mx-2 sm:py-4 w-8 h-8 sm:w-10 sm:h-10 relative flex justify-center items-center rounded-xl"
       >
         {displayIcon[gerneratedBy]}
       </div>
@@ -62,14 +63,14 @@ export const Chat: React.FC<childrenProp & chatInterface> = memo(({
           : gerneratedBy === 'system'
             ? 'sm:w-1/2'
             : 'sm:max-w-96'
-          } w-5/6 border shadow-lg p-4 rounded-3xl ${background} ${textColor}`}
+          } w-5/6 border shadow-lg p-3 rounded-3xl ${background} ${textColor}`}
       >
         {children}
-
+        <span style={{ color: useColor, fontSize: '11px' }} className='flex justify-end pt-2'>{date.toDateString()} - {date.toLocaleTimeString()}</span>
       </div>
-      <p style={{ color: useColor }} className={`flex text-xs items-center ${gerneratedBy === 'system' ? 'justify-start' : 'justify-end'} mt-3 mx-2`}>
+      {/* <p style={{ color: useColor }} className={`flex text-xs items-center ${gerneratedBy === 'system' ? 'justify-start' : 'justify-end'} mt-3 mx-2`}>
         {new Date().toLocaleTimeString()}
-      </p>
+      </p> */}
     </div >
 
   );
