@@ -13,7 +13,6 @@ export const ButtonComponent: React.FC<buttonInterface & themeInterface> = ({
   return (
     <button
       aria-label='Hover here'
-
       disabled={disabled}
       style={{
         ...({ '--use-color': color } as React.CSSProperties),
