@@ -12,6 +12,7 @@ export const ButtonComponent: React.FC<buttonInterface & themeInterface> = ({
   // useEffect(() => console.log(useColor), [useColor]);
   return (
     <button
+      // need to check what aria-label is?
       aria-label='Hover here'
       disabled={disabled}
       style={{
