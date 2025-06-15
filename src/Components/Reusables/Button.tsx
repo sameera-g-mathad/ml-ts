@@ -1,18 +1,20 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { buttonInterface, themeInterface } from '../../interface';
+import { ConditionalContext } from '../Context';
 import withTheme from '../HOC/withTheme';
 
 export const ButtonComponent: React.FC<buttonInterface & themeInterface> = ({
   name,
+  conditionalDisplay,
   iconComponent,
   callback,
   color,
   disabled,
 }) => {
-  // useEffect(() => console.log(useColor), [useColor]);
+  const { setConditionalDisplay } = useContext(ConditionalContext);
+  if (conditionalDisplay === undefined) conditionalDisplay = true;
   return (
     <button
-      // need to check what aria-label is?
       aria-label='Hover here'
       disabled={disabled}
       style={{
@@ -20,7 +22,10 @@ export const ButtonComponent: React.FC<buttonInterface & themeInterface> = ({
         cursor: disabled ? 'not-allowed' : 'pointer',
       }}
       className="button border-2 py-2 sm:px-4 px-3 mr-1 rounded-xl tracking-wide capitalize"
-      onClick={callback}
+      onClick={() => {
+        callback && callback();
+        if (conditionalDisplay) setConditionalDisplay(false)
+      }}
     >
       <span className="flex justify-evenly items-center">
         {iconComponent && iconComponent()}

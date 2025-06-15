@@ -104,6 +104,7 @@ export interface buttonInterface {
   name: string;
   icon?: boolean;
   disabled?: boolean;
+  conditionalDisplay?: boolean;
   iconComponent?: () => JSX.Element;
   callback?: () => any;
 }
