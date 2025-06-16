@@ -1,7 +1,7 @@
 import React, { useCallback, useContext, useReducer } from 'react';
 import {
   Button,
-  // Alert,
+  ConditionalDisplay,
   ConversationTyping,
   FileInput,
   HorizontalRule,
@@ -19,7 +19,7 @@ const fileUploadReducer = (
     delimiter: string;
     header: boolean;
     file: File | null;
-    submitStatus: boolean;
+    // submitStatus: boolean;
   },
   payload: { action: string; value: any }
 ) => {
@@ -33,7 +33,7 @@ const fileUploadReducer = (
     case 'setFile':
       return { ...state, file: payload.value };
 
-    case 'setSubmitStatus': return { ...state, submitStatus: payload.value }
+    // case 'setSubmitStatus': return { ...state, submitStatus: payload.value }
     default:
       return state;
   }
@@ -46,7 +46,7 @@ export const FileUpload: React.FC = React.memo(() => {
     delimiter: ',',
     header: false,
     file: null,
-    submitStatus: true
+    // submitStatus: true
   });
 
   const setDelimeter = useCallback((delimiter: string) => {
@@ -60,9 +60,9 @@ export const FileUpload: React.FC = React.memo(() => {
     dispatch({ action: 'setHeader', value: header });
   }, []);
 
-  const setSubmitStatus = useCallback((status: boolean) => {
-    dispatch({ action: 'setSubmitStatus', value: status });
-  }, []);
+  // const setSubmitStatus = useCallback((status: boolean) => {
+  //   dispatch({ action: 'setSubmitStatus', value: status });
+  // }, []);
 
   return (
     <div className="flex-col leading-7 text-sm sm:text-md">
@@ -81,8 +81,7 @@ export const FileUpload: React.FC = React.memo(() => {
         callback={() => dispatch({ action: 'setComplete', value: true })}
       />
       {state.complete && (
-        <div>
-          <HorizontalRule />
+        <ConditionalDisplay>
           <div className="flex flex-wrap items-center justify-evenly mt-3">
             <FileInput callback={setFile} />
             <InputGroup label='Delimeter'>
@@ -94,9 +93,9 @@ export const FileUpload: React.FC = React.memo(() => {
             <Button
               icon={false}
               name="Submit"
-              disabled={!state.file || !state.submitStatus ? true : false}
+              // disabled={!state.file || !state.submitStatus ? true : false}
               callback={() => {
-                setSubmitStatus(false);
+                // setSubmitStatus(false);
                 appendChatComponent(
                   <Chat gerneratedBy="user">
                     <FileUploadAck
@@ -110,7 +109,7 @@ export const FileUpload: React.FC = React.memo(() => {
               }
             />
           </div>
-        </div>
+        </ConditionalDisplay>
       )}
     </div>
   );

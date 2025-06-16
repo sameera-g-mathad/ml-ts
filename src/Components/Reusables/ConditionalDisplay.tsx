@@ -9,7 +9,9 @@ export const ConditionalDisplay: React.FC<PropsWithChildren> = memo(({ children 
         // eslint-disable-next-line 
         [])
     return <ConditionalProvider>
-        {memoisedPlaceholder}
+        <ConditionalDisplayPlaceHolder>
+            {children}
+        </ConditionalDisplayPlaceHolder>
     </ConditionalProvider>;
 });
 

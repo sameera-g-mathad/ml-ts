@@ -16,6 +16,8 @@ export const WelcomeText: React.FC = React.memo(() => {
   // const [displayButtons, setDisplayButtons] = useState(true);
   const { appendChatComponent } = useContext(ChatContext);
 
+  console.log('Inside WelcomeText')
+
   return <div className="flex-col leading-7 text-sm sm:text-md">
     {/* Conversational Typing prints the sentences in conversation style mimicing llms */}
     <ConversationTyping

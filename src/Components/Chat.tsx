@@ -1,4 +1,4 @@
-import React, { memo, useContext } from 'react';
+import React, { memo, useContext, useMemo } from 'react';
 import { childrenProp, chatInterface } from '../interface';
 import { UserSvg, SystemSvg } from './Svgs';
 import { ThemeContext } from './Context';
@@ -21,6 +21,7 @@ export const Chat: React.FC<childrenProp & chatInterface> = memo(({
 }) => {
   // This is to set the background color of the container.
   const { theme, useColor } = useContext(ThemeContext);
+
 
   // This is to place the chat message on either side of the display.
   // It uses enum which specifies that the generatedBy can have only two values.
@@ -68,10 +69,7 @@ export const Chat: React.FC<childrenProp & chatInterface> = memo(({
         {children}
         <span style={{ color: useColor, fontSize: '11px' }} className='flex justify-end pt-2'>{date.toDateString()} - {date.toLocaleTimeString()}</span>
       </div>
-      {/* <p style={{ color: useColor }} className={`flex text-xs items-center ${gerneratedBy === 'system' ? 'justify-start' : 'justify-end'} mt-3 mx-2`}>
-        {new Date().toLocaleTimeString()}
-      </p> */}
-    </div >
+    </div>
 
   );
 });

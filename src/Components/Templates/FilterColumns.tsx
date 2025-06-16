@@ -1,13 +1,12 @@
 import React, { memo, useCallback, useContext, useState } from 'react'
 import { ChatContext } from '../Context';
-import { Button, ConversationTyping, DraggableContainer, HorizontalRule } from '../Reusables';
+import { Button, ConditionalDisplay, ConversationTyping, DraggableContainer, HorizontalRule } from '../Reusables';
 import { Chat } from '../Chat';
 import { FilterColumnsAck } from './FilterColumnsAck';
 
 
 export const FilterColumns: React.FC = memo(() => {
     const { df, appendChatComponent } = useContext(ChatContext);
-    const [displayButtons, setDisplayButtons] = useState(true);
     const [initialCols, setInititalCols] = useState<string[]>(df.columns)
     const [filteredCols, setFilteredCols] = useState<string[]>([]);
 
@@ -39,22 +38,20 @@ export const FilterColumns: React.FC = memo(() => {
     return (
         <div>
             <ConversationTyping text='<p>You can filter the columns by selecting them as needed.</p>' />
-            {
-                displayButtons &&
-                <>
-                    <HorizontalRule />
-                    <span className='flex sm:flex-nowrap flex-wrap justify-between gap-5'>
-                        <DraggableContainer data={initialCols} draggable={true} onDragStart={dragFromSource} />
-                        <span className='flex flex-col justify-center gap-2'>
-                            <Button name='Reset' callback={resetAll} />
-                            <Button name='Retain' callback={moveAll} />
-                        </span>
-                        <DraggableContainer data={filteredCols} draggable={false} onDrop={dropFromSource} />
+
+            <ConditionalDisplay>
+                <span className='flex sm:flex-nowrap flex-wrap justify-between gap-5'>
+                    <DraggableContainer data={initialCols} draggable={true} onDragStart={dragFromSource} />
+                    <span className='flex flex-col justify-center gap-2'>
+                        <Button name='Reset' callback={resetAll} conditionalDisplay={false} />
+                        <Button name='Retain' callback={moveAll} conditionalDisplay={false} />
                     </span>
-                    <HorizontalRule />
-                    <Button name='filter' callback={() => { appendChatComponent(<Chat gerneratedBy='user'><FilterColumnsAck filteredCols={filteredCols.length > 0 ? filteredCols : initialCols} /></Chat>); setDisplayButtons(false); }} />
-                </>
-            }
+                    <DraggableContainer data={filteredCols} draggable={false} onDrop={dropFromSource} />
+                </span>
+                <HorizontalRule />
+                <Button name='filter' callback={() => { appendChatComponent(<Chat gerneratedBy='user'><FilterColumnsAck filteredCols={filteredCols.length > 0 ? filteredCols : initialCols} /></Chat>); }} />
+            </ConditionalDisplay>
+
         </div >
     )
 })

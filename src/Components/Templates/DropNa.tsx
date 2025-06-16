@@ -1,6 +1,6 @@
 import React, { memo, useCallback, useContext, useState } from "react";
 import { ChatContext } from "../Context";
-import { Button, ConversationTyping, DraggableContainer, HorizontalRule, InputGroup, RadioBtn } from "../Reusables";
+import { Button, ConditionalDisplay, ConversationTyping, DraggableContainer, HorizontalRule, InputGroup, RadioBtn } from "../Reusables";
 import { fr } from "../../ml-ts";
 import { DisplayDf, DropNaPrompt } from "./index";
 import { Chat } from "../Chat";
@@ -33,32 +33,33 @@ export const DropNa: React.FC = memo(() => {
 
     return <>
         <ConversationTyping text='Will drop the values as requested.' />
-        <HorizontalRule />
-        <span className='flex gap-3'>
-            <InputGroup label='Drop All'>
-                <RadioBtn id='all' name='drop' callback={() => setHow('all')} selected={true} />
-            </InputGroup>
-            <InputGroup label='Drop Any'>
-                <RadioBtn id='any' name='drop' callback={() => setHow('any')} />
-            </InputGroup>
-            <InputGroup label='Subset'>
-                <RadioBtn id='subset' name='drop' callback={() => setHow('subset')} />
-            </InputGroup>
-        </span>
-        {how === 'subset' ?
-            <span className="flex sm:flex-nowrap py-3 flex-wrap gap-5">
-                <DraggableContainer draggable={true} data={nanColumns} onDragStart={onDragStart} />
-                <span className='flex flex-col justify-center gap-2'>
-                    <Button name='Reset' callback={resetAll} />
-                </span>
-                <DraggableContainer draggable={false} data={subsetColumns} onDrop={onDrop} />
-            </span> : ''}
-        <Button name='Drop' callback={() => {
-            addDataframe(fr.dropna(df, how, subsetColumns))
-            appendChatComponent(<Chat gerneratedBy="system" widthFull={true}>
-                <DisplayDf componentAfterInfo={<DropNaPrompt />} />
-            </Chat>)
-        }} />
+        <ConditionalDisplay>
+            <span className='flex gap-3'>
+                <InputGroup label='Drop All'>
+                    <RadioBtn id='all' name='drop' callback={() => setHow('all')} selected={true} />
+                </InputGroup>
+                <InputGroup label='Drop Any'>
+                    <RadioBtn id='any' name='drop' callback={() => setHow('any')} />
+                </InputGroup>
+                <InputGroup label='Subset'>
+                    <RadioBtn id='subset' name='drop' callback={() => setHow('subset')} />
+                </InputGroup>
+            </span>
+            {how === 'subset' ?
+                <span className="flex sm:flex-nowrap py-3 flex-wrap gap-5">
+                    <DraggableContainer draggable={true} data={nanColumns} onDragStart={onDragStart} />
+                    <span className='flex flex-col justify-center gap-2'>
+                        <Button name='Reset' callback={resetAll} />
+                    </span>
+                    <DraggableContainer draggable={false} data={subsetColumns} onDrop={onDrop} />
+                </span> : ''}
+            <Button name='Drop' callback={() => {
+                addDataframe(fr.dropna(df, how, subsetColumns))
+                appendChatComponent(<Chat gerneratedBy="system" widthFull={true}>
+                    <DisplayDf componentAfterInfo={<DropNaPrompt />} />
+                </Chat>)
+            }} />
+        </ConditionalDisplay>
     </>;
 })
 

@@ -18,7 +18,7 @@ export const Content: React.FC = memo(() => {
   }, [chatComponents])
   return (
     <div ref={scroller} className="web-content w-full overflow-y-scroll">
-      <div>{chatComponents}</div>
+      <>{chatComponents}</>
     </div>
   );
 });
