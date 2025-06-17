@@ -6,7 +6,6 @@ export interface selectionPromptInterface {
     onNo: () => void;
 }
 export const SelectionPrompt: React.FC<selectionPromptInterface> = memo(({ onNo, onYes }) => {
-    // const [displayButtons, setDisplayButtons] = useState(true);
     return <>
         {
             <span>
