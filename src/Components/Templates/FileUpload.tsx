@@ -1,17 +1,17 @@
-import React, { useCallback, useContext, useReducer } from 'react';
+import React, { useCallback, useReducer } from 'react';
 import {
   Button,
   ConditionalDisplay,
   ConversationTyping,
   FileInput,
-  HorizontalRule,
   Input,
   InputGroup,
   Switch,
 } from '../Reusables';
-import { ChatContext } from '../Context';
 import { Chat } from '../Chat';
 import { FileUploadAck } from './index';
+import { withContext } from '../HOC';
+import { consumeContextInterface } from '../../interface';
 
 const fileUploadReducer = (
   state: {
@@ -33,21 +33,19 @@ const fileUploadReducer = (
     case 'setFile':
       return { ...state, file: payload.value };
 
-    // case 'setSubmitStatus': return { ...state, submitStatus: payload.value }
     default:
       return state;
   }
 };
 
-export const FileUpload: React.FC = React.memo(() => {
-  const { appendChatComponent } = useContext(ChatContext);
+const FileUploadComponent: React.FC<consumeContextInterface> = React.memo(({ appendChatComponent }) => {
   const [state, dispatch] = useReducer(fileUploadReducer, {
     complete: false,
     delimiter: ',',
     header: false,
     file: null,
-    // submitStatus: true
   });
+  // console.log('FileUpload')
 
   const setDelimeter = useCallback((delimiter: string) => {
     dispatch({ action: 'setDelimeter', value: delimiter })
@@ -59,10 +57,6 @@ export const FileUpload: React.FC = React.memo(() => {
   const setSwitch = useCallback((header: boolean) => {
     dispatch({ action: 'setHeader', value: header });
   }, []);
-
-  // const setSubmitStatus = useCallback((status: boolean) => {
-  //   dispatch({ action: 'setSubmitStatus', value: status });
-  // }, []);
 
   return (
     <div className="flex-col leading-7 text-sm sm:text-md">
@@ -93,9 +87,7 @@ export const FileUpload: React.FC = React.memo(() => {
             <Button
               icon={false}
               name="Submit"
-              // disabled={!state.file || !state.submitStatus ? true : false}
               callback={() => {
-                // setSubmitStatus(false);
                 appendChatComponent(
                   <Chat gerneratedBy="user">
                     <FileUploadAck
@@ -115,4 +107,6 @@ export const FileUpload: React.FC = React.memo(() => {
   );
 });
 
-FileUpload.displayName = 'FileUpload';
+FileUploadComponent.displayName = 'FileUploadComponent';
+
+export const FileUpload = withContext(FileUploadComponent, ['appendChatComponent'])

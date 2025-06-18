@@ -30,11 +30,18 @@ export interface chatInterfaceByContext {
   trainY: NDArray | null;
   testX: NDArray | null;
   testY: NDArray | null;
-  length?: number;
+  // length?: number;
   appendChatComponent: (Component: JSX.Element) => void;
   updateTask: (task: string) => void;
   updateTaskAndAppendChat: (task: string, Component: JSX.Element) => void;
   addDataframe: (df: DataFrame) => void;
+}
+
+export interface consumeContextInterface {
+  df: DataFrame;
+  addDataframe: (df: DataFrame) => void;
+  appendChatComponent: (Component: JSX.Element) => void;
+  updateTaskAndAppendChat: (task: string, Component: JSX.Element) => void;
 }
 
 /**

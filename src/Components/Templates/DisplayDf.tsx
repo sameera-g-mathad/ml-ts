@@ -1,18 +1,18 @@
-import React, { memo, useContext, useMemo, useRef, useState } from 'react';
-import { ChatContext } from '../Context';
+import React, { memo, useMemo, useRef, useState } from 'react';
 import { ConversationTyping, HorizontalRule, TableGroup } from '../Reusables';
 import { Chat } from '../Chat';
 import { DfInfo } from './index';
+import { withContext } from '../HOC';
+import { consumeContextInterface } from '../../interface';
 
 
 export interface displayDfInfoInterface {
   componentAfterInfo: React.ReactNode
 }
 
-export const DisplayDf: React.FC<displayDfInfoInterface> = memo(({ componentAfterInfo }) => {
-  const { df, appendChatComponent } = useContext(ChatContext);
+const DisplayDfComponent: React.FC<displayDfInfoInterface & consumeContextInterface> = memo(({ appendChatComponent, componentAfterInfo, df }) => {
   const [complete, setComplete] = useState(false)
-
+  // console.log('DisplayDf')
   const memoisedDf = useRef(df).current;
   const memoisedConversation = useMemo(() => <ConversationTyping
     text={`The data you provided consists of a shape of <b>(${memoisedDf.shape})</b> with ${memoisedDf.shape[0]} rows and ${memoisedDf.shape[1]} columns. If I find that 
@@ -25,6 +25,7 @@ export const DisplayDf: React.FC<displayDfInfoInterface> = memo(({ componentAfte
         </Chat>
       );
     }}
+  //eslint-disable-next-line
   />, [])
   return (
     <div>
@@ -39,4 +40,5 @@ export const DisplayDf: React.FC<displayDfInfoInterface> = memo(({ componentAfte
   );
 });
 
-DisplayDf.displayName = 'DisplayDf';
+DisplayDfComponent.displayName = 'DisplayDfComponent';
+export const DisplayDf = withContext(DisplayDfComponent, ['appendChatComponent', 'df'])

@@ -1,10 +1,10 @@
-import React, { memo, useContext } from 'react'
-import { ChatContext } from '../Context';
+import React, { memo } from 'react'
 import { ConditionalDisplay, ConversationTyping, SelectionPrompt } from '../Reusables'
 import { FilterColumnsPromptAck } from './index';
 import { Chat } from '../Chat';
-export const FilterColumnsPrompt: React.FC = memo(() => {
-    const { appendChatComponent } = useContext(ChatContext);
+import { consumeContextInterface } from '../../interface';
+import { withContext } from '../HOC';
+const FilterColumnsPromptComponent: React.FC<consumeContextInterface> = memo(({ appendChatComponent }) => {
     return (
         <>
             <ConversationTyping text='<p>Do you want to filter or select some columns to continue with?</p>' />
@@ -18,4 +18,6 @@ export const FilterColumnsPrompt: React.FC = memo(() => {
     )
 });
 
-FilterColumnsPrompt.displayName = 'FilterColumnsPrompt'
+FilterColumnsPromptComponent.displayName = 'FilterColumnsPromptComponent'
+
+export const FilterColumnsPrompt = withContext(FilterColumnsPromptComponent, ['appendChatComponent'])

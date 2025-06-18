@@ -1,12 +1,12 @@
-import React, { memo, useCallback, useContext, useState } from 'react'
-import { ChatContext } from '../Context';
+import React, { memo, useCallback, useState } from 'react'
 import { Button, ConditionalDisplay, ConversationTyping, DraggableContainer, HorizontalRule } from '../Reusables';
 import { Chat } from '../Chat';
 import { FilterColumnsAck } from './FilterColumnsAck';
+import { consumeContextInterface } from '../../interface';
+import { withContext } from '../HOC';
 
 
-export const FilterColumns: React.FC = memo(() => {
-    const { df, appendChatComponent } = useContext(ChatContext);
+const FilterColumnsComponent: React.FC<consumeContextInterface> = memo(({ appendChatComponent, df }) => {
     const [initialCols, setInititalCols] = useState<string[]>(df.columns)
     const [filteredCols, setFilteredCols] = useState<string[]>([]);
 
@@ -56,6 +56,8 @@ export const FilterColumns: React.FC = memo(() => {
     )
 })
 
-FilterColumns.displayName = 'FilterColumns'
+FilterColumnsComponent.displayName = 'FilterColumnsComponent'
+
+export const FilterColumns = withContext(FilterColumnsComponent, ['appendChatComponent', 'df'])
 
 

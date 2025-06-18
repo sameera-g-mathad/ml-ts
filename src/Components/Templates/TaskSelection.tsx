@@ -1,9 +1,9 @@
-import React, { memo, useContext, useMemo, useRef } from 'react';
-import { ChatContext } from '../Context';
+import React, { memo, useRef } from 'react';
 import { ConversationTyping } from '../Reusables';
 import { Chat } from '../Chat';
 import { FileUpload } from './FileUpload';
-import { taskInterface } from '../../interface';
+import { consumeContextInterface, taskInterface } from '../../interface';
+import { withContext } from '../HOC';
 
 /**
  * TaskSelection component is responsible for displaying a typing animation
@@ -13,8 +13,9 @@ import { taskInterface } from '../../interface';
  * @returns {JSX.Element} - The rendered component.
  */
 
-export const TaskSelection: React.FC<taskInterface> = memo(({ task }) => {
-  const { appendChatComponent } = useContext(ChatContext);
+const TaskSelectionComponent: React.FC<taskInterface & consumeContextInterface> = memo(({ task, appendChatComponent }) => {
+
+  // console.log('Task Selection')
   // List of messages for each task type.
   const taskSelected = {
     Regression: [
@@ -53,4 +54,6 @@ export const TaskSelection: React.FC<taskInterface> = memo(({ task }) => {
   />
 });
 
-TaskSelection.displayName = 'TaskSelection';
+TaskSelectionComponent.displayName = 'TaskSelectionComponent';
+
+export const TaskSelection = withContext(TaskSelectionComponent, ['appendChatComponent'])

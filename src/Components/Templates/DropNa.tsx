@@ -1,13 +1,13 @@
-import React, { memo, useCallback, useContext, useState } from "react";
-import { ChatContext } from "../Context";
-import { Button, ConditionalDisplay, ConversationTyping, DraggableContainer, HorizontalRule, InputGroup, RadioBtn } from "../Reusables";
+import React, { memo, useCallback, useState } from "react";
+import { Button, ConditionalDisplay, ConversationTyping, DraggableContainer, InputGroup, RadioBtn } from "../Reusables";
 import { fr } from "../../ml-ts";
 import { DisplayDf, DropNaPrompt } from "./index";
 import { Chat } from "../Chat";
+import { consumeContextInterface } from "../../interface";
+import { withContext } from "../HOC";
 
 
-export const DropNa: React.FC = memo(() => {
-    const { df, appendChatComponent, addDataframe } = useContext(ChatContext);
+const DropNaComponent: React.FC<consumeContextInterface> = memo(({ addDataframe, appendChatComponent, df }) => {
     const getNanColumns = fr.getNanColumns(df)
     const [nanColumns, setNanColumns] = useState<string[]>(getNanColumns);
     const [subsetColumns, setSubsetColumns] = useState<string[]>([]);
@@ -63,3 +63,6 @@ export const DropNa: React.FC = memo(() => {
     </>;
 })
 
+DropNaComponent.displayName = 'DropNaComponent';
+
+export const DropNa = withContext(DropNaComponent, ['addDataframe', 'appendChatComponent', 'df'])

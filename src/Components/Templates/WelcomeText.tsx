@@ -1,9 +1,10 @@
-import React, { useContext, useState } from 'react';
+import React, { memo, useState } from 'react';
 import { Button, ConditionalDisplay, ConversationTyping } from '../Reusables';
-import { ChatContext } from '../Context';
+import { withContext } from '../HOC';
 import { TaskEntry } from './TaskEntry';
 import { Chat } from '../Chat';
 import { RegressionSvg, ClassificationSvg } from '../Svgs';
+import { consumeContextInterface } from '../../interface';
 
 /**
  * This is the WelcomeText component of the application.
@@ -11,12 +12,10 @@ import { RegressionSvg, ClassificationSvg } from '../Svgs';
  * It uses the ChatContext to manage the chat components.
  * The chat components are displayed in a scrollable container.
  */
-export const WelcomeText: React.FC = React.memo(() => {
+const WelcomeTextComponent: React.FC<consumeContextInterface> = memo((props) => {
   const [complete, setComplete] = useState(false);
-  // const [displayButtons, setDisplayButtons] = useState(true);
-  const { appendChatComponent } = useContext(ChatContext);
-
-  console.log('Inside WelcomeText')
+  // console.log('Inside WelcomeText')
+  // console.log(props)
 
   return <div className="flex-col leading-7 text-sm sm:text-md">
     {/* Conversational Typing prints the sentences in conversation style mimicing llms */}
@@ -48,7 +47,7 @@ export const WelcomeText: React.FC = React.memo(() => {
                 icon={true}
                 iconComponent={() => <ClassificationSvg />}
                 callback={() => {
-                  appendChatComponent(
+                  props.appendChatComponent(
                     <Chat gerneratedBy="user">
                       <TaskEntry
                         task="Classification"
@@ -63,7 +62,7 @@ export const WelcomeText: React.FC = React.memo(() => {
                 icon={true}
                 iconComponent={() => <RegressionSvg />}
                 callback={() => {
-                  appendChatComponent(
+                  props.appendChatComponent(
                     <Chat gerneratedBy="user">
                       <TaskEntry task="Regression" />
                     </Chat>
@@ -79,4 +78,6 @@ export const WelcomeText: React.FC = React.memo(() => {
   </div>
 });
 
-WelcomeText.displayName = 'WelcomeText';
+WelcomeTextComponent.displayName = 'WelcomeTextComponent';
+
+export const WelcomeText = withContext(WelcomeTextComponent, ['appendChatComponent'])

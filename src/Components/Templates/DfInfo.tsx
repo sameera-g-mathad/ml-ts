@@ -1,18 +1,15 @@
-import React, { memo, useContext, useMemo, useRef } from 'react'
-import { ChatContext } from '../Context';
+import React, { memo, useRef } from 'react'
 import { ConversationTyping, HorizontalRule, TableGroup } from '../Reusables';
-import { fr, DataFrame } from './../../ml-ts'
+import { fr } from './../../ml-ts'
 import { Chat } from '../Chat';
-import { FilterColumnsPrompt } from './FilterColumnsPrompt';
-// import { DataFrame } from '../../ml-ts/frame';
+import { consumeContextInterface } from '../../interface';
+import { withContext } from '../HOC';
 
 export interface displayDfInterface {
     componentAfterInfo: React.ReactNode
 }
 
-export const DfInfo: React.FC<displayDfInterface> = memo(({ componentAfterInfo }) => {
-    const { df, appendChatComponent } = useContext(ChatContext)
-
+const DfInfoComponent: React.FC<displayDfInterface & consumeContextInterface> = memo(({ appendChatComponent, componentAfterInfo, df }) => {
     const info = useRef(fr.getInfo(df));
     if (!df || !info) return null;
     return (
@@ -33,4 +30,6 @@ export const DfInfo: React.FC<displayDfInterface> = memo(({ componentAfterInfo }
 });
 
 
-DfInfo.displayName = 'DfInfo';
+DfInfoComponent.displayName = 'DfInfoComponent';
+
+export const DfInfo = withContext(DfInfoComponent, ['appendChatComponent', 'df'])

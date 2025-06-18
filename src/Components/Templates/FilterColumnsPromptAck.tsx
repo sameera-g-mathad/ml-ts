@@ -1,14 +1,14 @@
-import React, { memo, useContext } from 'react'
-import { ChatContext } from '../Context'
+import React, { memo } from 'react'
 import { ConversationTyping } from '../Reusables'
 import { FilterColumns } from './FilterColumns'
 import { Chat } from '../Chat'
 import { DropNaPrompt } from './DropNaPrompt'
+import { consumeContextInterface } from '../../interface'
+import { withContext } from '../HOC'
 interface filterColumnsPromptAckInterface {
     decision: 'yes' | 'no'
 }
-export const FilterColumnsPromptAck: React.FC<filterColumnsPromptAckInterface> = memo(({ decision }) => {
-    const { appendChatComponent } = useContext(ChatContext)
+const FilterColumnsPromptAckComponent: React.FC<filterColumnsPromptAckInterface & consumeContextInterface> = memo(({ appendChatComponent, decision }) => {
     const messages = {
         'yes': 'Yes, help me filter some of the columns.',
         'no': 'No, I am fine with my data, I want to proceed.'
@@ -22,4 +22,6 @@ export const FilterColumnsPromptAck: React.FC<filterColumnsPromptAckInterface> =
     )
 })
 
-FilterColumnsPromptAck.displayName = 'FilterColumnsPromptAck'
+FilterColumnsPromptAckComponent.displayName = 'FilterColumnsPromptAckComponent'
+
+export const FilterColumnsPromptAck = withContext(FilterColumnsPromptAckComponent, ['appendChatComponent'])

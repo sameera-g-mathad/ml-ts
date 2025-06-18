@@ -1,10 +1,10 @@
-import React, { memo, useContext } from 'react';
-import { ChatContext } from '../Context';
+import React, { memo } from 'react';
 import { DropNa } from './DropNa';
 import { ConditionalDisplay, ConversationTyping, SelectionPrompt } from '../Reusables'
 import { Chat } from '../Chat';
-export const DropNaPrompt: React.FC = memo(() => {
-    const { appendChatComponent } = useContext(ChatContext)
+import { consumeContextInterface } from '../../interface';
+import { withContext } from '../HOC';
+const DropNaPromptComponent: React.FC<consumeContextInterface> = memo(({ appendChatComponent }) => {
     return (
         <>
             <ConversationTyping text='Do you want to drop undefined values' />
@@ -15,12 +15,14 @@ export const DropNaPrompt: React.FC = memo(() => {
     )
 })
 
-DropNaPrompt.displayName = 'DropNaPrompt'
+DropNaPromptComponent.displayName = 'DropNaPromptComponent'
+
+export const DropNaPrompt = withContext(DropNaPromptComponent, ['appendChatComponent'])
 
 
-const DropNaPromptAck: React.FC = memo(() => {
-    const { appendChatComponent } = useContext(ChatContext)
+const DropNaPromptAckComponent: React.FC<consumeContextInterface> = memo(({ appendChatComponent }) => {
     return <ConversationTyping text='I would like to go with dropna.' callback={() => appendChatComponent(<Chat gerneratedBy='system'><DropNa /></Chat>)} />
 })
 
 
+const DropNaPromptAck = withContext(DropNaPromptAckComponent, ['appendChatComponent'])

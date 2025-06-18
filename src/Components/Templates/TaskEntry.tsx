@@ -1,9 +1,9 @@
-import React, { memo, useContext, useMemo, useRef } from 'react';
-import { ChatContext } from '../Context';
+import React, { memo, useRef } from 'react';
 import { ConversationTyping } from '../Reusables';
+import { withContext } from '../HOC';
 import { Chat } from '../Chat';
 import { TaskSelection } from './index';
-import { taskInterface } from '../../interface';
+import { consumeContextInterface, taskInterface } from '../../interface';
 
 /**
  * TaskEntry component is responsible for displaying a typing animation
@@ -12,8 +12,8 @@ import { taskInterface } from '../../interface';
  * @param {taskInterface} task - The task to be executed.
  * @returns {JSX.Element} - The rendered component.
  */
-export const TaskEntry: React.FC<taskInterface> = memo(({ task }) => {
-  const { updateTaskAndAppendChat } = useContext(ChatContext);
+
+const TaskEntryComponent: React.FC<taskInterface & consumeContextInterface> = memo(({ task, updateTaskAndAppendChat }) => {
   const replies = [
     'Can you run a [classification/regression] task for me?',
     'I want to try out a [classification/regression] model. Can you help me run it?',
@@ -31,7 +31,7 @@ export const TaskEntry: React.FC<taskInterface> = memo(({ task }) => {
       `<b>${task}</b>`
     )
   );
-
+  // console.log('TaskEntry')
   return <ConversationTyping
     text={reply.current}
     speed={3}
@@ -46,4 +46,6 @@ export const TaskEntry: React.FC<taskInterface> = memo(({ task }) => {
   />
 });
 
-TaskEntry.displayName = 'TaskEntry';
+TaskEntryComponent.displayName = 'TaskEntryComponent';
+
+export const TaskEntry = withContext(TaskEntryComponent, ['updateTaskAndAppendChat'])
