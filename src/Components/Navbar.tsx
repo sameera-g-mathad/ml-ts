@@ -1,7 +1,7 @@
 import React, { memo, useContext } from 'react';
-import { Switch } from './Reusables';
-import { ThemeContext } from './Context';
-import { DarkTheme, LightTheme } from './Svgs';
+import { Switch } from './../Reusables';
+import { ThemeContext } from './../Context';
+import { DarkTheme, LightTheme } from '../Svgs';
 
 
 /**

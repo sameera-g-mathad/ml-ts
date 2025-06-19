@@ -1,5 +1,5 @@
 import React, { memo, useContext, useEffect, useRef } from 'react';
-import { ChatContext } from './Context';
+import { ChatContext } from './../Context';
 
 /**
  * This is the Content component of the application.

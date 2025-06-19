@@ -1,6 +1,6 @@
 import React, { memo, useContext, useMemo } from 'react';
 import { Navbar, Content } from './index';
-import { ThemeContext, ChatContextProvider } from './Context';
+import { ThemeContext, ChatContextProvider } from './../Context';
 
 
 /**

@@ -1,7 +1,7 @@
 import React, { memo, useContext, useMemo } from 'react';
 import { childrenProp, chatInterface } from '../interface';
-import { UserSvg, SystemSvg } from './Svgs';
-import { ThemeContext } from './Context';
+import { UserSvg, SystemSvg } from '../Svgs';
+import { ThemeContext } from './../Context';
 
 /**
  * This is the Chat component of the application.
