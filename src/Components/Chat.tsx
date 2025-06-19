@@ -64,7 +64,7 @@ export const Chat: React.FC<childrenProp & chatInterface> = memo(({
           : gerneratedBy === 'system'
             ? 'sm:w-1/2'
             : 'sm:max-w-96'
-          } w-5/6 border shadow-lg p-3 rounded-3xl ${background} ${textColor}`}
+          } w-5/6 border shadow-lg p-3 rounded-3xl relative ${background} ${textColor}`}
       >
         {children}
         <span style={{ color: useColor, fontSize: '11px' }} className='flex justify-end pt-2'>{date.toDateString()} - {date.toLocaleTimeString()}</span>

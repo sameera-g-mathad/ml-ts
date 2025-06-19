@@ -66,6 +66,7 @@ export interface fileInterface {
  */
 export interface themeInterface {
   color: string;
+  className: string;
 }
 
 /**

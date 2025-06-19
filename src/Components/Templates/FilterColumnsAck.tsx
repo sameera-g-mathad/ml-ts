@@ -16,7 +16,7 @@ const FilterColumnsAckComponent: React.FC<filterColumnsAckInterface & consumeCon
         addDataframe(fr.filterCols(df, filteredCols));
         // eslint-disable-next-line
     }, [])
-    return <ConversationTyping text={`<p className='flex w-full overflow-hidden flex-wrap'>Please filter the dataset and keep the columns: <span >[${filteredCols}]</span></p>`}
+    return <ConversationTyping text={`<p className='flex max-w-full overflow-x-hidden flex-wrap'>Please filter the dataset and keep the columns: <span className="max-w-64 overflow-x-hidden truncate">[${filteredCols}]</></p>`}
         callback={() =>
             appendChatComponent(
                 <Chat gerneratedBy="system" widthFull={true}>

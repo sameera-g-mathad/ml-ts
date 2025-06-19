@@ -6,7 +6,7 @@ const withTheme = <P extends object>(
 ) => {
   return (props: P) => {
     const { useColor } = useContext(ThemeContext);
-    return <Component {...props} color={useColor} />;
+    return <Component {...props} color={useColor} className='' />;
   };
 };
 
