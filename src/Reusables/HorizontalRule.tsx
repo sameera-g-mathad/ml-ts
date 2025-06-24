@@ -1,12 +1,12 @@
 import React from 'react';
 import { themeInterface } from '../interface';
-import withTheme from '../HOC/withTheme';
+import { withTheme } from '../HOC';
 export const HorizontalRuleComponent: React.FC<themeInterface> = ({
-  color,
+  secondaryColor,
 }) => {
-  return <hr style={{ borderColor: color }} className="my-3 border" />;
+  return <hr style={{ borderColor: secondaryColor }} className="my-3 border" />;
 };
 
 HorizontalRuleComponent.displayName = 'HorizontalRuleComponent';
 
-export const HorizontalRule = withTheme(HorizontalRuleComponent);
+export const HorizontalRule = withTheme(HorizontalRuleComponent, ['secondaryColor']);

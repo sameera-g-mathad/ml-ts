@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { switchProps, themeInterface } from '../interface';
-import withTheme from '../HOC/withTheme';
+import { withTheme } from '../HOC';
 /**
  *
  * @param {string} switchName - This has to be a unique name for the component, else there would be unexpected behaviour if multiple switch components are rendered
@@ -10,7 +10,7 @@ import withTheme from '../HOC/withTheme';
 export const SwitchComponent: React.FC<switchProps & themeInterface> = ({
   switchName,
   callback,
-  color,
+  secondaryColor,
 }) => {
   const [checked, isChecked] = useState<boolean>(false);
 
@@ -34,8 +34,8 @@ export const SwitchComponent: React.FC<switchProps & themeInterface> = ({
       />
       <label
         style={{
-          borderColor: color,
-          ...({ '--color': color } as React.CSSProperties),
+          borderColor: secondaryColor,
+          ...({ '--color': secondaryColor } as React.CSSProperties),
         }}
         htmlFor={switchName}
         className="switch border"
@@ -46,4 +46,4 @@ export const SwitchComponent: React.FC<switchProps & themeInterface> = ({
 
 SwitchComponent.displayName = 'SwitchComponent';
 
-export const Switch = withTheme(SwitchComponent);
+export const Switch = withTheme(SwitchComponent, ['secondaryColor']);

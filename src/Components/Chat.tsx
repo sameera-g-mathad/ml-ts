@@ -20,7 +20,7 @@ export const Chat: React.FC<childrenProp & chatInterface> = memo(({
   widthFull,
 }) => {
   // This is to set the background color of the container.
-  const { theme, useColor } = useContext(ThemeContext);
+  const { theme, colorToUse } = useContext(ThemeContext);
 
 
   // This is to place the chat message on either side of the display.
@@ -49,13 +49,13 @@ export const Chat: React.FC<childrenProp & chatInterface> = memo(({
       className={`w-full flex p-2 my-4 sm:p-4 justify-start ${displayPosition[gerneratedBy]}`}
     >
       <div
-        style={{ background: useColor }}
+        style={{ background: colorToUse[gerneratedBy] }}
         className="mx-1 py-2 sm:mx-2 sm:py-4 w-8 h-8 sm:w-10 sm:h-10 relative flex justify-center items-center rounded-xl"
       >
         {displayIcon[gerneratedBy]}
       </div>
       <div
-        style={{ borderColor: useColor }}
+        style={{ borderColor: colorToUse[gerneratedBy] }}
         // The below class is used to set the width of the container. 
         // If widthFull is true, it will take the full width of the container.
         // Else the same as to which user generated the message.
@@ -67,7 +67,7 @@ export const Chat: React.FC<childrenProp & chatInterface> = memo(({
           } w-5/6 border shadow-lg p-3 rounded-3xl relative ${background} ${textColor}`}
       >
         {children}
-        <span style={{ color: useColor, fontSize: '11px' }} className='flex justify-end pt-2'>{date.toDateString()} - {date.toLocaleTimeString()}</span>
+        <span style={{ color: colorToUse[gerneratedBy], fontSize: '11px' }} className='flex justify-end pt-2'>{date.toDateString()} - {date.toLocaleTimeString()}</span>
       </div>
     </div>
 

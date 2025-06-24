@@ -1,15 +1,15 @@
 import React, { memo } from 'react';
-import withTheme from '../HOC/withTheme';
+import { withTheme } from '../HOC';
 import { tableInterface, themeInterface } from '../interface';
 const TableComponent: React.FC<tableInterface & themeInterface> = memo(
-  ({ columns, color, data, colFrom, colTo, rowFrom, rowTo }) => {
+  ({ columns, data, colFrom, colTo, rowFrom, rowTo, secondaryColor }) => {
     return (
       <div className='overflow-x-scroll'>
         <table className="w-full border border-separate rounded-lg">
           <thead>
             <tr className='table table-fixed w-full font-light !text-white' >
               {columns.slice(colFrom, colTo).map((el, index) => (
-                <th className="border rounded capitalize w-32 truncate hover:text-xs p-1" key={index} style={{ backgroundColor: color }}>
+                <th className="border rounded capitalize w-32 truncate hover:text-xs p-1" key={index} style={{ backgroundColor: secondaryColor }}>
                   {el}
                 </th>
               ))}
@@ -39,4 +39,4 @@ const TableComponent: React.FC<tableInterface & themeInterface> = memo(
 
 TableComponent.displayName = 'TableComponent';
 
-export const Table = withTheme(TableComponent);
+export const Table = withTheme(TableComponent, ['secondaryColor']);

@@ -1,14 +1,14 @@
 import React, { useContext } from 'react';
 import { buttonInterface, themeInterface } from '../interface';
 import { ConditionalContext } from '../Context';
-import withTheme from '../HOC/withTheme';
+import { withTheme } from '../HOC';
 
 export const ButtonComponent: React.FC<buttonInterface & themeInterface> = ({
   name,
   conditionalDisplay,
   iconComponent,
   callback,
-  color,
+  secondaryColor,
   disabled,
 }) => {
   const { setConditionalDisplay } = useContext(ConditionalContext);
@@ -18,7 +18,7 @@ export const ButtonComponent: React.FC<buttonInterface & themeInterface> = ({
       aria-label='Hover here'
       disabled={disabled}
       style={{
-        ...({ '--use-color': color } as React.CSSProperties),
+        ...({ '--use-color': secondaryColor } as React.CSSProperties),
         cursor: disabled ? 'not-allowed' : 'pointer',
       }}
       className="button border-2 py-1 sm:px-4 px-3 mr-1 rounded-xl tracking-wide capitalize"
@@ -37,4 +37,4 @@ export const ButtonComponent: React.FC<buttonInterface & themeInterface> = ({
 
 ButtonComponent.displayName = 'ButtonComponent';
 
-export const Button = withTheme(ButtonComponent);
+export const Button = withTheme(ButtonComponent, ['secondaryColor']);

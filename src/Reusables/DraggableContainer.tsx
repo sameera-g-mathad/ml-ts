@@ -1,5 +1,7 @@
 import React, { memo, useContext } from "react";
 import { ThemeContext } from "../Context";
+import { themeInterface } from "../interface";
+import { withTheme } from "../HOC";
 
 export interface draggableContainerInterface {
     data: string[];
@@ -7,20 +9,19 @@ export interface draggableContainerInterface {
     onDragStart?: (e: React.DragEvent<HTMLDivElement>, item: string) => void;
     onDrop?: (e: React.DragEvent<HTMLDivElement>) => void;
 }
-export const DraggableContainer: React.FC<draggableContainerInterface> = memo(({ data, draggable, onDragStart, onDrop }) => {
-    const { useColor } = useContext(ThemeContext)
+const DraggableContainerComponent: React.FC<draggableContainerInterface & themeInterface> = memo(({ data, draggable, onDragStart, onDrop, secondaryColor }) => {
     return (
         <div
             className='border-2 border-dashed rounded-lg w-full h-64 overflow-y-scroll p-2'
             onDragOver={(e) => e.preventDefault()}
             onDrop={(e) => onDrop && onDrop(e)}
-            style={{ borderColor: useColor }}
+            style={{ borderColor: secondaryColor }}
         >
             {
                 data.map(
                     (el, index) =>
                         <div
-                            style={{ borderColor: useColor }}
+                            style={{ borderColor: secondaryColor }}
                             className={`border border-l-4 rounded-md p-2 m-1 ${draggable ? 'cursor-grab' : 'cursor-auto'}`}
                             draggable={draggable}
                             onDragStart={(e) => onDragStart && onDragStart(e, el)}
@@ -34,4 +35,6 @@ export const DraggableContainer: React.FC<draggableContainerInterface> = memo(({
     );
 });
 
-DraggableContainer.displayName = 'DraggableContainer';
+DraggableContainerComponent.displayName = 'DraggableContainerComponent';
+
+export const DraggableContainer = withTheme(DraggableContainerComponent, ['secondaryColor'])

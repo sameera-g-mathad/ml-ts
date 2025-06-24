@@ -1,9 +1,9 @@
 import React, { ChangeEvent, useState } from 'react';
 import { UploadSvg } from '../Svgs';
-import withTheme from '../HOC/withTheme';
+import { withTheme } from '../HOC';
 import { fileInterface, themeInterface } from '../interface';
 export const FileInputComponent: React.FC<fileInterface & themeInterface> = ({
-  color,
+  secondaryColor,
   callback,
 }) => {
   const [fileName, setFileName] = useState('');
@@ -25,7 +25,7 @@ export const FileInputComponent: React.FC<fileInterface & themeInterface> = ({
       <div className="flex items-center">
         <label
           style={{
-            ...({ '--use-color': color } as React.CSSProperties),
+            ...({ '--use-color': secondaryColor } as React.CSSProperties),
           }}
           className="file-input border-2 flex items-center justify-evenly px-3 rounded-xl py-1 "
           htmlFor="file-input"
@@ -41,4 +41,4 @@ export const FileInputComponent: React.FC<fileInterface & themeInterface> = ({
 
 FileInputComponent.displayName = 'FileInputComponent';
 
-export const FileInput = withTheme(FileInputComponent);
+export const FileInput = withTheme(FileInputComponent, ['secondaryColor']);

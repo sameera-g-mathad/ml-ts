@@ -1,13 +1,23 @@
 import React, { useContext } from 'react';
 import { ThemeContext } from '../Context';
 import { themeInterface } from '../interface';
-const withTheme = <P extends object>(
-  Component: React.ComponentType<P & themeInterface>
+
+export const withTheme = <P extends object>(
+  Component: React.ComponentType<P & themeInterface>, inject?: Partial<keyof themeInterface>[]
 ) => {
   return (props: P) => {
-    const { useColor } = useContext(ThemeContext);
-    return <Component {...props} color={useColor} className='' />;
+    const { theme, colorToUse, changeTheme } = useContext(ThemeContext);
+    const themeProps: themeInterface = {
+      theme,
+      changeTheme,
+      systemColor: colorToUse['system'],
+      userColor: colorToUse['user'],
+      secondaryColor: colorToUse['secondary']
+    }
+    const propsToUse: Partial<themeInterface> = {};
+    inject?.forEach(key =>
+      (propsToUse as any)[key] = themeProps[key]
+    )
+    return <Component {...props} {...propsToUse as any} />;
   };
 };
-
-export default withTheme;

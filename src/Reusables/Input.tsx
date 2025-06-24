@@ -1,9 +1,9 @@
 import React, { ChangeEvent } from 'react';
-import withTheme from '../HOC/withTheme';
+import { withTheme } from '../HOC';
 import { inputInterface, themeInterface } from '../interface';
 
 const InputComponent: React.FC<themeInterface & inputInterface> = ({
-  color,
+  secondaryColor,
   size,
   defaultValue,
   callback
@@ -17,7 +17,7 @@ const InputComponent: React.FC<themeInterface & inputInterface> = ({
   return (
     <input
       type="text"
-      style={{ borderColor: color }}
+      style={{ borderColor: secondaryColor }}
       className={`outline-none bg-none rounded-xl pl-2 border-2 text-black ${sizes[size]}`}
       value={defaultValue}
       onChange={(e: ChangeEvent<HTMLInputElement>) => callback && callback(e.target.value)}
@@ -27,4 +27,4 @@ const InputComponent: React.FC<themeInterface & inputInterface> = ({
 
 InputComponent.displayName = 'InputComponent';
 
-export const Input = withTheme(InputComponent);
+export const Input = withTheme(InputComponent, ['secondaryColor']);

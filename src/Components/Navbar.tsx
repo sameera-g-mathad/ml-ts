@@ -13,7 +13,7 @@ import { DarkTheme, LightTheme } from '../Svgs';
  */
 export const Navbar: React.FC = memo(() => {
   // Use themecontext to extract the theme
-  const { theme, useColor, changeTheme } = useContext(ThemeContext);
+  const { theme, colorToUse, changeTheme } = useContext(ThemeContext);
 
   // The object below is used to display appropriate icon based on the theme.
   // The icons are imported from the Svgs component.
@@ -25,7 +25,7 @@ export const Navbar: React.FC = memo(() => {
   return (
     <div
       // Set the background color of the navbar based on the theme
-      style={{ backgroundColor: useColor }}
+      style={{ backgroundColor: colorToUse['secondary'] }}
       className={`navbar shadow-md sm:p-6 p-2 text-white`}
     >
       {/* Styling the name as chat(ML)*/}

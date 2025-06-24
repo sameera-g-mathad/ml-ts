@@ -3,7 +3,7 @@ import { childrenProp, themeInterfaceByContext } from '../interface';
 
 export const ThemeContext = createContext<themeInterfaceByContext>({
   theme: 'light',
-  useColor: '',
+  colorToUse: { system: '', user: '', secondary: '' },
 });
 
 export const ThemeContextProvider: React.FC<childrenProp> = ({ children }) => {
@@ -39,6 +39,36 @@ export const ThemeContextProvider: React.FC<childrenProp> = ({ children }) => {
     // eslint-disable-next-line 
   }, []);
 
+  const colorCombinations = useMemo(() => (
+    [
+      {
+        'system': 'rgb(251, 146, 60)', //  (Amber 500)
+        'user': 'rgb(236, 72, 153)', //(Fuchsia 500)
+        'secondary': 'rgb(96, 165, 250)' // (Blue 400)
+      },
+      {
+        'system': 'rgb(6, 182, 212)', // (Cyan 500)
+        'user': 'rgb(139, 92, 246)', //(Violet 500)
+        'secondary': 'rgb(251, 113, 133)' // (Red 400)
+      },
+      {
+        'system': 'rgb(20, 184, 166)', //  (Teal 500)
+        'user': 'rgb(168, 85, 247)', // (Purple 500)
+        'secondary': 'rgb(251, 204, 21)' // (Yellow 400)
+      },
+      {
+        'system': 'rgb(75, 29, 219)', //  (Indigo 500)
+        'user': 'rgb(236, 72, 153)', // (Fuchsia 500)
+        'secondary': 'rgb(190, 24, 93)' // (Rose 500)
+      },
+      {
+        'system': 'rgb(16, 185, 129)', //(Emerald 500)
+        'user': 'rgb(191, 219, 74)', // (Lime 500)
+        'secondary': 'rgb(251, 146, 60)' // (Amber 500)
+      },
+    ]
+  ), [])
+
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
   // const useColor = useState(color);
   const changeTheme = useCallback((change: boolean) => {
@@ -48,8 +78,7 @@ export const ThemeContextProvider: React.FC<childrenProp> = ({ children }) => {
     <ThemeContext.Provider
       value={{
         theme,
-        useColor: color,
-        // useColor: useColor[0],
+        colorToUse: colorCombinations[4],
         changeTheme,
       }}
     >

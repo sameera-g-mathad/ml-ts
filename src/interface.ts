@@ -15,7 +15,12 @@ export interface childrenProp {
  */
 export interface themeInterfaceByContext {
   theme: 'light' | 'dark';
-  useColor: string;
+  colorToUse: {
+    system: string;
+    user: string;
+    secondary: string;
+    primary?: string;
+  };
   changeTheme?: (change: boolean) => void;
 }
 
@@ -65,8 +70,11 @@ export interface fileInterface {
  * It uses enum which specifies that the theme can have only two values.
  */
 export interface themeInterface {
-  color: string;
-  className: string;
+  systemColor: string;
+  userColor: string;
+  secondaryColor: string;
+  changeTheme?: (change: boolean) => void;
+  theme: 'light' | 'dark';
 }
 
 /**
