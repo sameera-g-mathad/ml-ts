@@ -1,5 +1,5 @@
 import React, { memo, useCallback, useState } from "react";
-import { Button, ConditionalDisplay, ConversationTyping, DraggableContainer, InputGroup, RadioBtn } from "../Reusables";
+import { Button, ConditionalDisplay, ConversationTyping, DraggableContainer, RadioBtn } from "../Reusables";
 import { fr } from "../ml-ts";
 import { DisplayDf, DropNaPrompt } from "./index";
 import { Chat } from "../Components/Chat";
@@ -35,15 +35,15 @@ const DropNaComponent: React.FC<consumeContextInterface> = memo(({ addDataframe,
         <ConversationTyping text='Will drop the values as requested.' />
         <ConditionalDisplay>
             <span className='flex gap-3'>
-                <InputGroup label='Drop All'>
-                    <RadioBtn id='all' name='drop' callback={() => setHow('all')} selected={true} />
-                </InputGroup>
-                <InputGroup label='Drop Any'>
-                    <RadioBtn id='any' name='drop' callback={() => setHow('any')} />
-                </InputGroup>
-                <InputGroup label='Subset'>
-                    <RadioBtn id='subset' name='drop' callback={() => setHow('subset')} />
-                </InputGroup>
+                {/* <InputGroup label='Drop All'> */}
+                <RadioBtn id='all' name='drop' callback={() => setHow('all')} selected={true} />
+                {/* </InputGroup> */}
+                {/* <InputGroup label='Drop Any'> */}
+                <RadioBtn id='any' name='drop' callback={() => setHow('any')} />
+                {/* </InputGroup> */}
+                {/* <InputGroup label='Subset'> */}
+                <RadioBtn id='subset' name='drop' callback={() => setHow('subset')} />
+                {/* </InputGroup> */}
             </span>
             {how === 'subset' ?
                 <span className="flex sm:flex-nowrap py-3 flex-wrap gap-5">

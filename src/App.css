@@ -58,7 +58,17 @@
   margin-left: 0;
 }
 
-.radio-label::before {
+.radio-label {
+  outline-color: var(--color);
+}
+
+.radio-input:checked + .radio-label {
+  background-color: var(--color);
+  color: white;
+  outline-offset: 2px;
+}
+
+/* .radio-label::before {
   content: '';
   width: 10px;
   height: 10px;
@@ -73,7 +83,7 @@
 
 .radio-input:checked + .radio-label::before {
   display: block;
-}
+} */
 
 .button,
 .file-input {

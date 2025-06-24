@@ -1,7 +1,7 @@
-import React, { memo, useContext } from "react";
-import { ThemeContext } from "../Context";
+import React, { memo } from "react";
 import { themeInterface } from "../interface";
 import { withTheme } from "../HOC";
+import { DragabbleSvg } from "../Svgs";
 
 export interface draggableContainerInterface {
     data: string[];
@@ -12,7 +12,7 @@ export interface draggableContainerInterface {
 const DraggableContainerComponent: React.FC<draggableContainerInterface & themeInterface> = memo(({ data, draggable, onDragStart, onDrop, secondaryColor }) => {
     return (
         <div
-            className='border-2 border-dashed rounded-lg w-full h-64 overflow-y-scroll p-2'
+            className='border-2 rounded-lg w-full h-64 overflow-y-scroll p-2'
             onDragOver={(e) => e.preventDefault()}
             onDrop={(e) => onDrop && onDrop(e)}
             style={{ borderColor: secondaryColor }}
@@ -21,13 +21,14 @@ const DraggableContainerComponent: React.FC<draggableContainerInterface & themeI
                 data.map(
                     (el, index) =>
                         <div
-                            style={{ borderColor: secondaryColor }}
-                            className={`border border-l-4 rounded-md p-2 m-1 ${draggable ? 'cursor-grab' : 'cursor-auto'}`}
+                            style={{ borderColor: secondaryColor, fill: secondaryColor }}
+                            className={`flex items-center gap-5 border active:border-l-4 p-2 m-1 active:font-bold active:text-lg ${draggable ? 'cursor-grab' : 'cursor-auto'}`}
                             draggable={draggable}
                             onDragStart={(e) => onDragStart && onDragStart(e, el)}
 
                             key={index}>
-                            {el}
+                            <DragabbleSvg />
+                            <span style={{ color: secondaryColor }}>{el}</span>
                         </div>
                 )
             }

@@ -5,3 +5,4 @@ export * from './DarkThemeSvg';
 export * from './ClassificationSvg';
 export * from './RegressionSvg';
 export * from './UploadSvg';
+export * from './DragabbleSvg'

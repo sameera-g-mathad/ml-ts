@@ -7,44 +7,44 @@ export const ThemeContext = createContext<themeInterfaceByContext>({
 });
 
 export const ThemeContextProvider: React.FC<childrenProp> = ({ children }) => {
-  const webColors = [
-    // 'rgb(59, 130, 246)', // bg-blue-500
-    // 'rgb(249, 168, 37)', // bg-yellow-500
-    'rgb(251, 146, 60)', // bg-amber-500
-    // 'rgb(34, 197, 94)', // bg-green-500
-    'rgb(16, 185, 129)', // bg-emerald-500
-    'rgb(6, 182, 212)', // bg-cyan-500
-    'rgb(37, 99, 235)', // bg-sky-500
-    'rgb(139, 92, 246)', // bg-violet-500
-    'rgb(168, 85, 247)', // bg-purple-500
-    'rgb(236, 72, 153)', // bg-fuchsia-500
-    'rgb(236, 72, 153)', // bg-pink-500
-    'rgb(190, 24, 93)', // bg-rose-500
-    // 'rgb(255, 0, 0)', // bg-red-500
-    'rgb(255, 159, 28)', // bg-orange-500
-    'rgb(20, 184, 166)', // bg-teal-500
-    'rgb(191, 219, 74)', // bg-lime-500
-    'rgb(75, 29, 219)', // bg-indigo-500
-    'rgb(251, 113, 133)', // bg-red-400
-    'rgb(74, 222, 128)', // bg-green-400
-    'rgb(96, 165, 250)', // bg-blue-400
-    'rgb(250, 204, 21)', // bg-yellow-400
-  ];
+  // const webColors = [
+  //   // 'rgb(59, 130, 246)', // bg-blue-500
+  //   // 'rgb(249, 168, 37)', // bg-yellow-500
+  //   'rgb(251, 146, 60)', // bg-amber-500
+  //   // 'rgb(34, 197, 94)', // bg-green-500
+  //   'rgb(16, 185, 129)', // bg-emerald-500
+  //   'rgb(6, 182, 212)', // bg-cyan-500
+  //   'rgb(37, 99, 235)', // bg-sky-500
+  //   'rgb(139, 92, 246)', // bg-violet-500
+  //   'rgb(168, 85, 247)', // bg-purple-500
+  //   'rgb(236, 72, 153)', // bg-fuchsia-500
+  //   'rgb(236, 72, 153)', // bg-pink-500
+  //   'rgb(190, 24, 93)', // bg-rose-500
+  //   // 'rgb(255, 0, 0)', // bg-red-500
+  //   'rgb(255, 159, 28)', // bg-orange-500
+  //   'rgb(20, 184, 166)', // bg-teal-500
+  //   'rgb(191, 219, 74)', // bg-lime-500
+  //   'rgb(75, 29, 219)', // bg-indigo-500
+  //   'rgb(251, 113, 133)', // bg-red-400
+  //   'rgb(74, 222, 128)', // bg-green-400
+  //   'rgb(96, 165, 250)', // bg-blue-400
+  //   'rgb(250, 204, 21)', // bg-yellow-400
+  // ];
 
-  const color = useMemo(() => {
-    // Randomly select a color from the webColors array
-    // and return it as a string
-    let choice = Math.floor(Math.random() * webColors.length);
-    return webColors[choice];
-    // eslint-disable-next-line 
-  }, []);
+  // const color = useMemo(() => {
+  //   // Randomly select a color from the webColors array
+  //   // and return it as a string
+  //   let choice = Math.floor(Math.random() * webColors.length);
+  //   return webColors[choice];
+  //   // eslint-disable-next-line 
+  // }, []);
 
   const colorCombinations = useMemo(() => (
     [
       {
-        'system': 'rgb(251, 146, 60)', //  (Amber 500)
-        'user': 'rgb(236, 72, 153)', //(Fuchsia 500)
-        'secondary': 'rgb(96, 165, 250)' // (Blue 400)
+        'system': 'rgb(4, 120, 87)', //  (Amber 500)
+        'user': 'rgb(75, 29, 219)', //(Fuchsia 500)
+        'secondary': 'rgb(16, 185, 129)' // (Blue 400)
       },
       {
         'system': 'rgb(6, 182, 212)', // (Cyan 500)
@@ -78,7 +78,7 @@ export const ThemeContextProvider: React.FC<childrenProp> = ({ children }) => {
     <ThemeContext.Provider
       value={{
         theme,
-        colorToUse: colorCombinations[4],
+        colorToUse: colorCombinations[0],
         changeTheme,
       }}
     >
