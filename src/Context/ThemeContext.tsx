@@ -1,6 +1,13 @@
 import React, { createContext, useCallback, useMemo, useState } from 'react';
 import { childrenProp, themeInterfaceByContext } from '../interface';
 
+/**
+ * This context is used to manage the theme of the application.
+ * It provides the current theme, a function to change the theme,
+ * and a color combination to use for the theme.
+ * The initial theme is set to 'light' and the color combination is set to a default value.
+ */
+
 export const ThemeContext = createContext<themeInterfaceByContext>({
   theme: 'light',
   colorToUse: { system: '', user: '', secondary: '' },

@@ -22,7 +22,7 @@ const DraggableContainerComponent: React.FC<draggableContainerInterface & themeI
                     (el, index) =>
                         <div
                             style={{ borderColor: secondaryColor, fill: secondaryColor }}
-                            className={`flex items-center gap-5 border active:border-l-4 p-2 m-1 active:font-bold active:text-lg ${draggable ? 'cursor-grab' : 'cursor-auto'}`}
+                            className={`flex items-center gap-5 border active:border-l-4 p-2 m-1 font-semibold active:font-bold active:text-lg ${draggable ? 'cursor-grab' : 'cursor-auto'}`}
                             draggable={draggable}
                             onDragStart={(e) => onDragStart && onDragStart(e, el)}
 

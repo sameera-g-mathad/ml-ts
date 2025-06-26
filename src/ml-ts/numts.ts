@@ -63,6 +63,15 @@ export class NDArray {
     }
     return newArray;
   }
+  copy(): NDArray {
+    let newArray = this.createAndFill(this.shape);
+    for (let i = 0; i < this.shape[0]; i++) {
+      for (let j = 0; j < this.shape[1]; j++) {
+        newArray.array[i][j] = this.array[i][j];
+      }
+    }
+    return newArray;
+  }
 }
 
 class Operations {
@@ -284,7 +293,6 @@ class Exponent {
     }
     return newArray;
   }
-
   // Logarithms using Newton's method (Expensive) as it internally uses exp method
   // naturalLogOfNumber(
   //   x: number,
@@ -344,15 +352,98 @@ class Exponent {
   }
 }
 
+class Statistics {
+  sum(ndArray: NDArray): NDArray {
+    const result = nt.zeros([1, ndArray.shape[1]]);
+    for (let i = 0; i < ndArray.shape[0]; i++) {
+      for (let j = 0; j < ndArray.shape[1]; j++) {
+        result.array[0][j] += ndArray.array[i][j];
+      }
+    }
+    return result;
+  }
+  mean(ndArray: NDArray): NDArray {
+    const sumOfArray = this.sum(ndArray);
+    const n = ndArray.shape[0];
+    for (let i = 0; i < sumOfArray.shape[1]; i++) {
+      sumOfArray.array[0][i] /= n;
+    }
+    return sumOfArray;
+  }
+  count(ndArray: NDArray): number {
+    return ndArray.shape[0];
+  }
+  variance(ndArray: NDArray, divide_by_n: boolean = true): NDArray {
+    const meanOfArray = this.mean(ndArray);
+    const varOfArray = nt.zeros([1, ndArray.shape[1]]);
+    const n = divide_by_n ? ndArray.shape[0] : ndArray.shape[0] - 1;
+    for (let i = 0; i < ndArray.shape[0]; i++) {
+      for (let j = 0; j < ndArray.shape[1]; j++) {
+        varOfArray.array[0][j] += nt.pow(
+          ndArray.array[i][j] - meanOfArray.array[0][j],
+          2
+        );
+      }
+    }
+    for (let i = 0; i < ndArray.shape[1]; i++) {
+      varOfArray.array[0][i] /= n;
+    }
+    return varOfArray;
+  }
+  sort(ndArray: NDArray): NDArray {
+    for (let row = 0; row < ndArray.shape[0]; row++) {
+      ndArray.array[row] = ndArray.array[row].sort((a, b) => a - b);
+    }
+    return ndArray;
+  }
+  median(ndArray: NDArray): NDArray {
+    const medianOfArray = nt.zeros([1, ndArray.shape[1]]);
+    const sortedArray = nt.sort(ndArray.copy().T);
+    const even = ndArray.shape[0] % 2 === 0 ? true : false;
+    const m = even ? ndArray.shape[0] / 2 - 1 : (ndArray.shape[0] + 1) / 2;
+    for (let i = 0; i < ndArray.shape[1]; i++) {
+      medianOfArray.array[0][i] = even
+        ? (sortedArray.array[i][m] + sortedArray.array[i][m + 1]) / 2
+        : sortedArray.array[i][m];
+    }
+    return medianOfArray;
+  }
+  // q1(ndArray: NDArray): NDArray {
+  //   const q1Array = nt.zeros([1, ndArray.shape[1]]);
+  //   const sortedArray = nt.sort(ndArray.copy().T);
+  //   const even = ndArray.shape[0] % 2 === 0 ? true : false;
+  //   const m = even ? ndArray.shape[0] / 2 - 1 : ndArray.shape[0] / 2;
+  //   const q1 = even ? (m + 1) / 2 : (m - 1) / 2 - 1;
+  //   for (let i = 0; i < ndArray.shape[1]; i++) {
+  //     q1Array.array[0][i] = even
+  //       ? sortedArray.array[i][q1]
+  //       : (sortedArray.array[i][q1] + sortedArray.array[i][q1 + 1]) / 2;
+  //   }
+  //   return q1Array;
+  // }
+  quantiles(ndArray: NDArray, q: 0.25 | 0.5 | 0.75 = 0.5): NDArray {
+    switch (q) {
+      // case 0.25:
+      //   return this.q1(ndArray);
+      case 0.5:
+        return this.median(ndArray);
+      default:
+        return this.median(ndArray);
+    }
+  }
+}
+
 class Numts {
   private ndarray: NDArray;
   private operations: Operations;
   private exponent: Exponent;
+  private statistics: Statistics;
   E: number = 2.718281828459045;
   constructor() {
     this.ndarray = new NDArray([[]]);
     this.operations = new Operations();
     this.exponent = new Exponent();
+    this.statistics = new Statistics();
   }
 
   // Array Creation
@@ -384,6 +475,10 @@ class Numts {
    */
   zeros(size: size = [1, 1]): NDArray {
     return this.ndarray.createAndFill(size);
+  }
+
+  copy(ndArray: NDArray) {
+    return ndArray.copy();
   }
 
   // Array Manipulation
@@ -641,6 +736,34 @@ class Numts {
   log(a: NDArray | number, base: number): NDArray | number {
     if (a instanceof NDArray) return this.exponent.logOfArray(a, base);
     return this.exponent.logOfNumber(a, base);
+  }
+
+  sum(ndArray: NDArray): NDArray {
+    return this.statistics.sum(ndArray);
+  }
+
+  mean(ndArray: NDArray): NDArray {
+    return this.statistics.mean(ndArray);
+  }
+
+  count(ndArray: NDArray): number {
+    return this.statistics.count(ndArray);
+  }
+
+  variance(ndArray: NDArray, divide_by_n: boolean = true): NDArray {
+    return this.statistics.variance(ndArray, divide_by_n);
+  }
+  std(ndArray: NDArray, divide_by_n: boolean = true): NDArray {
+    return this.sqrt(this.variance(ndArray, divide_by_n));
+  }
+  sort(ndArray: NDArray): NDArray {
+    return this.statistics.sort(ndArray);
+  }
+  median(ndArray: NDArray): NDArray {
+    return this.statistics.median(ndArray);
+  }
+  quantile(ndArray: NDArray, q: 0.25 | 0.5 | 0.75 = 0.5) {
+    return this.statistics.quantiles(ndArray, q);
   }
 }
 

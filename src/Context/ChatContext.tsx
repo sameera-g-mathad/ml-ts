@@ -74,7 +74,7 @@ const chatContextReducer = (
  * The initial state is set to an empty array of chat components and an empty task.
  * 
  * 
- * @param param0 - children
+ * @param children - children
  * @returns JSX.Element
  */
 export const ChatContextProvider: React.FC<childrenProp> = React.memo(({ children }) => {
