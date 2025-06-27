@@ -1,4 +1,4 @@
-// import { nt, NDArray } from './numts';
+import { nt } from './index';
 
 type data = (string | number)[][];
 type column = string[];
@@ -35,12 +35,24 @@ export class DataFrame {
  * It reads the file, processes the data, and returns a DataFrame object.
  */
 class Process {
+  /**
+   * This method is used to fill the isNan array with false values for each column.
+   * @param isNan - Array to be filled with false values.
+   * @param columns - Number of columns in the DataFrame.
+   * @returns Filled isNan array.
+   */
   private fillNan(isNan: boolean[], columns: number): boolean[] {
     for (let i = 0; i < columns; i++) {
       isNan.push(false);
     }
     return isNan;
   }
+  /**
+   * This method checks if there are any NaN values in the data.
+   * It returns an array of booleans indicating whether each column has NaN values.
+   * @param data - The data to be checked for NaN values.
+   * @returns An array of booleans indicating whether each column has NaN values.
+   */
   private checkNan(data: data): boolean[] {
     let isNan: boolean[] = this.fillNan([], data[0].length);
     for (let row = 0; row < data.length; row++) {
@@ -53,6 +65,68 @@ class Process {
     }
     return isNan;
   }
+  /**
+   * This method is used to describe the DataFrame.
+   * It returns a new DataFrame with the statistics of the original DataFrame.
+   * @param df The DataFrame instance to be described.
+   * @returns New DataFrame with the statistics of the original DataFrame.
+   */
+  describe(df: DataFrame): DataFrame {
+    const numericColumns = [];
+    const newColumns: column = ['stats'];
+    const newDtypes: string[] = ['string'];
+    const newIsNans: boolean[] = [];
+    const data: number[][] = [];
+    // Loop through each column in the DataFrame to find numeric columns.
+    for (let i = 0; i < df.shape[1]; i++) {
+      if (df.dtypes[i] === 'number') {
+        numericColumns.push(i);
+        newColumns.push(df.columns[i]); // Add the column name to newColumns.
+        newDtypes.push(df.dtypes[i]); // Add the dtype of the column to newDtypes.
+        newIsNans.push(false); // Add false to newIsNans as we are not checking for NaN values in this method.
+      }
+    }
+    // Loop through each row in the DataFrame to collect data for numeric columns.
+    for (let i = 0; i < df.shape[0]; i++) {
+      const row: number[] = [];
+      for (let j = 0; j < numericColumns.length; j++) {
+        let col = numericColumns[j]; // Get the index of the numeric column.
+        row.push(df.data[i][col] as number);
+      }
+      data.push(row);
+    }
+    // Create a new NDArray from the collected data.
+    const ndArray = nt.array(data);
+    // Calculate the statistics for the numeric columns.
+    const quantileStats = nt.quantileStats(ndArray);
+    // Calculate the range (min, max) for the numeric columns.
+    const rangeStats = nt.range(ndArray);
+    const newData = [
+      ['count', ...nt.count(ndArray).array[0]],
+      ['mean', ...nt.mean(ndArray).array[0]],
+      ['std', ...nt.std(ndArray, false).array[0]],
+      ['min', ...rangeStats.array[0]],
+      ['25%', ...quantileStats.array[0]],
+      ['50%', ...quantileStats.array[1]],
+      ['75%', ...quantileStats.array[2]],
+      ['max', ...rangeStats.array[1]],
+    ];
+
+    return new DataFrame(
+      newData,
+      newColumns,
+      [newData.length, newData[0].length],
+      newDtypes,
+      newIsNans
+    );
+  }
+  /**
+   * This method is used to drop rows with NaN values based on the specified criteria.
+   * @param df The DataFrame instance from which rows will be dropped.
+   * @param how The criteria for dropping rows: 'all', 'any', or 'subset'.
+   * @param subset An array of column names to consider when dropping rows (only used if how is 'subset').
+   * @returns A new DataFrame with the specified rows dropped.
+   */
   dropAll(df: DataFrame): DataFrame {
     // New variable to hold new Data.
     let newData: data = [];
@@ -92,7 +166,12 @@ class Process {
       this.checkNan(newData)
     );
   }
-
+  /**
+   * This method is used to drop rows with NaN values based on the 'any' criteria.
+   * It returns a new DataFrame with rows that have at least one non-NaN value.
+   * @param df The DataFrame instance from which rows will be dropped.
+   * @returns A new DataFrame with rows that have at least one non-NaN value.
+   */
   dropAny(df: DataFrame): DataFrame {
     let newData: data = [];
     // Loop through each row in the DataFrame.
@@ -126,7 +205,13 @@ class Process {
       this.fillNan([], dfShape[1])
     );
   }
-
+  /**
+   * This method is used to drop rows with NaN values based on the 'subset' criteria.
+   * It returns a new DataFrame with rows that have NaN values in the specified subset of columns.
+   * @param df The DataFrame instance from which rows will be dropped.
+   * @param subset An array of column names to consider when dropping rows.
+   * @returns A new DataFrame with rows that have NaN values in the specified subset of columns.
+   */
   dropSubset(df: DataFrame, subset: string[]): DataFrame {
     // variable to hold the columns that are to be dropped.
     let columns: number[] = [];
@@ -471,13 +556,28 @@ class Frame {
   constructor() {
     this.process = new Process();
   }
+  /**
+   * This method is used to describe the DataFrame.
+   * It returns a new DataFrame with the statistics of the original DataFrame.
+   * @param df The DataFrame instance to be described.
+   * @returns New DataFrame with the statistics of the original DataFrame.
+   */
+  describe(df: DataFrame): DataFrame {
+    return this.process.describe(df);
+  }
+
+  /**
+   * This method is used to drop rows with NaN values based on the specified criteria.
+   * @param df The DataFrame instance from which rows will be dropped.
+   * @param how The criteria for dropping rows: 'all', 'any', or 'subset'.
+   * @param subset An array of column names to consider when dropping rows (only used if how is 'subset').
+   * @returns A new DataFrame with the specified rows dropped.
+   */
   dropna(
     df: DataFrame,
     how: 'all' | 'any' | 'subset',
     subset: string[] = []
   ): DataFrame {
-    // This method is not implemented in the original code.
-    // It should be implemented to drop NaN values based on the specified criteria.
     switch (how) {
       case 'all':
         return this.process.dropAll(df);
@@ -487,13 +587,29 @@ class Frame {
         return this.process.dropSubset(df, subset);
     }
   }
+  /**
+   * This method is used to filter the columns of a DataFrame.
+   * @param df The DataFrame instance to be filtered.
+   * @param columns The columns to retain in the new DataFrame.
+   * @returns A new DataFrame with only the specified columns.
+   */
   filterCols(df: DataFrame, columns: string[]): DataFrame {
     return this.process.filterCols(df, columns);
   }
+  /**
+   * This method is used to get the info of the DataFrame.
+   * It returns a new DataFrame with the info of the original DataFrame.
+   * @param df The DataFrame instance for which the info will be returned.
+   * @returns New DataFrame that consists of info of the requested DataFrame.
+   */
   getInfo(df: DataFrame): DataFrame {
     return this.process.info(df);
   }
-
+  /**
+   * This method is used to get the columns that have NaN values in the DataFrame.
+   * @param df The DataFrame instance from which NaN columns will be retrieved.
+   * @returns An array of column names that contain NaN values.
+   */
   getNanColumns(df: DataFrame): string[] {
     return this.process.getNanColumns(df);
   }

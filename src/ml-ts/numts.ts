@@ -63,6 +63,12 @@ export class NDArray {
     }
     return newArray;
   }
+
+  /**
+   * This method is used to create a copy of the current instance of NDArray.
+   *
+   * @returns NDArray
+   */
   copy(): NDArray {
     let newArray = this.createAndFill(this.shape);
     for (let i = 0; i < this.shape[0]; i++) {
@@ -173,11 +179,21 @@ class Operations {
     }
     return newObj;
   }
-
+  /**
+   * This method is used to calculate the absolute value of a number or ndarray.
+   * @param num - Must be a number.
+   * @returns - Absolute value of the number or ndarray
+   */
   absOfNumber(num: number): number {
     if (num < 0) return num * -1;
     return num;
   }
+
+  /**
+   * This method is used to calculate the absolute value of each element in the ndarray.
+   * @param ndArray - Must be an instance of NDArray.
+   * @returns NDArray with absolute values of each element.
+   */
   absOfArray(ndArray: NDArray): NDArray {
     let [m, n] = ndArray.shape;
     let newArray = nt.zeros([m, n]);
@@ -315,22 +331,22 @@ class Exponent {
    * @returns - √(n)
    */
   sqrtOfNumber(n: number): number {
-    if (n === 0) return 0;
     if (n < 0) throw Error('Invalid value encountered ');
+    if (n === 0) return 0;
     let l = 0,
       h = n;
     let sqrtGuess = 0;
     while (l <= h) {
-      let mid = Math.floor(l + h) / 2;
+      let mid = Math.floor((l + h) / 2);
       let guess = mid * mid;
       if (guess === n) {
-        sqrtGuess = guess;
+        sqrtGuess = mid;
         break;
       } else if (guess > n) h = mid - 1;
       else l = mid + 1;
     }
     sqrtGuess = h;
-    while (nt.abs(sqrtGuess * sqrtGuess - n) > 0.0000001) {
+    while (nt.abs(sqrtGuess * sqrtGuess - n) >= 0.001) {
       sqrtGuess = (sqrtGuess + n / sqrtGuess) / 2;
     }
     return sqrtGuess;
@@ -353,6 +369,39 @@ class Exponent {
 }
 
 class Statistics {
+  /**
+   * This method is used to count the number of non-null elements in each column of the NDArray.
+   * @param ndArray - Must be an instance of NDArray.
+   * @returns NDArray with the count of non-null elements in each column.
+   */
+  count(ndArray: NDArray): NDArray {
+    const countArray = nt.zeros([1, ndArray.shape[1]]);
+    const count = ndArray.shape[0];
+    for (let i = 0; i < ndArray.shape[1]; i++) {
+      countArray.array[0][i] = count;
+    }
+    return countArray;
+  }
+
+  /**
+   * This method is used to calculate the mean of each column in the NDArray.
+   * @param ndArray - Must be an instance of NDArray.
+   * @returns NDArray with the mean of each column.
+   */
+  mean(ndArray: NDArray): NDArray {
+    const sumOfArray = this.sum(ndArray);
+    const n = ndArray.shape[0];
+    for (let i = 0; i < sumOfArray.shape[1]; i++) {
+      sumOfArray.array[0][i] /= n;
+    }
+    return sumOfArray;
+  }
+
+  /**
+   * Method to calculate the sum of each column in the NDArray.
+   * @param ndArray - Must be an instance of NDArray.
+   * @returns NDArray with the sum of each column.
+   */
   sum(ndArray: NDArray): NDArray {
     const result = nt.zeros([1, ndArray.shape[1]]);
     for (let i = 0; i < ndArray.shape[0]; i++) {
@@ -362,17 +411,68 @@ class Statistics {
     }
     return result;
   }
-  mean(ndArray: NDArray): NDArray {
-    const sumOfArray = this.sum(ndArray);
-    const n = ndArray.shape[0];
-    for (let i = 0; i < sumOfArray.shape[1]; i++) {
-      sumOfArray.array[0][i] /= n;
+
+  /**
+   * Method to calculate the quantile of each column in the NDArray.
+   * @param ndArray  Must be an instance of NDArray.
+   * @param q Numbrer between 0 and 1, default is 0.5 (median).
+   * @returns NDArray with the quantile of each column.
+   */
+  quantile(ndArray: NDArray, q: number = 0.5): NDArray {
+    if (q < 0 || q > 1) throw new Error('q should be between 0 and 1.');
+    const [m, n] = ndArray.shape;
+    const quantileArray = nt.zeros([1, m]);
+    const pos = (n - 1) * q;
+    const lowerBound = Math.floor(pos);
+    const upperBound = Math.ceil(pos);
+    const frac = pos - lowerBound;
+    const remainFrac = 1 - frac;
+    for (let i = 0; i < m; i++) {
+      quantileArray.array[0][i] =
+        remainFrac * ndArray.array[i][lowerBound] +
+        frac * ndArray.array[i][upperBound];
     }
-    return sumOfArray;
+    return quantileArray;
   }
-  count(ndArray: NDArray): number {
-    return ndArray.shape[0];
+
+  /**
+   * Method to find range, i.e (min, max) of each column in the NDArray.
+   * @param ndArray Must be an instance of NDArray.
+   * @returns NDArray with the range of each column.
+   */
+  range(ndArray: NDArray): NDArray {
+    const minArray = nt.fill([1, ndArray.shape[1]], nt.inf);
+    const maxArray = nt.zeros([1, ndArray.shape[1]]);
+    const rangeArray = nt.array([minArray.array[0], maxArray.array[0]]);
+    for (let j = 0; j < ndArray.shape[1]; j++) {
+      for (let i = 0; i < ndArray.shape[0]; i++) {
+        if (ndArray.array[i][j] < rangeArray.array[0][j]) {
+          rangeArray.array[0][j] = ndArray.array[i][j];
+        } else if (ndArray.array[i][j] > rangeArray.array[1][j]) {
+          rangeArray.array[1][j] = ndArray.array[i][j];
+        }
+      }
+    }
+    return rangeArray;
   }
+  /**
+   * Method to sort each column in the NDArray.
+   * @param ndArray Must be an instance of NDArray.
+   * @returns NDArray with each column sorted.
+   */
+  sort(ndArray: NDArray): NDArray {
+    for (let row = 0; row < ndArray.shape[0]; row++) {
+      ndArray.array[row] = ndArray.array[row].sort((a, b) => a - b);
+    }
+    return ndArray;
+  }
+
+  /**
+   * Method to calculate the variance of each column in the NDArray.
+   * @param ndArray Must be an instance of NDArray.
+   * @param divide_by_n If true, divides by n (number of rows), else divides by n-1 (sample variance).
+   * @returns NDArray with the variance of each column.
+   */
   variance(ndArray: NDArray, divide_by_n: boolean = true): NDArray {
     const meanOfArray = this.mean(ndArray);
     const varOfArray = nt.zeros([1, ndArray.shape[1]]);
@@ -390,47 +490,6 @@ class Statistics {
     }
     return varOfArray;
   }
-  sort(ndArray: NDArray): NDArray {
-    for (let row = 0; row < ndArray.shape[0]; row++) {
-      ndArray.array[row] = ndArray.array[row].sort((a, b) => a - b);
-    }
-    return ndArray;
-  }
-  median(ndArray: NDArray): NDArray {
-    const medianOfArray = nt.zeros([1, ndArray.shape[1]]);
-    const sortedArray = nt.sort(ndArray.copy().T);
-    const even = ndArray.shape[0] % 2 === 0 ? true : false;
-    const m = even ? ndArray.shape[0] / 2 - 1 : (ndArray.shape[0] + 1) / 2;
-    for (let i = 0; i < ndArray.shape[1]; i++) {
-      medianOfArray.array[0][i] = even
-        ? (sortedArray.array[i][m] + sortedArray.array[i][m + 1]) / 2
-        : sortedArray.array[i][m];
-    }
-    return medianOfArray;
-  }
-  // q1(ndArray: NDArray): NDArray {
-  //   const q1Array = nt.zeros([1, ndArray.shape[1]]);
-  //   const sortedArray = nt.sort(ndArray.copy().T);
-  //   const even = ndArray.shape[0] % 2 === 0 ? true : false;
-  //   const m = even ? ndArray.shape[0] / 2 - 1 : ndArray.shape[0] / 2;
-  //   const q1 = even ? (m + 1) / 2 : (m - 1) / 2 - 1;
-  //   for (let i = 0; i < ndArray.shape[1]; i++) {
-  //     q1Array.array[0][i] = even
-  //       ? sortedArray.array[i][q1]
-  //       : (sortedArray.array[i][q1] + sortedArray.array[i][q1 + 1]) / 2;
-  //   }
-  //   return q1Array;
-  // }
-  quantiles(ndArray: NDArray, q: 0.25 | 0.5 | 0.75 = 0.5): NDArray {
-    switch (q) {
-      // case 0.25:
-      //   return this.q1(ndArray);
-      case 0.5:
-        return this.median(ndArray);
-      default:
-        return this.median(ndArray);
-    }
-  }
 }
 
 class Numts {
@@ -439,6 +498,7 @@ class Numts {
   private exponent: Exponent;
   private statistics: Statistics;
   E: number = 2.718281828459045;
+  inf: number = 1.7976931348623157e308;
   constructor() {
     this.ndarray = new NDArray([[]]);
     this.operations = new Operations();
@@ -464,6 +524,10 @@ class Numts {
     }
     this.ndarray = new NDArray(arr);
     return this.ndarray;
+  }
+
+  fill(size: size = [1, 1], fillValue: number = 0): NDArray {
+    return this.ndarray.createAndFill(size, fillValue);
   }
 
   // Array Creation
@@ -738,32 +802,132 @@ class Numts {
     return this.exponent.logOfNumber(a, base);
   }
 
-  sum(ndArray: NDArray): NDArray {
-    return this.statistics.sum(ndArray);
+  // Statistics
+
+  /**
+   * This method is used to calculate the count of non-null elements in each column of the NDArray.
+   * @param ndArray - Must be an instance of NDArray.
+   * @returns NDArray with the count of non-null elements in each column.
+   */
+  count(ndArray: NDArray): NDArray {
+    return this.statistics.count(ndArray);
   }
 
+  /**
+   * This method is used to calculate the median of each column in the NDArray.
+   * @param ndArray - Must be an instance of NDArray.
+   * @returns NDArray with the median of each column.
+   */
+  median(ndArray: NDArray): NDArray {
+    return this.statistics.quantile(nt.sort(ndArray.T), 0.5);
+  }
+
+  /**
+   * This method is used to calculate the mean of each column in the NDArray.
+   * @param ndArray - Must be an instance of NDArray.
+   * @returns NDArray with the mean of each column.
+   */
   mean(ndArray: NDArray): NDArray {
     return this.statistics.mean(ndArray);
   }
 
-  count(ndArray: NDArray): number {
-    return this.statistics.count(ndArray);
+  /**
+   * This method is used to calculate the sum of each column in the NDArray.
+   * @param ndArray - Must be an instance of NDArray.
+   * @returns NDArray with the sum of each column.
+   */
+  min(ndArray: NDArray): NDArray {
+    const rangeArray = this.statistics.range(ndArray);
+    return nt.array([rangeArray.array[0]]);
   }
 
-  variance(ndArray: NDArray, divide_by_n: boolean = true): NDArray {
-    return this.statistics.variance(ndArray, divide_by_n);
+  /**
+   * This method is used to calculate the maximum value of each column in the NDArray.
+   * @param ndArray - Must be an instance of NDArray.
+   * @returns NDArray with the maximum value of each column.
+   */
+  max(ndArray: NDArray): NDArray {
+    const rangeArray = this.statistics.range(ndArray);
+    return nt.array([rangeArray.array[1]]);
   }
-  std(ndArray: NDArray, divide_by_n: boolean = true): NDArray {
-    return this.sqrt(this.variance(ndArray, divide_by_n));
+
+  /**
+   * This method is used to calculate the quantile of each column in the NDArray.
+   * @param ndArray - Must be an instance of NDArray.
+   * @param q - Number between 0 and 1, default is 0.5 (median).
+   * @returns NDArray with the quantile of each column.
+   */
+  quantile(ndArray: NDArray, q: number = 0.5) {
+    return this.statistics.quantile(nt.sort(ndArray.T), q);
   }
+
+  /**
+   * This method is used to calculate the quantiles of each column in the NDArray.
+   * @param ndArray - Must be an instance of NDArray.
+   * @param quantiles - Array of numbers between 0 and 1, default is [0.25, 0.5, 0.75].
+   * @returns NDArray with the quantiles of each column.
+   */
+  quantileStats(
+    ndArray: NDArray,
+    quantiles: number[] = [0.25, 0.5, 0.75]
+  ): NDArray {
+    const quantilesLength = quantiles.length;
+    const qunatileArray = nt.zeros([quantilesLength, ndArray.shape[1]]);
+    const sortedArray = nt.sort(ndArray.T);
+    for (let i = 0; i < quantilesLength; i++) {
+      qunatileArray.array[i] = this.statistics.quantile(
+        sortedArray,
+        quantiles[i]
+      ).array[0];
+    }
+    return qunatileArray;
+  }
+
+  /**
+   * This method is used to calculate the range (min, max) of each column in the NDArray.
+   * @param ndArray - Must be an instance of NDArray.
+   * @returns NDArray with the range of each column.
+   */
+  range(ndArray: NDArray): NDArray {
+    return this.statistics.range(ndArray);
+  }
+
+  /**
+   * This method is used to sort each column in the NDArray.
+   * @param ndArray - Must be an instance of NDArray.
+   * @returns NDArray with each column sorted.
+   */
   sort(ndArray: NDArray): NDArray {
     return this.statistics.sort(ndArray);
   }
-  median(ndArray: NDArray): NDArray {
-    return this.statistics.median(ndArray);
+
+  /**
+   * This method is used to calculate the standard deviation of each column in the NDArray.
+   * @param ndArray - Must be an instance of NDArray.
+   * @param divide_by_n - If true, divides by n (number of rows), else divides by n-1 (sample standard deviation).
+   * @returns NDArray with the standard deviation of each column.
+   */
+  std(ndArray: NDArray, divide_by_n: boolean = true): NDArray {
+    return this.sqrt(this.variance(ndArray, divide_by_n));
   }
-  quantile(ndArray: NDArray, q: 0.25 | 0.5 | 0.75 = 0.5) {
-    return this.statistics.quantiles(ndArray, q);
+
+  /**
+   * This method is used to calculate the sum of each column in the NDArray.
+   * @param ndArray - Must be an instance of NDArray.
+   * @returns NDArray with the sum of each column.
+   */
+  sum(ndArray: NDArray): NDArray {
+    return this.statistics.sum(ndArray);
+  }
+
+  /**
+   * This method is used to calculate the variance of each column in the NDArray.
+   * @param ndArray - Must be an instance of NDArray.
+   * @param divide_by_n - If true, divides by n (number of rows), else divides by n-1 (sample variance).
+   * @returns NDArray with the variance of each column.
+   */
+  variance(ndArray: NDArray, divide_by_n: boolean = true): NDArray {
+    return this.statistics.variance(ndArray, divide_by_n);
   }
 }
 
