@@ -2,7 +2,8 @@ import React, { memo, useRef } from 'react';
 import { ConversationTyping } from '../Reusables';
 import { Chat } from '../Components/Chat';
 import { FileUpload } from './FileUpload';
-import { consumeContextInterface, taskInterface } from '../interface';
+import { consumeContextInterface } from '../interface';
+import { taskInterface } from './interface'
 import { withContext } from '../HOC';
 
 /**

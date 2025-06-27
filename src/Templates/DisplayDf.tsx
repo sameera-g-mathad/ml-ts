@@ -4,11 +4,8 @@ import { Chat } from '../Components/Chat';
 import { DfInfo } from './index';
 import { withContext } from '../HOC';
 import { consumeContextInterface } from '../interface';
+import { displayDfInfoInterface } from './interface'
 
-
-export interface displayDfInfoInterface {
-  componentAfterInfo: React.ReactNode
-}
 
 const DisplayDfComponent: React.FC<displayDfInfoInterface & consumeContextInterface> = memo(({ appendChatComponent, componentAfterInfo, df }) => {
   const [complete, setComplete] = useState(false)

@@ -50,14 +50,6 @@ export interface consumeContextInterface {
 }
 
 /**
- * Used by Task.tsx to decide the task type.
- * It uses enum which specifies that the task can have only two values.
- */
-export interface taskInterface {
-  task: 'Regression' | 'Classification';
-}
-
-/**
  * Used by FileUpload.tsx to decide the file type.
  * It uses enum which specifies that the file can have only two values.
  */

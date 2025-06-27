@@ -3,8 +3,8 @@ import { ConversationTyping } from '../Reusables';
 import { withContext } from '../HOC';
 import { Chat } from '../Components/Chat';
 import { TaskSelection } from './index';
-import { consumeContextInterface, taskInterface } from '../interface';
-
+import { consumeContextInterface } from '../interface';
+import { taskInterface } from './interface'
 /**
  * TaskEntry component is responsible for displaying a typing animation
  * and then rendering the TaskSelection component based on the task provided.

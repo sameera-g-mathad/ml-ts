@@ -5,11 +5,7 @@ import { Chat } from '../Components/Chat';
 import { DisplayDf, FilterColumnsPrompt } from './index';
 import { withContext } from '../HOC';
 import { consumeContextInterface } from '../interface';
-export interface fileUploadAckInterface {
-  file: File;
-  header: boolean;
-  delimeter: string;
-}
+import { fileUploadAckInterface } from './interface'
 const FileUploadAckComponent: React.FC<fileUploadAckInterface & consumeContextInterface> = memo(
   ({ file, header, delimeter, addDataframe, appendChatComponent }) => {
     // console.log('FileUploadAck')

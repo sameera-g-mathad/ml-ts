@@ -71,7 +71,7 @@ class Process {
    * @param df The DataFrame instance to be described.
    * @returns New DataFrame with the statistics of the original DataFrame.
    */
-  describe(df: DataFrame): DataFrame {
+  describe(df: DataFrame): DataFrame | null {
     const numericColumns = [];
     const newColumns: column = ['stats'];
     const newDtypes: string[] = ['string'];
@@ -86,6 +86,7 @@ class Process {
         newIsNans.push(false); // Add false to newIsNans as we are not checking for NaN values in this method.
       }
     }
+    if (numericColumns.length === 0) return null;
     // Loop through each row in the DataFrame to collect data for numeric columns.
     for (let i = 0; i < df.shape[0]; i++) {
       const row: number[] = [];
@@ -562,7 +563,7 @@ class Frame {
    * @param df The DataFrame instance to be described.
    * @returns New DataFrame with the statistics of the original DataFrame.
    */
-  describe(df: DataFrame): DataFrame {
+  describe(df: DataFrame): DataFrame | null {
     return this.process.describe(df);
   }
 

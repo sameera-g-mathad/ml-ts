@@ -8,7 +8,7 @@ interface tabSwitchInterface {
     callback: (index: number) => void;
 }
 const TabSwitchComponent: React.FC<tabSwitchInterface & themeInterface> = memo(({ name, tabs, callback, secondaryColor }) => {
-    return <div className="inline-flex border py-1">
+    return <div className="inline-flex border py-1 rounded-lg">
         {tabs.map((tab, index) =>
             <div key={index}>
                 <input className="radio-input hidden" type='radio' id={tab} name={name} onClick={() => callback && callback(index)} defaultChecked={index === 0 ? true : false} />

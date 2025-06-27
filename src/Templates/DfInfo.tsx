@@ -3,12 +3,10 @@ import { ConversationTyping, HorizontalRule, TableGroup } from '../Reusables';
 import { fr } from '../ml-ts'
 import { Chat } from '../Components/Chat';
 import { consumeContextInterface } from '../interface';
+import { displayDfInterface } from './interface'
 import { withContext } from '../HOC';
 import { TabSelector } from '../Components/TabSelector';
 
-export interface displayDfInterface {
-    componentAfterInfo: React.ReactNode
-}
 
 const DfInfoComponent: React.FC<displayDfInterface & consumeContextInterface> = memo(({ appendChatComponent, componentAfterInfo, df }) => {
     const info = useRef(fr.getInfo(df));
@@ -26,14 +24,18 @@ const DfInfoComponent: React.FC<displayDfInterface & consumeContextInterface> = 
                 {componentAfterInfo}
             </Chat>)} />
             <HorizontalRule />
-            <TabSelector
-                name='info-descrbe'
-                tabs={['info', 'describe']}
-                renderComponents={
-                    [
-                        <TableGroup df={info.current} requireRowFilter={true} />,
-                        <TableGroup df={describe.current} requireRowFilter={false} />
-                    ]} />
+            {describe.current ?
+                <TabSelector
+                    name='info-descrbe'
+                    tabs={['info', 'describe']}
+                    renderComponents={
+                        [
+                            <TableGroup df={info.current} requireRowFilter={true} />,
+                            <TableGroup df={describe.current} requireRowFilter={false} />
+                        ]} />
+                : <TableGroup df={info.current} requireRowFilter={true} />
+
+            }
         </>
     )
 });
