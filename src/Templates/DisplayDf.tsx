@@ -20,7 +20,7 @@ const DisplayDfComponent: React.FC<displayDfInfoInterface & consumeContextInterf
     callback={() => {
       setComplete(true)
       appendChatComponent(
-        <Chat gerneratedBy="system">
+        <Chat gerneratedBy="system" widthFull={true}>
           <DfInfo componentAfterInfo={componentAfterInfo} />
         </Chat>
       );

@@ -12,4 +12,4 @@ export * from './SelectionPrompt';
 export * from './Switch';
 export * from './Table';
 export * from './TableGroup';
-export * from './TabSelecter';
+export * from './TabSwitch';

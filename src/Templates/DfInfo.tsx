@@ -4,6 +4,7 @@ import { fr } from '../ml-ts'
 import { Chat } from '../Components/Chat';
 import { consumeContextInterface } from '../interface';
 import { withContext } from '../HOC';
+import { TabSelector } from '../Components/TabSelector';
 
 export interface displayDfInterface {
     componentAfterInfo: React.ReactNode
@@ -11,7 +12,8 @@ export interface displayDfInterface {
 
 const DfInfoComponent: React.FC<displayDfInterface & consumeContextInterface> = memo(({ appendChatComponent, componentAfterInfo, df }) => {
     const info = useRef(fr.getInfo(df));
-    if (!df || !info) return null;
+    const describe = useRef(fr.describe(df))
+    if (!df || !info || !describe) return null;
     return (
         <>
             <ConversationTyping text={`
@@ -24,7 +26,14 @@ const DfInfoComponent: React.FC<displayDfInterface & consumeContextInterface> = 
                 {componentAfterInfo}
             </Chat>)} />
             <HorizontalRule />
-            <TableGroup df={info.current} requireRowFilter={true} />
+            <TabSelector
+                name='info-descrbe'
+                tabs={['info', 'describe']}
+                renderComponents={
+                    [
+                        <TableGroup df={info.current} requireRowFilter={true} />,
+                        <TableGroup df={describe.current} requireRowFilter={false} />
+                    ]} />
         </>
     )
 });

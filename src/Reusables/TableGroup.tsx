@@ -1,4 +1,4 @@
-import React, { useCallback, useReducer } from 'react'
+import React, { memo, useCallback, useReducer } from 'react'
 import { Input, InputGroup, Table } from './index'
 import { tableGroupInterface } from '../interface'
 
@@ -26,7 +26,8 @@ const displayReducer = (state: STATE, payload: PAYLOAD) => {
 }
 
 
-export const TableGroup: React.FC<tableGroupInterface> = ({ df, requireColumnFilter, requireRowFilter }) => {
+export const TableGroup: React.FC<tableGroupInterface> = memo(({ df, requireColumnFilter, requireRowFilter }) => {
+    console.log(df)
     const [state, dispatch] = useReducer(displayReducer, {
         colFrom: 0,
         colTo: 20,
@@ -100,6 +101,6 @@ export const TableGroup: React.FC<tableGroupInterface> = ({ df, requireColumnFil
             />
         </div >
     )
-}
+});
 
 TableGroup.displayName = 'TableGroup'

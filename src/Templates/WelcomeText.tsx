@@ -16,18 +16,18 @@ const WelcomeTextComponent: React.FC<consumeContextInterface> = memo((props) => 
   const [complete, setComplete] = useState(false);
   // console.log('Inside WelcomeText')
   // console.log(props)
-
+  // return <TabSelecter tabs={['one', 'two', 'three']} name='tabs' callback={() => null} />
   return <div className="flex-col leading-7 text-sm sm:text-md">
     {/* Conversational Typing prints the sentences in conversation style mimicing llms */}
     <ConversationTyping
       text={`
-            <span class='font-bold text-md sm:text-lg'>Welcome to chat(ML)! 🤖💬</span>
-            <br>
-            <p>
-             Let’s get started! Type your question or request, and we'll help you navigate through the world of machine learning.
-            Feel free to ask about anything—from basic concepts to complex models. ✨
-            </p>          
-`}
+              <span class='font-bold text-md sm:text-lg'>Welcome to chat(ML)! 🤖💬</span>
+              <br>
+              <p>
+               Let’s get started! Type your question or request, and we'll help you navigate through the world of machine learning.
+              Feel free to ask about anything—from basic concepts to complex models. ✨
+              </p>          
+  `}
       speed={1.5}
       callback={() => setComplete(true)}
     />
