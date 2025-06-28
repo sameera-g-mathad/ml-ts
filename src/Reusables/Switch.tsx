@@ -9,6 +9,7 @@ import { withTheme } from '../HOC';
  */
 export const SwitchComponent: React.FC<switchProps & themeInterface> = ({
   switchName,
+  names,
   callback,
   secondaryColor,
 }) => {
@@ -16,30 +17,40 @@ export const SwitchComponent: React.FC<switchProps & themeInterface> = ({
 
   useEffect(() => {
     if (callback) callback(checked);
-  }, [checked, callback]);
+    // eslint-disable-next-line 
+  }, [checked]);
+  // }, [checked, callback]);
 
   const switchClick = (e: React.ChangeEvent<HTMLDivElement>) => {
     isChecked((prevState) => !prevState);
   };
 
   return (
-    <div className="rounded-xl">
-      <input
-        className="switch-input hidden"
-        type="checkbox"
-        name={switchName}
-        checked={checked}
-        id={switchName}
-        onChange={switchClick}
-      />
-      <label
-        style={{
-          borderColor: secondaryColor,
-          ...({ '--color': secondaryColor } as React.CSSProperties),
-        }}
-        htmlFor={switchName}
-        className="switch border"
-      ></label>
+    <div className='flex gap-2 items-center'>
+      <label>{names && names[0]}</label>
+      <div className="rounded-xl">
+        <input
+          className="switch-input hidden"
+          type="checkbox"
+          name={switchName}
+          checked={checked}
+          id={switchName}
+          onChange={switchClick}
+        />
+        {/* <span> */}
+
+        <label
+          style={{
+            borderColor: secondaryColor,
+            ...({ '--color': secondaryColor } as React.CSSProperties),
+          }}
+          htmlFor={switchName}
+          className="switch border"
+        ></label>
+
+        {/* </span> */}
+      </div>
+      <label>{names && names[1]}</label>
     </div>
   );
 };

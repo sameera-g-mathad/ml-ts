@@ -1,5 +1,5 @@
 import React, { memo } from "react";
-import { Button } from "./index";
+import { Button } from "./Button";
 
 export interface selectionPromptInterface {
     onYes: () => void;

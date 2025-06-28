@@ -30,9 +30,31 @@ export interface systemPromptAckInterface {
   renderComponent: React.ReactNode;
 }
 
+export interface fillNaColumnInterface {
+  column: string;
+  callback: (obj: fillNaReducerType) => void;
+}
+
 // Types
 
 export type systemPromptRenderType = {
   yes: systemPromptAckInterface;
   no: systemPromptAckInterface;
 };
+
+export type fillNaType = fillNaReducerType & {
+  column: string;
+};
+
+export type fillNaReducerType = {
+  dtype: string;
+  isFill: boolean;
+  value: string;
+  imputeType: 'max' | 'min' | 'mean' | 'median';
+};
+
+export type fillNaReducerActionType =
+  | { action: 'setDtype'; value: string }
+  | { action: 'setIsFill' }
+  | { action: 'setValue'; value: string }
+  | { action: 'setImputeType'; value: 'max' | 'min' | 'mean' | 'median' };

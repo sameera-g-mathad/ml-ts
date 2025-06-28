@@ -1,3 +1,4 @@
+import { fillNaType } from '../Templates/interface';
 import { nt } from './index';
 
 type data = (string | number)[][];
@@ -27,6 +28,13 @@ export class DataFrame {
     this.shape = shape;
     this.dtypes = dtypes;
     this.isNan = isNan;
+  }
+
+  getIndex(column: string): number {
+    for (let index = 0; index < this.shape[1]; index++) {
+      if (this.columns[index] === column) return index;
+    }
+    return -1;
   }
 }
 
@@ -282,6 +290,29 @@ class Process {
       df.dtypes,
       this.checkNan(newData)
     );
+  }
+
+  fillString(df: DataFrame, fillValue: fillNaType): DataFrame {
+    const column = fillValue['column'];
+    const columnIndex = df.getIndex(column);
+    for (let i = 0; i < df.shape[0]; i++) {
+      if (df.data[i][columnIndex] === 'undefined')
+        df.data[i][columnIndex] = fillValue['value'];
+    }
+    df.isNan[columnIndex] = false;
+    return df;
+  }
+
+  fillNa(df: DataFrame, fillValues: fillNaType[]): DataFrame {
+    for (let fillColumn in fillValues) {
+      const fillValue = fillValues[fillColumn];
+      console.log(fillValue);
+      switch (fillValue['dtype']) {
+        case 'string':
+          this.fillString(df, fillValue);
+      }
+    }
+    return df;
   }
 
   /**
@@ -587,6 +618,10 @@ class Frame {
       case 'subset':
         return this.process.dropSubset(df, subset);
     }
+  }
+
+  fillna(df: DataFrame, fillValues: fillNaType[]): DataFrame {
+    return this.process.fillNa(df, fillValues);
   }
   /**
    * This method is used to filter the columns of a DataFrame.

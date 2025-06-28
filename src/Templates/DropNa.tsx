@@ -1,7 +1,7 @@
 import React, { memo, useCallback, useState } from "react";
 import { Button, ConditionalDisplay, ConversationTyping, DraggableContainer, RadioBtn } from "../Reusables";
 import { fr } from "../ml-ts";
-import { DisplayDf, DropNaPrompt } from "./index";
+import { DisplayDf, FillNaPrompt } from "./index";
 import { Chat } from "../Components/Chat";
 import { consumeContextInterface } from "../interface";
 import { withContext } from "../HOC";
@@ -56,7 +56,7 @@ const DropNaComponent: React.FC<consumeContextInterface> = memo(({ addDataframe,
             <Button name='Drop' callback={() => {
                 addDataframe(fr.dropna(df, how, subsetColumns))
                 appendChatComponent(<Chat gerneratedBy="system" widthFull={true}>
-                    <DisplayDf componentAfterInfo={<DropNaPrompt />} />
+                    <DisplayDf componentAfterInfo={<FillNaPrompt />} />
                 </Chat>)
             }} />
         </ConditionalDisplay>

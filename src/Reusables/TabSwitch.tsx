@@ -8,11 +8,11 @@ interface tabSwitchInterface {
     callback: (index: number) => void;
 }
 const TabSwitchComponent: React.FC<tabSwitchInterface & themeInterface> = memo(({ name, tabs, callback, secondaryColor }) => {
-    return <div className="inline-flex border py-1 rounded-lg">
+    return <div className="inline-flex border py-1 rounded-lg bg-gray-200">
         {tabs.map((tab, index) =>
             <div key={index}>
-                <input className="radio-input hidden" type='radio' id={tab} name={name} onClick={() => callback && callback(index)} defaultChecked={index === 0 ? true : false} />
-                <label className="radio-label p-3 rounded capitalize" htmlFor={tab} style={{ ...({ "--color": secondaryColor } as React.CSSProperties) }}>{tab}</label >
+                <input className="radio-input hidden" type='radio' id={tab + name} name={name} onChange={() => callback && callback(index)} defaultChecked={index === 0 ? true : false} />
+                <label className="radio-label p-2 rounded capitalize" htmlFor={tab + name} style={{ ...({ "--color": secondaryColor } as React.CSSProperties) }}>{tab}</label >
             </div>
         )}
     </div>;

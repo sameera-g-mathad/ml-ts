@@ -10,8 +10,8 @@ const InputComponent: React.FC<themeInterface & inputInterface> = ({
 }) => {
   const sizes = {
     small: 'w-12',
-    medium: 'w-32',
-    large: 'w-64',
+    medium: 'w-20',
+    large: 'w-40',
     full: 'w-full',
   };
   return (
