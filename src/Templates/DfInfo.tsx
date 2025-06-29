@@ -1,4 +1,4 @@
-import React, { memo, useRef } from 'react'
+import React, { memo, useId, useRef } from 'react'
 import { ConversationTyping, HorizontalRule, TableGroup } from '../Reusables';
 import { fr } from '../ml-ts'
 import { Chat } from '../Components/Chat';
@@ -10,7 +10,8 @@ import { TabSelector } from '../Components/TabSelector';
 
 const DfInfoComponent: React.FC<displayDfInterface & consumeContextInterface> = memo(({ appendChatComponent, componentAfterInfo, df }) => {
     const info = useRef(fr.getInfo(df));
-    const describe = useRef(fr.describe(df))
+    const describe = useRef(fr.describe(df));
+    const uniqueId = useId();
     if (!df || !info || !describe) return null;
     return (
         <>
@@ -26,12 +27,12 @@ const DfInfoComponent: React.FC<displayDfInterface & consumeContextInterface> = 
             <HorizontalRule />
             {describe.current ?
                 <TabSelector
-                    name='info-descrbe'
+                    name={`info-descirbe-${uniqueId}`}
                     tabs={['info', 'describe']}
                     renderComponents={
                         [
                             <TableGroup df={info.current} requireRowFilter={true} />,
-                            <TableGroup df={describe.current} requireRowFilter={false} />
+                            <TableGroup df={describe.current} requireRowFilter={false} requireColumnFilter={true} />
                         ]} />
                 : <TableGroup df={info.current} requireRowFilter={true} />
 

@@ -292,6 +292,49 @@ class Process {
     );
   }
 
+  fillNumber(df: DataFrame, fillValue: fillNaType): DataFrame {
+    const column = fillValue['column'];
+    const columnIndex = df.getIndex(column);
+    const data = [];
+    for (let i = 0; i < df.shape[0]; i++) {
+      let value = df.data[i][columnIndex] as string;
+      if (value === 'undefined') continue;
+      let newValue = parseInt(value) || parseFloat(value);
+      if (isNaN(newValue)) {
+        return this.fillString(df, fillValue);
+      }
+    }
+    for (let i = 0; i < df.shape[0]; i++) {
+      let value = df.data[i][columnIndex] as string;
+      if (value === 'undefined') continue;
+      let newValue = parseFloat(value) || parseInt(value);
+      df.data[i][columnIndex] = newValue;
+      data.push(newValue);
+    }
+    const ndArray = nt.array([data]).T;
+    let result: number;
+    switch (fillValue['imputeType']) {
+      case 'mean':
+        result = nt.mean(ndArray).array[0][0];
+        break;
+      case 'median':
+        result = nt.median(ndArray).array[0][0];
+        break;
+      case 'min':
+        result = nt.min(ndArray).array[0][0];
+        break;
+      default:
+        result = nt.max(ndArray).array[0][0];
+    }
+    for (let i = 0; i < df.shape[0]; i++) {
+      if (df.data[i][columnIndex] === 'undefined')
+        df.data[i][columnIndex] = result;
+    }
+    df.dtypes[columnIndex] = 'number';
+    df.isNan[columnIndex] = false;
+    return df;
+  }
+
   fillString(df: DataFrame, fillValue: fillNaType): DataFrame {
     const column = fillValue['column'];
     const columnIndex = df.getIndex(column);
@@ -303,14 +346,13 @@ class Process {
     return df;
   }
 
-  fillNa(df: DataFrame, fillValues: fillNaType[]): DataFrame {
-    for (let fillColumn in fillValues) {
-      const fillValue = fillValues[fillColumn];
-      console.log(fillValue);
-      switch (fillValue['dtype']) {
-        case 'string':
-          this.fillString(df, fillValue);
-      }
+  fillNa(df: DataFrame, fillValue: fillNaType): DataFrame {
+    switch (fillValue['dtype']) {
+      case 'number':
+        this.fillNumber(df, fillValue);
+        break;
+      default:
+        this.fillString(df, fillValue);
     }
     return df;
   }
@@ -620,8 +662,8 @@ class Frame {
     }
   }
 
-  fillna(df: DataFrame, fillValues: fillNaType[]): DataFrame {
-    return this.process.fillNa(df, fillValues);
+  fillna(df: DataFrame, fillValue: fillNaType): DataFrame {
+    return this.process.fillNa(df, fillValue);
   }
   /**
    * This method is used to filter the columns of a DataFrame.

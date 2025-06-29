@@ -8,13 +8,13 @@ import { fillNaType, fillNaColumnInterface, fillNaReducerType, fillNaReducerActi
 import { fr } from "../ml-ts";
 
 const FillNaComponent: React.FC<consumeContextInterface> = ({ addDataframe, appendChatComponent, df }) => {
-    const fillValues = useRef<fillNaType[]>([])
+    // const fillValues = useRef<fillNaType[]>([])
 
     const nanColumns: number[] = []
     for (let i = 0; i < df.shape[1]; i++) {
         if (df.isNan[i]) {
             nanColumns.push(i)
-            fillValues.current.push({} as fillNaType)
+            // fillValues.current.push({} as fillNaType)
         }
     }
     return <div>
@@ -26,11 +26,10 @@ const FillNaComponent: React.FC<consumeContextInterface> = ({ addDataframe, appe
                     return <FillColumn
                         column={column}
                         key={index}
-                        callback={(obj: fillNaReducerType) => fillValues.current[index] = { ...obj, column }} />
+                        callback={(obj: fillNaReducerType) => fr.fillna(df, { ...obj, column })} />
                 })
             }
-            <Button name='Fill Values' callback={() => {
-                addDataframe(fr.fillna(df, fillValues.current))
+            <Button name='Finish' callback={() => {
                 appendChatComponent(<Chat gerneratedBy="system" widthFull={true}>
                     <DisplayDf componentAfterInfo={<FillNaPrompt />} />
                 </Chat>)
