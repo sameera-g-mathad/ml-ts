@@ -5,3 +5,5 @@ This is a simple website that is built on react and typescript. The whole idea w
 There is nothing fancy about this website, as there is no backend, and it is just a static website. Even though it is a static website, you can still use it for uploading files and perform data analysis(as of now).
 
 # Need to update.
+
+# simple push
