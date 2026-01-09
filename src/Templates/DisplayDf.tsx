@@ -6,10 +6,13 @@ import { withContext } from '../HOC';
 import { consumeContextInterface } from '../interface';
 import { displayDfInfoInterface } from './interface'
 
-
+/**
+ * Template - 6
+ * DisplayDf component is responsible for displaying the shape of the DataFrame and rendering a table with the data.
+ * It also includes a typing animation that describes the shape of the DataFrame.
+ */
 const DisplayDfComponent: React.FC<displayDfInfoInterface & consumeContextInterface> = memo(({ appendChatComponent, componentAfterInfo, df }) => {
-  const [complete, setComplete] = useState(false)
-  // console.log('DisplayDf')
+  const [complete, setComplete] = useState(false);
   const memoisedDf = useRef(df).current;
   const memoisedConversation = useMemo(() => <ConversationTyping
     text={`The data you provided consists of a shape of <b>(${memoisedDf.shape})</b> with ${memoisedDf.shape[0]} rows and ${memoisedDf.shape[1]} columns. If I find that 

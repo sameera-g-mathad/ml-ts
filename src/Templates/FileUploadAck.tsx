@@ -5,7 +5,13 @@ import { Chat } from '../Components/Chat';
 import { DisplayDf, FilterColumnsPrompt } from './index';
 import { withContext } from '../HOC';
 import { consumeContextInterface } from '../interface';
-import { fileUploadAckInterface } from './interface'
+import { fileUploadAckInterface } from './interface';
+
+/**
+ * Template - 5
+ * FileUploadAck component is responsible for reading the uploaded file and displaying a typing animation
+ * that confirms the file has been read successfully. It also renders the DataFrame display component.
+ */
 const FileUploadAckComponent: React.FC<fileUploadAckInterface & consumeContextInterface> = memo(
   ({ file, header, delimeter, addDataframe, appendChatComponent }) => {
     // console.log('FileUploadAck')

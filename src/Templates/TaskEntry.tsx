@@ -6,6 +6,7 @@ import { TaskSelection } from './index';
 import { consumeContextInterface } from '../interface';
 import { taskInterface } from './interface'
 /**
+ * Template - 2
  * TaskEntry component is responsible for displaying a typing animation
  * and then rendering the TaskSelection component based on the task provided.
  * 

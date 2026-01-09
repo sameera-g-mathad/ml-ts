@@ -3,6 +3,12 @@ import { buttonInterface, themeInterface } from '../interface';
 import { ConditionalContext } from '../Context';
 import { withTheme } from '../HOC';
 
+
+/**
+ * Button component is responsible for rendering a button that can be used to trigger actions.
+ * It takes in a name, an optional icon component, a callback function to handle clicks, and a disabled state.
+ * The button's appearance is styled based on the provided theme.
+ */
 export const ButtonComponent: React.FC<buttonInterface & themeInterface> = ({
   name,
   conditionalDisplay,
