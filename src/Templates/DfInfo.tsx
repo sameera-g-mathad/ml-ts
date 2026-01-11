@@ -7,7 +7,15 @@ import { displayDfInterface } from './interface'
 import { withContext } from '../HOC';
 import { TabSelector } from '../Components/TabSelector';
 
-
+/**
+ * Template - 7
+ * DfInfo component is responsible for displaying the info and describe of the DataFrame. 
+ * It also includes a typing animation that describes the info and describe of the DataFrame.
+ * 
+ * parameters:
+ * - df: the DataFrame to display the info and describe of.
+ * - componentAfterInfo: the component to render after the info and describe is displayed.
+ */
 const DfInfoComponent: React.FC<displayDfInterface & consumeContextInterface> = memo(({ appendChatComponent, componentAfterInfo, df }) => {
     const info = useRef(fr.getInfo(df));
     const describe = useRef(fr.describe(df));
