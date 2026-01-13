@@ -7,6 +7,7 @@ import { RegressionSvg, ClassificationSvg } from '../Svgs';
 import { consumeContextInterface } from '../interface';
 
 /**
+ * Template - 1
  * This is the WelcomeText component of the application.
  * It contains the welcome message and the options for the user to choose from.
  * It uses the ChatContext to manage the chat components.

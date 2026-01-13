@@ -6,7 +6,12 @@ import { consumeContextInterface } from '../interface';
 import { DisplayDf, DropNaPrompt } from './index';
 import { withContext } from '../HOC';
 
-
+/**
+ * Template - 8
+ * FilterColumns component is responsible for allowing the user to filter the columns of the DataFrame.
+ * It includes a drag and drop interface for selecting the columns to keep or remove, as well as buttons to reset or retain all columns.
+ * 
+ */
 const FilterColumnsComponent: React.FC<consumeContextInterface> = memo(({ appendChatComponent, df }) => {
     const [initialCols, setInititalCols] = useState<string[]>(df.columns)
     const [filteredCols, setFilteredCols] = useState<string[]>([]);

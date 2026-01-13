@@ -7,6 +7,7 @@ import { taskInterface } from './interface'
 import { withContext } from '../HOC';
 
 /**
+ * Template - 3
  * TaskSelection component is responsible for displaying a typing animation
  * and then rendering the FileUpload component based on the task provided.
  *

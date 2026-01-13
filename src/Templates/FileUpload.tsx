@@ -13,6 +13,8 @@ import { FileUploadAck } from './index';
 import { withContext } from '../HOC';
 import { consumeContextInterface } from '../interface';
 
+// Reducer function to manage the state of the FileUpload component.
+// It handles actions to set the completion status, delimiter, header, and file.
 const fileUploadReducer = (
   state: {
     complete: boolean;
@@ -38,6 +40,14 @@ const fileUploadReducer = (
   }
 };
 
+/**
+ * Template - 4
+ * FileUpload component is responsible for displaying a typing animation
+ * and then rendering the file upload form based on the user's input.
+ *
+ * @param {consumeContextInterface} props - The context interface for the component.
+ * @returns {JSX.Element} - The rendered component. 
+ */
 const FileUploadComponent: React.FC<consumeContextInterface> = React.memo(({ appendChatComponent }) => {
   const [state, dispatch] = useReducer(fileUploadReducer, {
     complete: false,
@@ -47,6 +57,7 @@ const FileUploadComponent: React.FC<consumeContextInterface> = React.memo(({ app
   });
   // console.log('FileUpload')
 
+  // Callback functions to update the state based on user input.
   const setDelimeter = useCallback((delimiter: string) => {
     dispatch({ action: 'setDelimeter', value: delimiter })
   }, []);

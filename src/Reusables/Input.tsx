@@ -2,6 +2,10 @@ import React, { ChangeEvent } from 'react';
 import { withTheme } from '../HOC';
 import { inputInterface, themeInterface } from '../interface';
 
+/**
+ * Input component is responsible for rendering a text input field that allows users to enter text.
+ * It takes in a size, default value, and a callback function to handle changes to the input value.
+ */
 const InputComponent: React.FC<themeInterface & inputInterface> = ({
   secondaryColor,
   size,
