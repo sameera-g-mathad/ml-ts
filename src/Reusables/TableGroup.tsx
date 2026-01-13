@@ -70,28 +70,10 @@ export const TableGroup: React.FC<tableGroupInterface> = memo(({ df, requireColu
         <div>
             <span className='flex flex-col gap-4 my-2'>
                 {requireRowFilter &&
-                    <InputGroup label='Filter rows (upto 100)'>
-                        <span className='flex gap-3 '>
-                            <InputGroup label='from:'>
-                                <Input defaultValue={rowFrom} size='medium' callback={handleRowFrom} />
-                            </InputGroup>
-                            <InputGroup label='to:'>
-                                <Input defaultValue={rowTo} size='medium' callback={handleRowTo} />
-                            </InputGroup>
-                        </span>
-                    </InputGroup>
+                    <FilterTableData heading='Rows' axisFrom={rowFrom} axisTo={rowTo} handleFrom={handleRowFrom} handleTo={handleRowTo} />
                 }
                 {requireColumnFilter &&
-                    <InputGroup label='Filter columns (upto 20)'>
-                        <span className='flex flex-wrap gap-3'>
-                            <InputGroup label='from:'>
-                                <Input defaultValue={colFrom} size='medium' callback={handleColFrom} />
-                            </InputGroup>
-                            <InputGroup label='to:'>
-                                <Input defaultValue={colTo} size='medium' callback={handleColTo} />
-                            </InputGroup>
-                        </span>
-                    </InputGroup>
+                    <FilterTableData heading='Columns' axisFrom={colFrom} axisTo={colTo} handleFrom={handleColFrom} handleTo={handleColTo} />
                 }
             </span>
             <Table
@@ -106,5 +88,18 @@ export const TableGroup: React.FC<tableGroupInterface> = memo(({ df, requireColu
         </div >
     )
 });
+
+/**
+ * FilterTableData component is responsible for rendering the input fields for filtering the rows and columns of the table.
+ * It takes in the heading, axisFrom, axisTo, and callback functions to handle changes to the input values.
+ */
+const FilterTableData: React.FC<{ heading: string, axisFrom: number, axisTo: number, handleFrom: (value: string) => void, handleTo: (value: string) => void }> = ({ heading, axisFrom, axisTo, handleFrom, handleTo }) => {
+    return <InputGroup label={heading}>
+        <span className='flex gap-3'>
+            <Input defaultValue={axisFrom} size='medium' callback={handleFrom} />
+            <Input defaultValue={axisTo} size='medium' callback={handleTo} />
+        </span>
+    </InputGroup>
+}
 
 TableGroup.displayName = 'TableGroup'
