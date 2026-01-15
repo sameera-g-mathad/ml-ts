@@ -76,6 +76,14 @@ export const ThemeContextProvider: React.FC<childrenProp> = ({ children }) => {
     ]
   ), [])
 
+  const color = useMemo(() => {
+    // Randomly select a color from the webColors array
+    // and return it as a string
+    let choice = Math.floor(Math.random() * colorCombinations.length);
+    return colorCombinations[choice];
+    // eslint-disable-next-line 
+  }, []);
+
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
   // const useColor = useState(color);
   const changeTheme = useCallback((change: boolean) => {
@@ -85,7 +93,7 @@ export const ThemeContextProvider: React.FC<childrenProp> = ({ children }) => {
     <ThemeContext.Provider
       value={{
         theme,
-        colorToUse: colorCombinations[0],
+        colorToUse: color,
         changeTheme,
       }}
     >
