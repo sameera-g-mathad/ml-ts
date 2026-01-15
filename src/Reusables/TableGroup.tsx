@@ -1,5 +1,7 @@
 import React, { memo, useCallback, useReducer } from 'react'
-import { Input, InputGroup, Table } from './index'
+import { Input } from './Input';
+import { InputGroup } from './InputGroup';
+import { Table } from './Table';
 import { tableGroupInterface } from '../interface'
 
 type STATE = {
